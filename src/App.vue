@@ -12,7 +12,7 @@ export default {
 
 <style>
 /* reset */
-body, p, div, table, ul, li, ol {
+body, p, div, table, ul, li, ol, a {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -24,5 +24,9 @@ li {
 body {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     background: #f0eef5;
+}
+a {
+    text-decoration: none;
+    color: #7d8b8d;
 }
 </style>
