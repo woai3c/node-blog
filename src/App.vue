@@ -22,7 +22,7 @@ li {
 }
 /* global style */
 body {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-family: 'Microsoft Yahei', 'Avenir', Helvetica, Arial, sans-serif;
     background: #f0eef5;
 }
 a {

@@ -8,8 +8,24 @@ export default new Router({
         {path: '/', redirect: '/index'},
         {
             path: '/index',
-            name: 'index',
-            component: () => import('../view/index/index.vue')
+            component: () => import('../view/Index/Index.vue'),
+            children: [
+                {
+                    path: '/',
+                    name: 'tags',
+                    component: () => import('../view/Index/Tags.vue')
+                },
+                {
+                    path: '/about',
+                    name: 'about',
+                    component: () => import('../view/Index/About.vue')
+                },
+                {
+                    path: '/content',
+                    name: 'content',
+                    component: () => import('../view/Index/Content.vue')
+                },
+            ]
         }
     ]
 })

@@ -2,21 +2,13 @@
     <div class="view-index">
         <header>
             <ul class="tags">
-                <li>首页</li>
-                <li>关于</li>
+                <li @click="gotoPage('/index')">首页</li>
+                <li @click="gotoPage('/about')">关于</li>
             </ul>
         </header>
         <section class="main">
             <div class="content">
-                <ul>
-                    <li v-for="(item, index) in contentData" :key="index" class="content-li">
-                        <p class="p-title">{{ item.title }}</p>
-                        <div class="abstract">
-                            摘要：{{ item.text }}
-                        </div>
-                        <p class="date">{{ item.date }}</p>
-                    </li>
-                </ul>
+                <router-view></router-view>
             </div>
             <div class="sidebar">
                 <div class="introduction">
@@ -36,7 +28,7 @@
                 <div class="tag-header">
                     我的标签
                 </div>
-                <ul>
+                <ul @click="toggleTag">
                     <li v-for="(item, index) in sidebarData" :key="index" class="sidebar-li">
                         {{ item.tag }}({{ item.nums }})
                     </li>
@@ -53,60 +45,38 @@
 export default {
     data() {
         return {
-            contentData: [
-                {
-                    title: '在浏览器调起本地应用的方法',
-                    text: '这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试',
-                    date: '2017-05-17 17:51',
-                },
-                {
-                    title: '在浏览器调起本地应用的方法',
-                    text: '这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试',
-                    date: '2017-05-17 17:51',
-                },
-                {
-                    title: '在浏览器调起本地应用的方法',
-                    text: '这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试',
-                    date: '2017-05-17 17:51',
-                },
-                {
-                    title: '在浏览器调起本地应用的方法',
-                    text: '这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试',
-                    date: '2017-05-17 17:51',
-                },
-                {
-                    title: '在浏览器调起本地应用的方法',
-                    text: '这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试',
-                    date: '2017-05-17 17:51',
-                },
-                {
-                    title: '在浏览器调起本地应用的方法',
-                    text: '这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试这是一个测试',
-                    date: '2017-05-17 17:51',
-                },
-            ],
             sidebarData: [
                 {
                     tag: '前端',
+                    nums: 10
+                },
+                {
+                    tag: '后端',
+                    nums: 15
+                },
+                {
+                    tag: '测试',
+                    nums: 2
+                },
+                {
+                    tag: '人工智能',
                     nums: 19
                 },
                 {
-                    tag: '前端',
-                    nums: 19
-                },
-                {
-                    tag: '前端',
-                    nums: 19
-                },
-                {
-                    tag: '前端',
-                    nums: 19
-                },
-                {
-                    tag: '前端',
-                    nums: 19
+                    tag: '大数据',
+                    nums: 1
                 },
             ]
+        }
+    },
+    methods: {
+        gotoPage(path) {
+            this.$store.commit('setCurrentTag', '')
+            this.$router.push(path)
+        },
+
+        toggleTag(e) {
+            this.$store.commit('setCurrentTag', e.target.innerHTML.trim().split('(')[0])
         }
     }
 }
@@ -153,35 +123,16 @@ footer {
 }
 
 
-
-.content-li {
-    background: #fff;
-    padding: 20px;
-    border: 1px solid #dedede;
-    margin-bottom: -1px;
-}
-.p-title {
-    font-size: 20px;
-    color: #555;
-    cursor: pointer;
-}
-.abstract {
-    font-size: 14px;
-    color: #333;
-    line-height: 2;
-    height: 82px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    overflow: hidden;
-    margin-top: 10px;
-}
 .sidebar-li {
     padding: 15px;
     background: #fff;
     border: 1px solid #dedede;
     border-top: 0;
     cursor: pointer;
+}
+.sidebar-li:hover {
+    background: #dedede;
+    color: #fff;
 }
 .tag-header {
     background: #333;
@@ -193,18 +144,13 @@ footer {
 .introduction {
     margin-bottom: 10px;
 }
-.date {
-    color: #bcbcbc;
-    font-size: 12px;
-    margin-top: 10px;
-}
 .introduction a {
     display: inline-block;
 }
 .my-link {
     display: flex;
     align-items: center;
-    margin: 10px 0;
+    margin: 20px 0;
 }
 .my-link a {
     width: 34px;
