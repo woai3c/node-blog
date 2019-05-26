@@ -7,23 +7,28 @@ export default new Router({
     routes: [
         {path: '/', redirect: '/index'},
         {
+            path: '/editor',
+            name: 'editor',
+            component: () => import('../view/editor/Editor.vue'),
+        },
+        {
             path: '/index',
-            component: () => import('../view/Index/Index.vue'),
+            component: () => import('../view/index/Index.vue'),
             children: [
                 {
                     path: '/',
                     name: 'tags',
-                    component: () => import('../view/Index/Tags.vue')
+                    component: () => import('../view/index/Tags.vue')
                 },
                 {
                     path: '/about',
                     name: 'about',
-                    component: () => import('../view/Index/About.vue')
+                    component: () => import('../view/index/About.vue')
                 },
                 {
                     path: '/content',
                     name: 'content',
-                    component: () => import('../view/Index/Content.vue')
+                    component: () => import('../view/index/Content.vue')
                 },
             ]
         }

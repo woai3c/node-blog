@@ -44,6 +44,7 @@ export default new Vuex.Store({
                 id: 5,
             },
         ],
+        articleContent: '# test',
     },
     mutations: {
         setTagsData(state, data) {

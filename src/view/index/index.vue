@@ -77,6 +77,7 @@ export default {
 
         toggleTag(e) {
             this.$store.commit('setCurrentTag', e.target.innerHTML.trim().split('(')[0])
+            this.$router.push('/index')
         }
     }
 }
