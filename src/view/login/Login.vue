@@ -4,11 +4,9 @@
             <p class="title">WELCOME</p>
             <div class="input-c">
                 <Input prefix="ios-contact" v-model="account" placeholder="用户名" clearable/>
-                <p class="error">{{accountError}}</p>
             </div>
             <div class="input-c">
                 <Input type="password" v-model="pwd" prefix="md-lock" placeholder="密码" clearable/>
-                <p class="error">{{pwdError}}</p>
             </div>
             <Button :loading="isShowLoading" class="submit" type="primary" @click="submit">登陆</Button>
         </div>
@@ -22,8 +20,6 @@ export default {
         return {
             account: '',
             pwd: '',
-            accountError: '',
-            pwdError: '',
             isShowLoading: false,
             bg: {}
         }
@@ -47,7 +43,7 @@ export default {
     },
     methods: {
         submit() {
-
+            this.isShowLoading = true
         }
     }
 }
@@ -92,6 +88,7 @@ export default {
 }
 .login-vue .input-c {
     margin: auto;
+    margin-bottom: 30px;
     width: 200px;
 }
 .login-vue .error {

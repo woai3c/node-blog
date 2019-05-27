@@ -37,5 +37,10 @@ export default new Router({
             name: 'login',
             component: () => import('../view/login/Login.vue'),
         },
+        {
+            path: '/manage',
+            name: 'manage',
+            component: () => import('../view/manage/Manage.vue'),
+        },
     ]
 })
