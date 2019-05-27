@@ -13,6 +13,8 @@ export default {
 <style scoped>
 .view-about {
     background: #fff;
+    height: 100%;
+    font-size: 14px;
 }
 </style>
 

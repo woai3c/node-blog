@@ -83,9 +83,9 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .view-index {
-    color: #7d8b8d;
+    background: #eee;
 }
 header,
 footer {
@@ -96,6 +96,7 @@ footer {
     justify-content: center;
     align-items: center;
     height: 100px;
+    font-size: 18px;
 }
 .main {
     width: 1200px;
@@ -113,14 +114,16 @@ footer {
     width: 100px;
     cursor: pointer;
 }
-
-
+li {
+    font-size: 20px;
+}
 
 .content {
     width: 890px;
 }
 .sidebar {
     width: 290px;
+    color: #7d8b8d;
 }
 
 
@@ -130,6 +133,7 @@ footer {
     border: 1px solid #dedede;
     border-top: 0;
     cursor: pointer;
+    font-size: 16px;
 }
 .sidebar-li:hover {
     background: #dedede;
@@ -141,9 +145,11 @@ footer {
     border-bottom: 0;
     color: #fff;
     padding: 15px;
+    font-size: 16px;
 }
 .introduction {
     margin-bottom: 10px;
+    font-size: 16px;
 }
 .introduction a {
     display: inline-block;

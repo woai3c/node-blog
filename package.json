@@ -24,6 +24,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "express": "^4.17.0",
+    "iview": "^3.4.2",
     "vue": "^2.6.10",
     "vue-markdown": "^2.2.4",
     "vue-router": "^3.0.6",
