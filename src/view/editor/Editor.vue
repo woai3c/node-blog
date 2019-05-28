@@ -30,6 +30,9 @@ export default {
             rightEle: null,
         }
     },
+    created() {
+        console.log(this.$route.params.id)
+    },
     mounted() {
         const editViewStyle = this.$('.view-edit').style
         editViewStyle.height = `${document.documentElement.clientHeight}px`
@@ -45,7 +48,7 @@ export default {
         },
 
         publish() {
-            this.$store.commit('setArticleContent', {
+            this.$store.commit('setArticleInfo', {
                 content: this.content,
                 title: this.title
             })
@@ -59,7 +62,7 @@ export default {
 </script>
 
 <style scoped>
-/* 编辑器样式仿的 csdn */
+/* 编辑器样式仿 CSDN */
 header {
     height: 56px;
     background: #f3f3f3;

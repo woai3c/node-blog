@@ -5,7 +5,7 @@
             {{ currentTag }}
         </p>
         <ul @click="gotoContent">
-            <li v-for="(item, index) in tagsData" :key="index" class="content-li">
+            <li v-for="(item, index) in articleData" :key="index" class="content-li">
                 <p class="p-title" :data-id="item.id">{{ item.title }}</p>
                 <div class="abstract">
                     摘要：{{ item.text }}
@@ -21,14 +21,14 @@ import { mapState } from 'vuex'
 
 export default {
     computed: mapState([
-        'tagsData',
+        'articleData',
         'currentTag'
     ]),
     methods: {
         gotoContent(e) {
             const target = e.target
             if (target.className == 'p-title') {
-                this.$router.push('/content')
+                this.$router.push('content')
             }
         }
     }

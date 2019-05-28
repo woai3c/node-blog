@@ -30,11 +30,6 @@ a {
     text-decoration: none;
     color: #7d8b8d;
 }
-html,
-body,
-.app {
-    min-height: 100%;
-}
 table {
     border-collapse: collapse;
     border-spacing: 0;
@@ -53,7 +48,7 @@ table {
 /* 滚动条滑块 */
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    background: rgba(0,0,0,0.1);
+    background: rgba(0,0,0,0.3);
     -webkit-box-shadow: inset006pxrgba(0,0,0,0.5);
 }
 

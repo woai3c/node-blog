@@ -44,6 +44,8 @@ export default {
     methods: {
         submit() {
             this.isShowLoading = true
+            this.$store.commit('setToken', 'token')
+            this.$router.push('manage')
         }
     }
 }

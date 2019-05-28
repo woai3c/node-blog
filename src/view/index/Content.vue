@@ -14,7 +14,10 @@ export default {
     },
     computed: mapState([
         'articleContent',
-    ])
+    ]),
+    created() {
+        console.log(this.$route.params.id)
+    }
 }
 </script>
 

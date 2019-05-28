@@ -5,6 +5,7 @@ Vue.use(Router)
 
 export default new Router({
     routes: [
+        {path: '*', redirect: '/index'},
         {path: '/', redirect: '/index'},
         {
             path: '/editor',
@@ -13,6 +14,7 @@ export default new Router({
         },
         {
             path: '/index',
+            name: 'index',
             component: () => import('../view/index/Index.vue'),
             children: [
                 {
