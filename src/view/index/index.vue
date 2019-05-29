@@ -69,6 +69,11 @@ export default {
             ]
         }
     },
+    created() {
+        this.$axios.get('/test').then(res => {
+            console.log(res)
+        })
+    },
     methods: {
         gotoPage(name) {
             this.$store.commit('setCurrentTag', '')

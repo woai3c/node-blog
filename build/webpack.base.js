@@ -2,9 +2,9 @@ const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 module.exports = {
-    entry: './src/main.js',
     module: {
         rules: [
             {
@@ -53,6 +53,7 @@ module.exports = {
         new webpack.NamedModulesPlugin(),
         new webpack.HotModuleReplacementPlugin(),
         new VueLoaderPlugin(),
+        new CleanWebpackPlugin()
     ],
     output: {
         filename: 'app.js',
