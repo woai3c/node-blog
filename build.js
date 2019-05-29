@@ -1,13 +1,12 @@
 const path = require('path')
 const webpack = require('webpack')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 
 module.exports = {
-    mode: 'development',
-    entry: {
-        app: ['webpack-hot-middleware/client?reload=true' , './src/main.js'] // 开启热模块更新
-    },
+    entry: './src/main.js',
+    devtool: 'source-map',
     module: {
         rules: [
             {
@@ -55,7 +54,10 @@ module.exports = {
         }),
         new webpack.NamedModulesPlugin(),
         new webpack.HotModuleReplacementPlugin(),
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new UglifyJsPlugin({
+            sourceMap: true
+        })
     ],
     output: {
         filename: 'app.js',

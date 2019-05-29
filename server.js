@@ -1,7 +1,7 @@
 const http = require('http')
 const express = require('express')
 const webpack = require('webpack')
-const webpackConfig = require('./webpack.config')
+const webpackConfig = require('./build/webpack.dev.js')
 const compiler = webpack(webpackConfig)
 const app = express()
 const server = new http.Server(app)
