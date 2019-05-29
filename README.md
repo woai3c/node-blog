@@ -8,7 +8,7 @@
 * 登陆(login)
 * 管理(manage)
 
-## 使用的库或框架
+## 使用的库、框架
 ### 前端
 * vue
 * vue-router
