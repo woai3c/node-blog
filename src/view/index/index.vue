@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import { fetchArticleData } from '../../api'
+
 export default {
     data() {
         return {
@@ -70,7 +72,7 @@ export default {
         }
     },
     created() {
-        this.$axios.get('/test').then(res => {
+        fetchArticleData().then(res => {
             console.log(res)
         })
     },

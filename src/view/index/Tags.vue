@@ -8,7 +8,7 @@
             <li v-for="(item, index) in articleData" :key="index" class="content-li">
                 <p class="p-title" :data-id="item.id">{{ item.title }}</p>
                 <div class="abstract">
-                    摘要：{{ item.text }}
+                    摘要：{{ item.content }}
                 </div>
                 <p class="date">{{ item.date }}</p>
             </li>
