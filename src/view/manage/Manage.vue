@@ -1,7 +1,10 @@
 <template>
     <div class="view-manage">
         <div class="content">
-            <p>全部文章（{{ articleNum }}）</p>
+            <div class="article-header">
+                <p>全部文章（{{ articleNum }}）</p>
+                <Button class="btn-publish" type="primary" @click="gotoEditor">发布文章</Button>
+            </div>
             <div class="div-search">
                 <p>筛选：</p>
                 <Dropdown trigger="click" @on-click="getYear">
@@ -106,6 +109,10 @@ export default {
 
         pageChange(p) {
             console.log(p)
+        },
+
+        gotoEditor() {
+            this.$router.push({name: 'editor'})
         }
     },
     mounted() {
@@ -179,5 +186,12 @@ button {
 }
 .page {
     margin-top: 20px;
+}
+.article-header {
+    display: flex;
+    align-items: center;
+}
+.btn-publish {
+    margin-left: 20px;
 }
 </style>
