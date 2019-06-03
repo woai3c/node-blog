@@ -42,8 +42,6 @@
 </template>
 
 <script>
-import { fetchArticleData } from '../../api'
-
 export default {
     data() {
         return {
@@ -72,9 +70,7 @@ export default {
         }
     },
     created() {
-        fetchArticleData().then(res => {
-            console.log(res)
-        })
+
     },
     methods: {
         gotoPage(name) {

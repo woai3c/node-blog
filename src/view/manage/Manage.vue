@@ -38,7 +38,7 @@
                 <Button class="btn-search" type="primary">搜索</Button>
             </div>
             <ul class="div-list">
-                <li class="li-article" v-for="(item, index) in articleData" :key="index" :data-id="item.id" @click="articleOP">
+                <li class="li-article" v-for="(item, index) in articleData" :key="index" :data-id="item._id" @click="articleOP">
                     <p class="p-title">{{ item.title }}</p>
                     <p>{{ item.date }}</p>
                     <div class="btn-group">
@@ -47,15 +47,32 @@
                     </div>
                 </li>
             </ul>
-            <Page class="page" :page-size="8" :total="100" @on-change="pageChange"/>
+            <Page v-if="totalArticle" class="page" :page-size="8" :total="totalArticle" @on-change="pageChange"/>
         </div>
+        <Modal v-model="isShowModal" width="360" class="delete-modal">
+            <p slot="header" style="color:#f60;text-align:center">
+                <span class="delete-title">删除确认</span>
+            </p>
+            <div>
+                <p class="delete-p">是否要删除该文章？</p>
+            </div>
+            <div slot="footer">
+                <Button type="error" size="large" @click="del">删除</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 
 <script>
+import { fetchAllArticles, deleteArticle  } from '../../api'
+import { mapState } from 'vuex'
+import { timestampToDate } from '../../utils'
+
 export default {
     data() {
         return {
+            isShowModal: false,
+            articleData: [],
             articleNum: 0,
             year: '年份',
             month: '月份',
@@ -77,10 +94,11 @@ export default {
             ]
         }
     },
-    computed: {
-        articleData() {
-            return this.$store.state.articleData
-        }
+    computed: mapState([
+        'totalArticle'
+    ]),
+    created() {
+        this.initData()
     },
     methods: {
         getYear(y) {
@@ -98,12 +116,13 @@ export default {
         articleOP(e) {
             const target = e.target
             const text = target.innerText
+            this.id = e.currentTarget.dataset.id
             if (text == '删除') {
-                console.log(e.currentTarget.dataset.id)
+                this.isShowModal = true
             } else if (text == '编辑') {
-                this.$router.push({name: 'editor', params: {id: e.currentTarget.dataset.id}})
+                this.$router.push({name: 'editor', params: {id: this.id}})
             } else if (target.className == 'p-title') {
-                this.$router.push({name: 'content', params: {id: e.currentTarget.dataset.id}})
+                this.$router.push({name: 'content', params: {id: this.id}})
             }
         },
 
@@ -113,13 +132,31 @@ export default {
 
         gotoEditor() {
             this.$router.push({name: 'editor'})
-        }
-    },
-    mounted() {
-        const loginViewStyle = this.$('.view-manage').style
-        loginViewStyle.height = `${document.documentElement.clientHeight}px`
-        window.onresize = () => {
-            loginViewStyle.height = `${document.documentElement.clientHeight}px`
+        },
+
+        del() {
+            this.isShowModal = false
+            deleteArticle({ id: this.id }).then(res => {
+                if (res.data.code == 0) {
+                    this.$Message.success('删除成功')
+                    this.initData()
+                } else {
+                    this.$Message.error(res.data.msg)
+                }
+            })
+        },
+
+        initData() {
+            fetchAllArticles().then(res => {
+                res = res.data
+                if (res.code == 0) {
+                    res.data.forEach(item => {
+                        item.date = timestampToDate(item.date)
+                    })
+                
+                    this.articleData = res.data
+                }
+            })
         }
     }
 }
@@ -134,6 +171,7 @@ button {
     background: #eee;
     font-size: 14px;
     overflow: auto;
+    height: 100vh;
 }
 .content {
     min-height: 100%;
@@ -193,5 +231,16 @@ button {
 }
 .btn-publish {
     margin-left: 20px;
+}
+.delete-modal button {
+    width: 100%;
+}
+.delete-p {
+    font-size: 16px;
+    text-align: center;
+    padding: 20px 0;
+}
+.delete-title {
+    font-size: 20px;
 }
 </style>

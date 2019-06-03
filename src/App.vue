@@ -1,12 +1,40 @@
 <template>
     <div class="app">
         <router-view/>
+        <div class="loading" v-show="isShowLoading">
+            <Spin size="large"></Spin>
+        </div>
     </div>
 </template>
 
 <script>
 export default {
-    
+    data() {
+        return {
+            isShowLoading: false,
+        }
+    },
+    created() {
+        // 添加请求拦截器
+        this.$axios.interceptors.request.use(config => {
+            this.isShowLoading = true
+            return config
+        }, error => {
+            this.isShowLoading = false
+            this.$Message.error('网络异常，请稍后再试')
+            return Promise.reject(error)
+        })
+
+        // 添加响应拦截器
+        this.$axios.interceptors.response.use(response => {
+            this.isShowLoading = false
+            return response
+        }, error => {
+            this.isShowLoading = false
+            this.$Message.error('网络异常，请稍后再试')
+            return Promise.reject(error)
+        })
+    }
 }
 </script>
 
@@ -35,7 +63,18 @@ table {
     border-spacing: 0;
 }
 
-
+/* loading */
+.loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255,255,255,.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 /* 设置滚动条的样式 */
 ::-webkit-scrollbar {
     width: 10px;

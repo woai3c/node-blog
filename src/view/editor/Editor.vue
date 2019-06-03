@@ -3,8 +3,8 @@
         <header>
             <input type="text" v-model="title" placeholder="请输入文章标题">
             <div class="btn-group">
-                <button @click="publish">发布文章</button>
-                <button @click="quit" class="btn-quit">退出</button>
+                <Button type="error" @click="showTagModal">发布文章</Button>
+                <Button type="default" @click="quit" class="btn-quit">退出</Button>
             </div>
         </header>
         <section>
@@ -13,11 +13,18 @@
                 <VueMarkdown class="markdown" :source="content"/>
             </div>
         </section>
+        <Modal v-model="isShowModal">
+            <p>请添加标签</p>
+            <Input/>
+            <Button type="primary">确定</Button>
+            <Tag @on-close="closeTag(index)" closable v-for="(item, index) in tagsData" :key="index">{{ item }}</Tag>
+        </Modal>
     </div>
 </template>
 
 <script>
 import VueMarkdown from 'vue-markdown'
+import { pushArticle, fetchArticleContent } from '../../api'
 
 export default {
     components: {
@@ -25,21 +32,29 @@ export default {
     },
     data() {
         return {
+            tagsData: ['1', '2', '3'],
+            isShowModal: true,
             content: '',
             title: '',
+            id: '',
             rightEle: null,
         }
     },
     created() {
-        console.log(this.$route.params.id)
+        this.id = this.$route.params.id
+        console.log(this.id)
+        if (this.id) {
+            fetchArticleContent(this.id).then(res => {
+                res = res.data
+                if (res.code == 0) {
+                    const data = res.data
+                    this.content = data.content
+                    this.title = data.title
+                }
+            })
+        }
     },
     mounted() {
-        const editViewStyle = this.$('.view-edit').style
-        editViewStyle.height = `${document.documentElement.clientHeight}px`
-        window.onresize = () => {
-            editViewStyle.height = `${document.documentElement.clientHeight}px`
-        }
-
         this.rightEle = this.$('.right')
     },
     methods: {
@@ -48,20 +63,42 @@ export default {
         },
 
         publish() {
-            this.$store.commit('setArticleInfo', {
+            const obj = {
+                title: this.title,
                 content: this.content,
-                title: this.title
+                tags: [],
+            }
+
+            if (this.id) obj.id = this.id
+            pushArticle(obj).then(res => {
+                if (res.data.code == 0) {
+                    this.$Message.success('发布成功')
+                    this.quit()
+                } else {
+                    this.$Message.error(res.data.msg)
+                }
             })
         },
 
         quit() {
             this.$router.back()
+        },
+
+        showTagModal() {
+
+        },
+
+        closeTag(i) {
+            this.tagsData.splice(i, 1)
         }
     }
 }
 </script>
 
 <style scoped>
+.view-edit {
+    height: 100vh;
+}
 /* 编辑器样式仿 CSDN */
 header {
     height: 56px;
@@ -89,14 +126,13 @@ button {
     height: 40px;
     padding: 0 16px;
     font-size: 16px;
-    color: #fff;
     border: none;
     border-radius: 4px;
     white-space: nowrap;
-    background-color: #ca0c16;
 }
 .btn-quit {
     background: #aaa;
+    color: #fff;
 }
 .left {
     background: #eee;

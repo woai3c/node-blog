@@ -7,9 +7,9 @@ export default new Vuex.Store({
     state: {
         token: '',
         currentTag: '',
-        articleData: [],
         articleContent: '',
         articleTitle: '',
+        totalArticle: 0,
     },
     mutations: {
         setTagsData(state, data) {

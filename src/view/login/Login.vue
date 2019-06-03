@@ -27,20 +27,6 @@ export default {
     created() {
         this.bg.backgroundImage = 'url(' + require('../../assets/bg.jpg') + ')'
     },
-    mounted() {
-        const loginViewStyle = this.$('.login-vue').style
-        loginViewStyle.height = `${document.documentElement.clientHeight}px`
-        window.onresize = () => {
-            loginViewStyle.height = `${document.documentElement.clientHeight}px`
-        }
-        
-        document.onkeydown = e => {
-            // 监听回车事件
-            if (e.keyCode == 13) {
-                this.submit()
-            }
-        }
-    },
     methods: {
         submit() {
             this.isShowLoading = true
@@ -53,7 +39,7 @@ export default {
 
 <style>
 .login-vue {
-    height: 100%;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
