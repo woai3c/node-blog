@@ -13,10 +13,12 @@
                 <VueMarkdown class="markdown" :source="content"/>
             </div>
         </section>
-        <Modal v-model="isShowModal">
-            <p>请添加标签</p>
-            <Input/>
-            <Button type="primary">确定</Button>
+        <Modal v-model="isShowModal" @on-ok="publish">
+            <p class="modal-p">请添加标签</p>
+            <div class="div-input">
+                <Input v-model="tagVal"/>
+                <Button type="primary" @click="addTag">添加标签</Button>
+            </div>
             <Tag @on-close="closeTag(index)" closable v-for="(item, index) in tagsData" :key="index">{{ item }}</Tag>
         </Modal>
     </div>
@@ -32,12 +34,13 @@ export default {
     },
     data() {
         return {
-            tagsData: ['1', '2', '3'],
-            isShowModal: true,
+            tagsData: [],
+            isShowModal: false,
             content: '',
             title: '',
             id: '',
             rightEle: null,
+            tagVal: '',
         }
     },
     created() {
@@ -50,6 +53,7 @@ export default {
                     const data = res.data
                     this.content = data.content
                     this.title = data.title
+                    this.tagsData = data.tags
                 }
             })
         }
@@ -66,7 +70,7 @@ export default {
             const obj = {
                 title: this.title,
                 content: this.content,
-                tags: [],
+                tags: this.tagsData,
             }
 
             if (this.id) obj.id = this.id
@@ -85,11 +89,16 @@ export default {
         },
 
         showTagModal() {
-
+            this.isShowModal = true
         },
 
         closeTag(i) {
             this.tagsData.splice(i, 1)
+        },
+
+        addTag(e) {
+            this.tagsData.push(this.tagVal)
+            this.tagVal = ''
         }
     }
 }
@@ -158,6 +167,21 @@ textarea {
     color: #666;
     font-family: inherit;
     outline: 0;
+}
+.modal-p {
+    font-size: 18px;
+}
+.div-input {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.div-input button {
+    height: 34px;
+}
+.ivu-input-wrapper  {
+    width: 70%;
 }
 </style>
 

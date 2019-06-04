@@ -38,3 +38,7 @@ app.use('/deleteArticle', (req, res) => {
 app.use('/fetchArticleContent', (req, res) => {
     handler.fetchArticleContent(req, res)
 })
+
+app.use('/fetchAppointArticles', (req, res) => {
+    handler.fetchAppointArticles(req, res)
+})

@@ -34,8 +34,8 @@
                         <DropdownItem v-for="(item, index) in tags" :name="item" :key="index">{{ item }}</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
-                <Input class="keyword" placeholder="请输入标题关键词"/>
-                <Button class="btn-search" type="primary">搜索</Button>
+                <Input class="keyword" placeholder="请输入标题关键词" v-model="keyword"/>
+                <Button class="btn-search" type="primary" @click="searchArticles">搜索</Button>
             </div>
             <ul class="div-list">
                 <li class="li-article" v-for="(item, index) in articleData" :key="index" :data-id="item._id" @click="articleOP">
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { fetchAllArticles, deleteArticle  } from '../../api'
+import { fetchAllArticles, deleteArticle, fetchAppointArticles  } from '../../api'
 import { mapState } from 'vuex'
 import { timestampToDate } from '../../utils'
 
@@ -76,22 +76,11 @@ export default {
             articleNum: 0,
             year: '年份',
             month: '月份',
-            tag: '分类',
-            years: [
-                '2019',
-                '2018',
-                '2017',
-            ],
-            months: [
-                '12',
-                '11',
-                '10',
-            ],
-            tags: [
-                '前端',
-                '后端',
-                'IOS',
-            ]
+            tag: '标签',
+            keyword: '',
+            years: [2019],
+            months: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            tags: []
         }
     },
     computed: mapState([
@@ -101,6 +90,19 @@ export default {
         this.initData()
     },
     methods: {
+        initData() {
+            fetchAllArticles().then(res => {
+                res = res.data
+                if (res.code == 0) {
+                    res.data.forEach(item => {
+                        item.date = timestampToDate(item.date)
+                    })
+                
+                    this.articleData = res.data
+                }
+            })
+        },
+
         getYear(y) {
             this.year = y
         },
@@ -146,16 +148,15 @@ export default {
             })
         },
 
-        initData() {
-            fetchAllArticles().then(res => {
-                res = res.data
-                if (res.code == 0) {
-                    res.data.forEach(item => {
-                        item.date = timestampToDate(item.date)
-                    })
-                
-                    this.articleData = res.data
-                }
+        searchArticles() {
+            fetchAppointArticles({
+                tags: this.tag == '标签'? '' : this.tag,
+                year: this.year == '年份'? '' : this.year,
+                month: this.month == '月份'? '' : this.month,
+                title: this.keyword,
+            })
+            .then(res => {
+                console.log(res)
             })
         }
     }
