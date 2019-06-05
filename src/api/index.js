@@ -20,3 +20,11 @@ export function deleteArticle(obj) {
 export function fetchAppointArticles(obj) {
     return axios.get('/fetchAppointArticles' + objToUrlParam(obj))
 }
+
+export function fetchTagsData() {
+    return axios.get('/fetchTagsData')
+}
+
+export function fetchTagsArtilesData() {
+    return axios.get('/fetchTagsArtilesData')
+}

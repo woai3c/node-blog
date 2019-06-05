@@ -1,6 +1,8 @@
 <template>
     <div class="app">
-        <router-view/>
+        <keep-alive :include="keepAliveData">
+            <router-view/>
+        </keep-alive>
         <div class="loading" v-show="isShowLoading">
             <Spin size="large"></Spin>
         </div>
@@ -8,12 +10,24 @@
 </template>
 
 <script>
+import { fetchAllArticles, fetchTagsData  } from './api'
+import { mapState } from 'vuex'
+import { timestampToDate } from './utils'
+
 export default {
     data() {
         return {
             isShowLoading: false,
+            keepAliveData: ['manage']
         }
     },
+    // computed: {
+    //     ...mapState([
+    //         'articleNum',
+    //         'tags',
+    //         'articlesData',
+    //     ]),
+    // },
     created() {
         // 添加请求拦截器
         this.$axios.interceptors.request.use(config => {
@@ -34,7 +48,36 @@ export default {
             this.$Message.error('网络异常，请稍后再试')
             return Promise.reject(error)
         })
-    }
+    },
+    // watch: {
+    //     $route(to, from) {
+    //         const fname = from.name
+    //         const tname = to.name
+    //         if (fname != 'editor' && tname == 'manage') {
+    //             fetchAllArticles().then(res => {
+    //                 res = res.data
+    //                 if (res.code == 0) {
+    //                     const data = res.data
+    //                     if (data.length) {
+    //                         data.forEach(item => {
+    //                             item.date = timestampToDate(item.date)
+    //                         })
+                        
+    //                         this.articlesData = res.data
+    //                         this.articleNum = res.data.length
+    //                     }
+    //                 }
+    //             })
+
+    //             fetchTagsData().then(res => {
+    //                 res = res.data
+    //                 if (res.code == 0) {
+    //                     this.tags = ['标签', ...res.data]
+    //                 }
+    //             })
+    //         }
+    //     }
+    // }
 }
 </script>
 

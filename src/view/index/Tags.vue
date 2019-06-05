@@ -5,8 +5,8 @@
             {{ currentTag }}
         </p>
         <ul @click="gotoContent">
-            <li v-for="(item, index) in articleData" :key="index" class="content-li">
-                <p class="p-title" :data-id="item.id">{{ item.title }}</p>
+            <li v-for="(item, index) in articlesData" :key="index" class="content-li">
+                <p class="p-title" :data-index="index">{{ item.title }}</p>
                 <div class="abstract">
                     摘要：{{ item.content }}
                 </div>
@@ -18,17 +18,38 @@
 
 <script>
 import { mapState } from 'vuex'
+import { fetchAllArticles } from '../../api'
+import { timestampToDate } from '../../utils'
 
 export default {
+    data() {
+        return {
+            articlesData: []
+        }
+    },
     computed: mapState([
-        'articleData',
         'currentTag'
     ]),
+    created() {
+        fetchAllArticles().then(res => {
+            res = res.data
+            if (res.code == 0) {
+                const data = res.data
+                if (data.length) {
+                    data.forEach(item => {
+                        item.date = timestampToDate(item.date)
+                    })
+                
+                    this.articlesData = res.data
+                }
+            }
+        })
+    },
     methods: {
         gotoContent(e) {
             const target = e.target
             if (target.className == 'p-title') {
-                this.$router.push('content')
+                this.$router.push({name: 'content', params: {articleData: this.articlesData[target.dataset.index]}})
             }
         }
     }

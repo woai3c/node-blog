@@ -7,26 +7,23 @@ export default new Vuex.Store({
     state: {
         token: '',
         currentTag: '',
-        articleContent: '',
-        articleTitle: '',
-        totalArticle: 0,
+        articleNum: 0,
+        year: '年份',
+        month: '月份',
+        tag: '标签',
+        keyword: '',
+        years: ['年份', 2019],
+        months: ['月份', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+        tags: [],
+        articlesData: [],
     },
     mutations: {
-        setTagsData(state, data) {
-            state.tagsData = data
-        },
-
         setCurrentTag(state, name) {
             state.currentTag = name
         },
 
-        setArticleInfo(state, obj) {
-            state.articleContent = obj.content
-            state.articleTitle = obj.title
-        },
-
         setToken(state, token) {
             state.token = token
-        }
+        },
     }
 })

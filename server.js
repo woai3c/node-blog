@@ -42,3 +42,11 @@ app.use('/fetchArticleContent', (req, res) => {
 app.use('/fetchAppointArticles', (req, res) => {
     handler.fetchAppointArticles(req, res)
 })
+
+app.use('/fetchTagsData', (req, res) => {
+    handler.fetchTagsData(req, res)
+})
+
+app.use('/fetchTagsArtilesData', (req, res) => {
+    handler.fetchTagsArtilesData(req, res)
+})

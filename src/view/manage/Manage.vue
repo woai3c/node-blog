@@ -38,7 +38,7 @@
                 <Button class="btn-search" type="primary" @click="searchArticles">搜索</Button>
             </div>
             <ul class="div-list">
-                <li class="li-article" v-for="(item, index) in articleData" :key="index" :data-id="item._id" @click="articleOP">
+                <li class="li-article" v-for="(item, index) in articlesData" :key="index" :data-index="index" @click="articleOP">
                     <p class="p-title">{{ item.title }}</p>
                     <p>{{ item.date }}</p>
                     <div class="btn-group">
@@ -64,41 +64,54 @@
 </template>
 
 <script>
-import { fetchAllArticles, deleteArticle, fetchAppointArticles  } from '../../api'
+import { fetchAllArticles, deleteArticle, fetchAppointArticles, fetchTagsData  } from '../../api'
 import { mapState } from 'vuex'
 import { timestampToDate } from '../../utils'
 
 export default {
+    name: 'manage',
     data() {
         return {
             isShowModal: false,
-            articleData: [],
-            articleNum: 0,
-            year: '年份',
-            month: '月份',
-            tag: '标签',
-            keyword: '',
-            years: [2019],
-            months: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-            tags: []
         }
     },
-    computed: mapState([
-        'totalArticle'
-    ]),
-    created() {
-        this.initData()
+    computed: {
+        ...mapState([
+            'articleNum',
+            'year',
+            'month',
+            'tag',
+            'keyword',
+            'years',
+            'months',
+            'tags',
+            'articlesData',
+        ]),
+        totalArticle() {
+            return this.articlesData.length
+        }
     },
     methods: {
         initData() {
             fetchAllArticles().then(res => {
                 res = res.data
                 if (res.code == 0) {
-                    res.data.forEach(item => {
-                        item.date = timestampToDate(item.date)
-                    })
-                
-                    this.articleData = res.data
+                    const data = res.data
+                    if (data.length) {
+                        data.forEach(item => {
+                            item.date = timestampToDate(item.date)
+                        })
+                    
+                        this.articlesData = res.data
+                        this.articleNum = res.data.length
+                    }
+                }
+            })
+
+            fetchTagsData().then(res => {
+                res = res.data
+                if (res.code == 0) {
+                    this.tags = ['标签', ...res.data]
                 }
             })
         },
@@ -118,13 +131,13 @@ export default {
         articleOP(e) {
             const target = e.target
             const text = target.innerText
-            this.id = e.currentTarget.dataset.id
+            const index = e.currentTarget.dataset.index
             if (text == '删除') {
                 this.isShowModal = true
             } else if (text == '编辑') {
-                this.$router.push({name: 'editor', params: {id: this.id}})
+                this.$router.push({name: 'editor', params: {articleData: this.articlesData[index]}})
             } else if (target.className == 'p-title') {
-                this.$router.push({name: 'content', params: {id: this.id}})
+                this.$router.push({name: 'content', params: {articleData: this.articlesData[index]}})
             }
         },
 
@@ -156,7 +169,15 @@ export default {
                 title: this.keyword,
             })
             .then(res => {
-                console.log(res)
+                res = res.data
+                if (res.code == 0) {
+                    res.data.forEach(item => {
+                        item.date = timestampToDate(item.date)
+                    })
+
+                    this.articlesData = res.data
+                    this.articleNum = res.data.length
+                }
             })
         }
     }

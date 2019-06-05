@@ -8,7 +8,9 @@
         </header>
         <section class="main">
             <div class="content">
-                <router-view></router-view>
+                <keep-alive>
+                    <router-view></router-view>
+                </keep-alive>
             </div>
             <div class="sidebar">
                 <div class="introduction">
@@ -25,12 +27,12 @@
                         </a>
                     </div>
                 </div>
-                <div class="tag-header">
+                <div class="tag-header" v-if="sidebarData.length">
                     我的标签
                 </div>
                 <ul @click="toggleTag">
                     <li v-for="(item, index) in sidebarData" :key="index" class="sidebar-li">
-                        {{ item.tag }}({{ item.nums }})
+                        {{ item.tag }}（{{ item.nums }}）
                     </li>
                 </ul>
             </div>
@@ -42,35 +44,26 @@
 </template>
 
 <script>
+import { fetchTagsArtilesData } from '../../api'
+
 export default {
     data() {
         return {
-            sidebarData: [
-                {
-                    tag: '前端',
-                    nums: 10
-                },
-                {
-                    tag: '后端',
-                    nums: 15
-                },
-                {
-                    tag: '测试',
-                    nums: 2
-                },
-                {
-                    tag: '人工智能',
-                    nums: 19
-                },
-                {
-                    tag: '大数据',
-                    nums: 1
-                },
-            ]
+            sidebarData: []
         }
     },
     created() {
-
+        fetchTagsArtilesData().then(res => {
+            res = res.data
+            if (res.code == 0) {
+                const data = res.data
+                const keys = Object.keys(data)
+                this.sidebarData = keys.map(key => ({
+                    tag: key,
+                    nums: data[key]
+                }))
+            }
+        })
     },
     methods: {
         gotoPage(name) {
@@ -79,7 +72,7 @@ export default {
         },
 
         toggleTag(e) {
-            this.$store.commit('setCurrentTag', e.target.innerHTML.trim().split('(')[0])
+            this.$store.commit('setCurrentTag', e.target.innerHTML.trim().split('（')[0])
             this.$router.push('index')
         },
 

@@ -29,6 +29,7 @@ import VueMarkdown from 'vue-markdown'
 import { pushArticle, fetchArticleContent } from '../../api'
 
 export default {
+    name: 'editor',
     components: {
         VueMarkdown
     },
@@ -44,18 +45,12 @@ export default {
         }
     },
     created() {
-        this.id = this.$route.params.id
-        console.log(this.id)
-        if (this.id) {
-            fetchArticleContent(this.id).then(res => {
-                res = res.data
-                if (res.code == 0) {
-                    const data = res.data
-                    this.content = data.content
-                    this.title = data.title
-                    this.tagsData = data.tags
-                }
-            })
+        const data = this.$route.params.articleData
+        if (data) {
+            this.content = data.content
+            this.title = data.title
+            this.tagsData = data.tags
+            this.id = data._id
         }
     },
     mounted() {
@@ -97,8 +92,10 @@ export default {
         },
 
         addTag(e) {
-            this.tagsData.push(this.tagVal)
-            this.tagVal = ''
+            if (this.tagVal) {
+                this.tagsData.push(this.tagVal)
+                this.tagVal = ''
+            }
         }
     }
 }
