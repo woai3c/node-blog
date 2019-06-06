@@ -77,6 +77,9 @@ module.exports = {
         MongoClient.connect(url, config, (err, db) => {
             if (err) throw err
             const dbo = db.db('blog')
+            const query = req.query
+            const size = query.pageSize
+            const index = query.pageIndex
             dbo.collection('user').find({}).toArray((err, result) => {
                 if (err) {
                     res.send({
@@ -86,7 +89,8 @@ module.exports = {
                 } else {
                     res.send({
                         code: 0,
-                        data: result
+                        data: result.slice(size * (index - 1), size * index),
+                        total: result.length,
                     })
                 }
                 
@@ -123,12 +127,13 @@ module.exports = {
             if (err) throw err
             const dbo = db.db('blog')
             const query = req.query
+            const size = query.pageSize
+            const index = query.pageIndex
             const queryObj = {}
             if (query.title) queryObj.title = new RegExp(query.title)
             if (query.year) queryObj.year = ~~query.year
             if (query.month) queryObj.month = ~~query.month
             if (query.tags) queryObj.tags = query.tags
-
             dbo.collection('user').find(queryObj).toArray((err, result) => {
                 if (err) {
                     res.send({
@@ -139,7 +144,8 @@ module.exports = {
                 } else {
                     res.send({
                         code: 0,
-                        data: result
+                        data: result.slice(size * (index - 1), size * index),
+                        total: result.length,
                     })
                 }
                 

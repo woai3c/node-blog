@@ -55,7 +55,7 @@ export default {
         }
     },
     computed: mapState([
-        'articlesData'
+        'articlesData',
     ]),
     created() {
         fetchTagsArtilesData().then(res => {

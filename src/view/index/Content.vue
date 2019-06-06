@@ -1,7 +1,7 @@
 <template>
     <div class="view-content">
         <div class="back" @click="back">
-            < 返回
+            <img src="../../assets/back.png">返回
         </div>
         <p class="title">{{ title }}</p>
         <div class="info">
@@ -70,5 +70,13 @@ export default {
 .back {
     font-size: 16px;
     color: #888;
+    display: flex;
+    align-items: center;
+    width: 70px;
+    cursor: pointer;
+}
+.back img {
+    width: 20px;
+    margin-right: 10px;
 }
 </style>

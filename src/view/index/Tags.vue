@@ -4,36 +4,33 @@
             <li v-for="(item, index) in articlesData" :key="index" class="content-li">
                 <p class="p-title" :data-index="index">{{ item.title }}</p>
                 <div class="abstract">
-                    摘要：{{ item.content }}
+                    <VueMarkdown class="markdown" :source="item.content"/>
                 </div>
                 <p class="date">{{ item.date }}</p>
             </li>
         </ul>
+        <Page v-if="totalArticles" class="page" :page-size="pageSize" :total="totalArticles" @on-change="pageChange"/>
     </div>
 </template>
 
 <script>
+import VueMarkdown from 'vue-markdown'
 import { mapState } from 'vuex'
 import { fetchAllArticles } from '../../api'
 import { timestampToDate } from '../../utils'
 
 export default {
+    components: {
+        VueMarkdown
+    },
     computed: mapState([
-        'articlesData'
+        'articlesData',
+        'pageSize',
+        'totalArticles',
+        'pageIndex',
     ]),
     created() {
-        fetchAllArticles().then(res => {
-            res = res.data
-            if (res.code == 0) {
-                const data = res.data
-                data.forEach(item => {
-                    item.date = timestampToDate(item.date)
-                })
-                
-                this.$store.commit('setArticlesData', data)
-                this.$store.commit('setArticlesNum', data.length)
-            }
-        })
+        this.initData()
     },
     methods: {
         gotoContent(e) {
@@ -41,6 +38,29 @@ export default {
             if (target.className == 'p-title') {
                 this.$router.push({name: 'content', params: {articleData: this.articlesData[target.dataset.index]}})
             }
+        },
+
+        pageChange(p) {
+            this.$store.commit('setPageIndex', p)
+            this.initData()
+        },
+
+        initData() {
+            fetchAllArticles({
+                pageSize: this.pageSize,
+                pageIndex: this.pageIndex,
+            }).then(res => {
+                res = res.data
+                if (res.code == 0) {
+                    const data = res.data
+                    data.forEach(item => {
+                        item.date = timestampToDate(item.date)
+                    })
+                    
+                    this.$store.commit('setTotalArticles', res.total)
+                    this.$store.commit('setArticlesData', data)
+                }
+            })
         }
     }
 }
@@ -54,8 +74,8 @@ export default {
     margin-bottom: -1px;
 }
 .p-title {
-    font-size: 20px;
-    color: #555;
+    font-size: 22px;
+    color: #333;
     cursor: pointer;
 }
 .abstract {
@@ -78,5 +98,8 @@ export default {
     color: #333;
     font-size: 20px;
     margin-bottom: 20px;
+}
+.page {
+    margin-top: 20px;
 }
 </style>

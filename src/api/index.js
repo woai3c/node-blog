@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { objToUrlParam } from '../utils'
 
-export function fetchAllArticles() {
-    return axios.get('/fetchAllArticles')
+export function fetchAllArticles(obj) {
+    return axios.get('/fetchAllArticles' + objToUrlParam(obj))
 }
 
 export function fetchArticleContent(id) {

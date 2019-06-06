@@ -31,6 +31,9 @@ export default {
             'month',
             'tag',
             'keyword',
+            'pageSize',
+            'pageIndex',
+            'totalArticles',
         ]),
     },
     created() {
@@ -67,6 +70,8 @@ export default {
                     year: this.year == '年份'? '' : this.year,
                     month: this.month == '月份'? '' : this.month,
                     title: this.keyword,
+                    pageSize: this.pageSize,
+                    pageIndex: this.pageIndex,
                 }).then(res => {
                     res = res.data
                     if (res.code == 0) {
@@ -75,8 +80,8 @@ export default {
                             item.date = timestampToDate(item.date)
                         })
 
+                        this.$store.commit('setTotalArticles', res.total)
                         this.$store.commit('setArticlesData', data)
-                        this.$store.commit('setArticlesNum', data.length)
                     }
                 })
 

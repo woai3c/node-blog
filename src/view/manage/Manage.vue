@@ -2,7 +2,7 @@
     <div class="view-manage">
         <div class="content">
             <div class="article-header">
-                <p>全部文章（{{ articlesNum }}）</p>
+                <p>全部文章（{{ totalArticles }}）</p>
                 <Button class="btn-publish" type="primary" @click="gotoEditor">发布文章</Button>
             </div>
             <div class="div-search">
@@ -47,7 +47,7 @@
                     </div>
                 </li>
             </ul>
-            <Page v-if="totalArticle" class="page" :page-size="8" :total="totalArticle" @on-change="pageChange"/>
+            <Page v-if="totalArticles" class="page" :page-size="pageSize" :total="totalArticles" @on-change="pageChange"/>
         </div>
         <Modal v-model="isShowModal" width="360" class="delete-modal">
             <p slot="header" style="color:#f60;text-align:center">
@@ -78,7 +78,6 @@ export default {
     },
     computed: {
         ...mapState([
-            'articlesNum',
             'year',
             'month',
             'tag',
@@ -87,14 +86,17 @@ export default {
             'months',
             'tags',
             'articlesData',
+            'pageSize',
+            'totalArticles',
+            'pageIndex'
         ]),
-        totalArticle() {
-            return this.articlesData.length
-        }
     },
     methods: {
         initData() {
-            fetchAllArticles().then(res => {
+            fetchAllArticles({
+                pageSize: this.pageSize,
+                pageIndex: this.pageIndex,
+            }).then(res => {
                 res = res.data
                 if (res.code == 0) {
                     const data = res.data
@@ -102,8 +104,8 @@ export default {
                         item.date = timestampToDate(item.date)
                     })
 
+                    this.$store.commit('setTotalArticles', res.total)
                     this.$store.commit('setArticlesData', data)
-                    this.$store.commit('setArticlesNum', data.length)
                 }
             })
 
@@ -142,7 +144,8 @@ export default {
         },
 
         pageChange(p) {
-            console.log(p)
+            this.$store.commit('setPageIndex', p)
+            this.searchArticles()
         },
 
         gotoEditor() {
@@ -167,6 +170,8 @@ export default {
                 year: this.year == '年份'? '' : this.year,
                 month: this.month == '月份'? '' : this.month,
                 title: this.keyword,
+                pageSize: this.pageSize,
+                pageIndex: this.pageIndex,
             })
             .then(res => {
                 res = res.data
@@ -177,7 +182,7 @@ export default {
                     })
 
                     this.$store.commit('setArticlesData', data)
-                    this.$store.commit('setArticlesNum', data.length)
+                    this.$store.commit('setTotalArticles', res.total)
                 }
             })
         }
