@@ -2,7 +2,7 @@
     <div class="view-manage">
         <div class="content">
             <div class="article-header">
-                <p>全部文章（{{ articleNum }}）</p>
+                <p>全部文章（{{ articlesNum }}）</p>
                 <Button class="btn-publish" type="primary" @click="gotoEditor">发布文章</Button>
             </div>
             <div class="div-search">
@@ -73,11 +73,12 @@ export default {
     data() {
         return {
             isShowModal: false,
+            index: 0,
         }
     },
     computed: {
         ...mapState([
-            'articleNum',
+            'articlesNum',
             'year',
             'month',
             'tag',
@@ -97,41 +98,40 @@ export default {
                 res = res.data
                 if (res.code == 0) {
                     const data = res.data
-                    if (data.length) {
-                        data.forEach(item => {
-                            item.date = timestampToDate(item.date)
-                        })
-                    
-                        this.articlesData = res.data
-                        this.articleNum = res.data.length
-                    }
+                    data.forEach(item => {
+                        item.date = timestampToDate(item.date)
+                    })
+
+                    this.$store.commit('setArticlesData', data)
+                    this.$store.commit('setArticlesNum', data.length)
                 }
             })
 
             fetchTagsData().then(res => {
                 res = res.data
                 if (res.code == 0) {
-                    this.tags = ['标签', ...res.data]
+                    this.$store.commit('setTags', ['标签', ...res.data])
                 }
             })
         },
 
         getYear(y) {
-            this.year = y
+            this.$store.commit('setYear', y)
         },
 
         getMonth(m) {
-            this.month = m
+            this.$store.commit('setMonth', m)
         },
 
         getTag(t) {
-            this.tag = t
+            this.$store.commit('setTag', t)
         },
 
         articleOP(e) {
             const target = e.target
             const text = target.innerText
             const index = e.currentTarget.dataset.index
+            this.index = index
             if (text == '删除') {
                 this.isShowModal = true
             } else if (text == '编辑') {
@@ -151,7 +151,7 @@ export default {
 
         del() {
             this.isShowModal = false
-            deleteArticle({ id: this.id }).then(res => {
+            deleteArticle({ id: this.articlesData[this.index]._id }).then(res => {
                 if (res.data.code == 0) {
                     this.$Message.success('删除成功')
                     this.initData()
@@ -171,12 +171,13 @@ export default {
             .then(res => {
                 res = res.data
                 if (res.code == 0) {
-                    res.data.forEach(item => {
+                    const data = res.data
+                    data.forEach(item => {
                         item.date = timestampToDate(item.date)
                     })
 
-                    this.articlesData = res.data
-                    this.articleNum = res.data.length
+                    this.$store.commit('setArticlesData', data)
+                    this.$store.commit('setArticlesNum', data.length)
                 }
             })
         }

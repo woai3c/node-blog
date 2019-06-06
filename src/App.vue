@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { fetchAllArticles, fetchTagsData  } from './api'
+import { fetchAppointArticles, fetchTagsData  } from './api'
 import { mapState } from 'vuex'
 import { timestampToDate } from './utils'
 
@@ -18,66 +18,91 @@ export default {
     data() {
         return {
             isShowLoading: false,
-            keepAliveData: ['manage']
+            keepAliveData: ['manage'],
+            loadingCount: 0,
         }
     },
-    // computed: {
-    //     ...mapState([
-    //         'articleNum',
-    //         'tags',
-    //         'articlesData',
-    //     ]),
-    // },
+    computed: {
+        ...mapState([
+            'articlesNum',
+            'tags',
+            'articlesData',
+            'year',
+            'month',
+            'tag',
+            'keyword',
+        ]),
+    },
     created() {
         // 添加请求拦截器
         this.$axios.interceptors.request.use(config => {
-            this.isShowLoading = true
+            this.addLoading()
             return config
         }, error => {
             this.isShowLoading = false
+            this.loadingCount = 0
             this.$Message.error('网络异常，请稍后再试')
             return Promise.reject(error)
         })
 
         // 添加响应拦截器
         this.$axios.interceptors.response.use(response => {
-            this.isShowLoading = false
+            this.isCloseLoading()
             return response
         }, error => {
             this.isShowLoading = false
+            this.loadingCount = 0
             this.$Message.error('网络异常，请稍后再试')
             return Promise.reject(error)
         })
     },
-    // watch: {
-    //     $route(to, from) {
-    //         const fname = from.name
-    //         const tname = to.name
-    //         if (fname != 'editor' && tname == 'manage') {
-    //             fetchAllArticles().then(res => {
-    //                 res = res.data
-    //                 if (res.code == 0) {
-    //                     const data = res.data
-    //                     if (data.length) {
-    //                         data.forEach(item => {
-    //                             item.date = timestampToDate(item.date)
-    //                         })
-                        
-    //                         this.articlesData = res.data
-    //                         this.articleNum = res.data.length
-    //                     }
-    //                 }
-    //             })
+    watch: {
+        $route(to, from) {
+            const fname = from.name
+            const tname = to.name
+            if (from.meta.isPublish || (fname != 'editor' && tname == 'manage')) {
+                from.meta.isPublish = false
+                fetchAppointArticles({
+                    tags: this.tag == '标签'? '' : this.tag,
+                    year: this.year == '年份'? '' : this.year,
+                    month: this.month == '月份'? '' : this.month,
+                    title: this.keyword,
+                }).then(res => {
+                    res = res.data
+                    if (res.code == 0) {
+                        const data = res.data
+                        data.forEach(item => {
+                            item.date = timestampToDate(item.date)
+                        })
 
-    //             fetchTagsData().then(res => {
-    //                 res = res.data
-    //                 if (res.code == 0) {
-    //                     this.tags = ['标签', ...res.data]
-    //                 }
-    //             })
-    //         }
-    //     }
-    // }
+                        this.$store.commit('setArticlesData', data)
+                        this.$store.commit('setArticlesNum', data.length)
+                    }
+                })
+
+                fetchTagsData().then(res => {
+                    res = res.data
+                    if (res.code == 0) {
+                        this.$store.commit('setTags', ['标签', ...res.data])
+                    }
+                })
+            }
+        }
+    },
+    methods: {
+        addLoading() {
+            this.isShowLoading = true
+            this.loadingCount++
+        },
+
+        isCloseLoading() {
+            this.loadingCount--
+            if (this.loadingCount <= 0) {
+                this.isShowLoading = false
+                this.loadingCount = 0
+            }
+        }
+    }
 }
 </script>
 

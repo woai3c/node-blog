@@ -6,8 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         token: '',
-        currentTag: '',
-        articleNum: 0,
+        articlesNum: 0,
         year: '年份',
         month: '月份',
         tag: '标签',
@@ -18,12 +17,36 @@ export default new Vuex.Store({
         articlesData: [],
     },
     mutations: {
-        setCurrentTag(state, name) {
-            state.currentTag = name
-        },
-
         setToken(state, token) {
             state.token = token
         },
+
+        setArticlesData(state, data) {
+            state.articlesData = data
+        },
+
+        setArticlesNum(state, num) {
+            state.articlesNum = num
+        },
+
+        setTags(state, data) {
+            state.tags = data
+        },
+
+        setTag(state, tag) {
+            state.tag = tag
+        },
+
+        setMonth(state, m) {
+            state.month = m
+        },
+
+        setYear(state, y) {
+            state.year = y
+        },
+
+        setKeyword(state, str) {
+            state.keyword = str
+        }
     }
 })

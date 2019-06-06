@@ -1,5 +1,8 @@
 <template>
     <div class="view-content">
+        <div class="back" @click="back">
+            < 返回
+        </div>
         <p class="title">{{ title }}</p>
         <div class="info">
             时间：{{ date }}
@@ -16,6 +19,7 @@ import { mapState } from 'vuex'
 import { timestampToDate } from '../../utils'
 
 export default {
+    name: 'artileContent',
     data() {
         return {
             content: '',
@@ -29,11 +33,17 @@ export default {
     },
     created() {
         const data = this.$route.params.articleData
+        console.log(data)
         if (data) {
             this.content = data.content
             this.title = data.title
             this.tags = data.tags
             this.date = timestampToDate(data.date)
+        }
+    },
+    methods: {
+        back() {
+            this.$router.back()
         }
     }
 }
@@ -41,6 +51,7 @@ export default {
 
 <style scoped>
 .view-content {
+    position: relative;
     background: #fff;
     padding: 20px;
     min-height: 100%;
@@ -55,5 +66,9 @@ export default {
     padding: 5px 0;
     border-bottom: 1px solid #ddd;
     margin-bottom: 10px;
+}
+.back {
+    font-size: 16px;
+    color: #888;
 }
 </style>

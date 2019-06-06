@@ -1,9 +1,5 @@
 <template>
     <div>
-        <p class="tag-title" v-show="currentTag">
-            <span>已切换到标签：</span>
-            {{ currentTag }}
-        </p>
         <ul @click="gotoContent">
             <li v-for="(item, index) in articlesData" :key="index" class="content-li">
                 <p class="p-title" :data-index="index">{{ item.title }}</p>
@@ -22,26 +18,20 @@ import { fetchAllArticles } from '../../api'
 import { timestampToDate } from '../../utils'
 
 export default {
-    data() {
-        return {
-            articlesData: []
-        }
-    },
     computed: mapState([
-        'currentTag'
+        'articlesData'
     ]),
     created() {
         fetchAllArticles().then(res => {
             res = res.data
             if (res.code == 0) {
                 const data = res.data
-                if (data.length) {
-                    data.forEach(item => {
-                        item.date = timestampToDate(item.date)
-                    })
+                data.forEach(item => {
+                    item.date = timestampToDate(item.date)
+                })
                 
-                    this.articlesData = res.data
-                }
+                this.$store.commit('setArticlesData', data)
+                this.$store.commit('setArticlesNum', data.length)
             }
         })
     },

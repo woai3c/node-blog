@@ -72,6 +72,7 @@ export default {
             pushArticle(obj).then(res => {
                 if (res.data.code == 0) {
                     this.$Message.success('发布成功')
+                    this.$route.meta.isPublish = true
                     this.quit()
                 } else {
                     this.$Message.error(res.data.msg)

@@ -8,7 +8,7 @@
         </header>
         <section class="main">
             <div class="content">
-                <keep-alive>
+                <keep-alive exclude="artileContent">
                     <router-view></router-view>
                 </keep-alive>
             </div>
@@ -44,7 +44,9 @@
 </template>
 
 <script>
-import { fetchTagsArtilesData } from '../../api'
+import { fetchTagsArtilesData, fetchAppointArticles, fetchAllArticles } from '../../api'
+import { timestampToDate } from '../../utils'
+import { mapState } from 'vuex'
 
 export default {
     data() {
@@ -52,6 +54,9 @@ export default {
             sidebarData: []
         }
     },
+    computed: mapState([
+        'articlesData'
+    ]),
     created() {
         fetchTagsArtilesData().then(res => {
             res = res.data
@@ -67,18 +72,45 @@ export default {
     },
     methods: {
         gotoPage(name) {
-            this.$store.commit('setCurrentTag', '')
-            this.$router.push(name)
+            if (name == 'index') {
+                fetchAllArticles().then(res => {
+                    res = res.data
+                    if (res.code == 0) {
+                        const data = res.data
+                        data.forEach(item => {
+                            item.date = timestampToDate(item.date)
+                        })
+                        
+                        this.$store.commit('setArticlesData', data)
+                        this.$store.commit('setArticlesNum', data.length)
+                        this.$router.push(name)
+                    }
+                })
+            } else {
+                this.$router.push(name)
+            }
         },
 
         toggleTag(e) {
-            this.$store.commit('setCurrentTag', e.target.innerHTML.trim().split('（')[0])
-            this.$router.push('index')
+            const tag = e.target.innerHTML.trim().split('（')[0]
+            fetchAppointArticles({tags: tag}).then(res => {
+                res = res.data
+                if (res.code == 0) {
+                    const data = res.data
+                    data.forEach(item => {
+                        item.date = timestampToDate(item.date)
+                    })
+
+                    this.$store.commit('setArticlesData', data)
+                    this.$store.commit('setArticlesNum', data.length)
+                    this.$router.push('index')
+                }
+            })
         },
 
         gotoLogin() {
             this.$router.push('manage')
-        }
+        },
     }
 }
 </script>

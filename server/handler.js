@@ -14,7 +14,6 @@ module.exports = {
         MongoClient.connect(url, config, (err, db) => {
             if (err) throw err
             const dbo = db.db('blog')
-            console.log(req.body.id)
             if (req.body.id) {
                 const query = {_id: new ObjectID(req.body.id)}
                 const body = req.body
@@ -107,6 +106,7 @@ module.exports = {
                         msg: '删除失败'
                     })
                 } else {
+                    updateTagsData()
                     res.send({
                         code: 0,
                         msg: '删除成功'
@@ -133,7 +133,8 @@ module.exports = {
                 if (err) {
                     res.send({
                         code: 0,
-                        msg: '查找失败'
+                        msg: '查找失败',
+                        data: []
                     })
                 } else {
                     res.send({
@@ -164,7 +165,8 @@ module.exports = {
         if (!tagsCacheData.length) {
             res.send({
                 code: 0,
-                msg: '没有标签数据'
+                msg: '没有标签数据',
+                data: []
             })
 
             return

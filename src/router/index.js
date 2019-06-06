@@ -11,6 +11,7 @@ export default new Router({
             path: '/editor',
             name: 'editor',
             component: () => import('../view/editor/Editor.vue'),
+            meta: {isPublish: true}
         },
         {
             path: '/index',
