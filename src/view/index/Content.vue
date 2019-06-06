@@ -33,7 +33,6 @@ export default {
     },
     created() {
         const data = this.$route.params.articleData
-        console.log(data)
         if (data) {
             this.content = data.content
             this.title = data.title

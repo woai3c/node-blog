@@ -56,8 +56,11 @@ export default {
     },
     computed: mapState([
         'articlesData',
+        'pageSize',
+        'pageIndex',
     ]),
     created() {
+        this.$store.commit('setPageIndex', 1)
         fetchTagsArtilesData().then(res => {
             res = res.data
             if (res.code == 0) {
@@ -73,7 +76,11 @@ export default {
     methods: {
         gotoPage(name) {
             if (name == 'index') {
-                fetchAllArticles().then(res => {
+                this.$store.commit('setPageIndex', 1)
+                fetchAllArticles({
+                    pageSize: this.pageSize,
+                    pageIndex: this.pageIndex,
+                }).then(res => {
                     res = res.data
                     if (res.code == 0) {
                         const data = res.data
@@ -81,8 +88,8 @@ export default {
                             item.date = timestampToDate(item.date)
                         })
                         
+                        this.$store.commit('setTotalArticles', res.total)
                         this.$store.commit('setArticlesData', data)
-                        this.$store.commit('setArticlesNum', data.length)
                         this.$router.push(name)
                     }
                 })
@@ -92,8 +99,13 @@ export default {
         },
 
         toggleTag(e) {
+            this.$store.commit('setPageIndex', 1)
             const tag = e.target.innerHTML.trim().split('（')[0]
-            fetchAppointArticles({tags: tag}).then(res => {
+            fetchAppointArticles({
+                tags: tag,
+                pageSize: this.pageSize,
+                pageIndex: this.pageIndex,
+            }).then(res => {
                 res = res.data
                 if (res.code == 0) {
                     const data = res.data
@@ -101,8 +113,8 @@ export default {
                         item.date = timestampToDate(item.date)
                     })
 
+                    this.$store.commit('setTotalArticles', res.total)
                     this.$store.commit('setArticlesData', data)
-                    this.$store.commit('setArticlesNum', data.length)
                     this.$router.push('index')
                 }
             })

@@ -65,6 +65,7 @@ export default {
             const tname = to.name
             if (from.meta.isPublish || (fname != 'editor' && tname == 'manage')) {
                 from.meta.isPublish = false
+                this.$store.commit('setPageIndex', 1)
                 fetchAppointArticles({
                     tags: this.tag == '标签'? '' : this.tag,
                     year: this.year == '年份'? '' : this.year,

@@ -4,10 +4,11 @@ const url = 'mongodb://localhost:27017/'
 const config = {useNewUrlParser: true}
 let tagsCacheData = []
 let tagsArticlesCacheData = {}
+let totalCacheArticles = 0
 // 标签数据是否改变
 let isTagsChange = true
-// 更新并缓存标签数据
-updateTagsData()
+
+initData()
 
 module.exports = {
     pushArticle(req, res) {
@@ -60,6 +61,7 @@ module.exports = {
                         })
                     } else {
                         updateTagsData()
+                        getAllArticlesNum()
                         isTagsChange = true
                         res.send({
                             code: 0,
@@ -78,9 +80,9 @@ module.exports = {
             if (err) throw err
             const dbo = db.db('blog')
             const query = req.query
-            const size = query.pageSize
-            const index = query.pageIndex
-            dbo.collection('user').find({}).toArray((err, result) => {
+            const size = ~~query.pageSize
+            const index = ~~query.pageIndex
+            dbo.collection('user').find().skip(size * (index - 1)).limit(size).toArray((err, result) => {
                 if (err) {
                     res.send({
                         code: 0,
@@ -89,8 +91,8 @@ module.exports = {
                 } else {
                     res.send({
                         code: 0,
-                        data: result.slice(size * (index - 1), size * index),
-                        total: result.length,
+                        data: result,
+                        total: totalCacheArticles,
                     })
                 }
                 
@@ -111,6 +113,7 @@ module.exports = {
                     })
                 } else {
                     updateTagsData()
+                    getAllArticlesNum()
                     res.send({
                         code: 0,
                         msg: '删除成功'
@@ -127,29 +130,36 @@ module.exports = {
             if (err) throw err
             const dbo = db.db('blog')
             const query = req.query
-            const size = query.pageSize
-            const index = query.pageIndex
+            const size = ~~query.pageSize
+            const index = ~~query.pageIndex
             const queryObj = {}
+            const collection = dbo.collection('user')
+            let total = 0
             if (query.title) queryObj.title = new RegExp(query.title)
             if (query.year) queryObj.year = ~~query.year
             if (query.month) queryObj.month = ~~query.month
             if (query.tags) queryObj.tags = query.tags
-            dbo.collection('user').find(queryObj).toArray((err, result) => {
-                if (err) {
-                    res.send({
-                        code: 0,
-                        msg: '查找失败',
-                        data: []
-                    })
-                } else {
-                    res.send({
-                        code: 0,
-                        data: result.slice(size * (index - 1), size * index),
-                        total: result.length,
-                    })
-                }
-                
-                db.close()
+
+            collection.find(queryObj).count((err, num) => {
+                if (err) throw err
+                total = num
+                collection.find(queryObj).skip(size * (index - 1)).limit(size).toArray((err, result) => {
+                    if (err) {
+                        res.send({
+                            code: 0,
+                            msg: '查找失败',
+                            data: []
+                        })
+                    } else {
+                        res.send({
+                            code: 0,
+                            data: result,
+                            total: total,
+                        })
+                    }
+                    
+                    db.close()
+                })
             })
         })
     },
@@ -190,6 +200,13 @@ module.exports = {
         isTagsChange = false
         searchTagsArticlesData(res)
     }
+}
+
+function initData() {
+    // 更新并缓存标签数据
+    updateTagsData()
+    // 获取文章总数
+    getAllArticlesNum()
 }
 
 function updateTagsData(res) {
@@ -236,6 +253,17 @@ function searchTagsArticlesData(res) {
 
                 db.close()
             })
+        })
+    })
+}
+
+function getAllArticlesNum() {
+    MongoClient.connect(url, config, (err, db) => {
+        if (err) throw err
+        const dbo = db.db('blog')
+        dbo.collection('user').find().count((err, result) => {
+            totalCacheArticles = result
+            db.close()
         })
     })
 }

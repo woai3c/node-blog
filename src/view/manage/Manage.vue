@@ -118,14 +118,17 @@ export default {
         },
 
         getYear(y) {
+            this.$store.commit('setPageIndex', 1)
             this.$store.commit('setYear', y)
         },
 
         getMonth(m) {
+            this.$store.commit('setPageIndex', 1)
             this.$store.commit('setMonth', m)
         },
 
         getTag(t) {
+            this.$store.commit('setPageIndex', 1)
             this.$store.commit('setTag', t)
         },
 
