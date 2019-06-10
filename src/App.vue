@@ -149,22 +149,6 @@ table {
     justify-content: center;
     align-items: center;
 }
-/* 设置滚动条的样式 */
-::-webkit-scrollbar {
-    width: 10px;
-}
-/* 滚动槽 */
-::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset006pxrgba(0,0,0,0.3);
-    border-radius: 10px;
-}
-/* 滚动条滑块 */
-::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background: rgba(0,0,0,0.3);
-    -webkit-box-shadow: inset006pxrgba(0,0,0,0.5);
-}
-
 
 /* markdown style */
 .markdown {
