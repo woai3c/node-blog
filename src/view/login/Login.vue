@@ -8,7 +8,7 @@
             <div class="input-c">
                 <Input type="password" v-model="pwd" prefix="md-lock" placeholder="密码" clearable/>
             </div>
-            <Button :loading="isShowLoading" class="submit" type="primary" @click="submit">登陆</Button>
+            <Button class="submit" type="primary" @click="submit">登陆</Button>
         </div>
     </div>
 </template>
@@ -22,7 +22,6 @@ export default {
         return {
             user: '',
             pwd: '',
-            isShowLoading: false,
             bg: {}
         }
     },
@@ -37,7 +36,6 @@ export default {
                 password: this.pwd,
             })
             .then(res => {
-                this.isShowLoading = false
                 res = res.data
                 if (res.code == 0) {
                     localStorage.setItem('token', res.data)

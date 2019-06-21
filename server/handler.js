@@ -14,11 +14,12 @@ initData()
 
 module.exports = {
     pushArticle(req, res) {
-        MongoClient.connect(url, config, (err, db) => {
+        MongoClient.connect(url, config, async (err, db) => {
             if (err) throw err
             const dbo = db.db('blog')
             const token = req.get('Authorization')
-            if (!isVaildToken(dbo, token)) {
+            const vaild = await isVaildToken(dbo, token)
+            if (!vaild) {
                 res.send({
                     code: 1,
                     msg: '无效的 token'
@@ -39,7 +40,7 @@ module.exports = {
                     }
                 }
 
-                dbo.collection('myBlog').updateOne(query, updateContent, err => {
+                dbo.collection('myBlogArticles').updateOne(query, updateContent, err => {
                     if (err) {
                         res.send({
                             code: 1,
@@ -66,7 +67,7 @@ module.exports = {
                     month: date.getMonth() + 1
                 }
                 
-                dbo.collection('myBlog').insertOne(articleData, err => {
+                dbo.collection('myBlogArticles').insertOne(articleData, err => {
                     if (err) {
                         res.send({
                             code: 1,
@@ -95,7 +96,7 @@ module.exports = {
             const query = req.query
             const size = ~~query.pageSize
             const index = ~~query.pageIndex
-            dbo.collection('myBlog').find().skip(size * (index - 1)).limit(size).toArray((err, result) => {
+            dbo.collection('myBlogArticles').find().skip(size * (index - 1)).limit(size).toArray((err, result) => {
                 if (err) {
                     res.send({
                         code: 0,
@@ -115,11 +116,12 @@ module.exports = {
     },
 
     deleteArticle(req, res) {
-        MongoClient.connect(url, config, (err, db) => {
+        MongoClient.connect(url, config, async (err, db) => {
             if (err) throw err
             const dbo = db.db('blog')
             const token = req.get('Authorization')
-            if (!isVaildToken(dbo, token)) {
+            const vaild = await isVaildToken(dbo, token)
+            if (!vaild) {
                 res.send({
                     code: 1,
                     msg: '无效的 token'
@@ -129,7 +131,7 @@ module.exports = {
                 return
             }
 
-            dbo.collection('myBlog').deleteOne({ _id: new ObjectID(req.body.id) }, err => {
+            dbo.collection('myBlogArticles').deleteOne({ _id: new ObjectID(req.body.id) }, err => {
                 if (err) {
                     res.send({
                         code: 1,
@@ -154,10 +156,11 @@ module.exports = {
             if (err) throw err
             const dbo = db.db('blog')
             const query = req.query
+            // ~~取整
             const size = ~~query.pageSize
             const index = ~~query.pageIndex
             const queryObj = {}
-            const collection = dbo.collection('myBlog')
+            const collection = dbo.collection('myBlogArticles')
             let total = 0
             if (query.title) queryObj.title = new RegExp(query.title)
             if (query.year) queryObj.year = ~~query.year
@@ -277,7 +280,7 @@ function updateTagsData(res) {
     MongoClient.connect(url, config, (err, db) => {
         if (err) throw err
         const dbo = db.db('blog')
-        dbo.collection('myBlog').find({tags: new RegExp('')}).toArray((err, result) => {
+        dbo.collection('myBlogArticles').find({tags: new RegExp('')}).toArray((err, result) => {
             if (err) throw err
             let arry = []
             result.forEach(item => {
@@ -305,7 +308,7 @@ function searchTagsArticlesData(res) {
         const lastIndex = tagsCacheData.length - 1
         tagsArticlesCacheData = {}
         tagsCacheData.forEach((item, i) => {
-            dbo.collection('myBlog').find({tags: item}).toArray((err, result) => {
+            dbo.collection('myBlogArticles').find({tags: item}).toArray((err, result) => {
                 if (err) throw err
                 tagsArticlesCacheData[item] = result.length
                 if (res && i == lastIndex) {
@@ -325,7 +328,7 @@ function getAllArticlesNum() {
     MongoClient.connect(url, config, (err, db) => {
         if (err) throw err
         const dbo = db.db('blog')
-        dbo.collection('myBlog').find().count((err, result) => {
+        dbo.collection('myBlogArticles').find().count((err, result) => {
             totalCacheArticles = result
             db.close()
         })
@@ -340,7 +343,7 @@ async function isVaildToken(dbo, token) {
         console.log(e)
         return false
     }
-    
+
     const {exp} = result
     const current = Math.floor(Date.now() / 1000)
     if (current > exp) {
