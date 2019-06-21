@@ -1,3 +1,5 @@
+const { key, generateToken } = require('./token')
+const jwt = require('jsonwebtoken')
 const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID
 const url = 'mongodb://localhost:27017/'
@@ -15,6 +17,17 @@ module.exports = {
         MongoClient.connect(url, config, (err, db) => {
             if (err) throw err
             const dbo = db.db('blog')
+            const token = req.get('Authorization')
+            if (!isVaildToken(dbo, token)) {
+                res.send({
+                    code: 1,
+                    msg: '无效的 token'
+                })
+
+                db.close()
+                return
+            }
+
             if (req.body.id) {
                 const query = {_id: new ObjectID(req.body.id)}
                 const body = req.body
@@ -26,7 +39,7 @@ module.exports = {
                     }
                 }
 
-                dbo.collection('user').updateOne(query, updateContent, err => {
+                dbo.collection('myBlog').updateOne(query, updateContent, err => {
                     if (err) {
                         res.send({
                             code: 1,
@@ -53,7 +66,7 @@ module.exports = {
                     month: date.getMonth() + 1
                 }
                 
-                dbo.collection('user').insertOne(articleData, err => {
+                dbo.collection('myBlog').insertOne(articleData, err => {
                     if (err) {
                         res.send({
                             code: 1,
@@ -82,7 +95,7 @@ module.exports = {
             const query = req.query
             const size = ~~query.pageSize
             const index = ~~query.pageIndex
-            dbo.collection('user').find().skip(size * (index - 1)).limit(size).toArray((err, result) => {
+            dbo.collection('myBlog').find().skip(size * (index - 1)).limit(size).toArray((err, result) => {
                 if (err) {
                     res.send({
                         code: 0,
@@ -105,7 +118,18 @@ module.exports = {
         MongoClient.connect(url, config, (err, db) => {
             if (err) throw err
             const dbo = db.db('blog')
-            dbo.collection('user').deleteOne({ _id: new ObjectID(req.body.id) }, err => {
+            const token = req.get('Authorization')
+            if (!isVaildToken(dbo, token)) {
+                res.send({
+                    code: 1,
+                    msg: '无效的 token'
+                })
+
+                db.close()
+                return
+            }
+
+            dbo.collection('myBlog').deleteOne({ _id: new ObjectID(req.body.id) }, err => {
                 if (err) {
                     res.send({
                         code: 1,
@@ -133,7 +157,7 @@ module.exports = {
             const size = ~~query.pageSize
             const index = ~~query.pageIndex
             const queryObj = {}
-            const collection = dbo.collection('user')
+            const collection = dbo.collection('myBlog')
             let total = 0
             if (query.title) queryObj.title = new RegExp(query.title)
             if (query.year) queryObj.year = ~~query.year
@@ -199,6 +223,46 @@ module.exports = {
 
         isTagsChange = false
         searchTagsArticlesData(res)
+    },
+
+    login(req, res) {
+        MongoClient.connect(url, config, (err, db) => {
+            if (err) throw err
+            const dbo = db.db('blog')
+            const {user, password} = req.body
+            console.log(user, password, 1)
+            dbo.collection('user').find({user, password}).toArray((err, result) => {
+                if (err || !result.length) {
+                    res.send({
+                        code: 1,
+                        msg: '没有查询到该用户'
+                    })
+                } else {
+                    const token = generateToken(user)
+                    const updateContent = {
+                        $set: { 
+                            token,
+                        }
+                    }
+
+                    dbo.collection('user').updateOne({user, password}, updateContent, err => {
+                        if (err) {
+                            res.send({
+                                code: 1,
+                                msg: '登陆失败，请重试'
+                            })
+                        } else {
+                            res.send({
+                                code: 0,
+                                data: token
+                            })
+                        }
+    
+                        db.close()
+                    })
+                }
+            })
+        })
     }
 }
 
@@ -213,7 +277,7 @@ function updateTagsData(res) {
     MongoClient.connect(url, config, (err, db) => {
         if (err) throw err
         const dbo = db.db('blog')
-        dbo.collection('user').find({tags: new RegExp('')}).toArray((err, result) => {
+        dbo.collection('myBlog').find({tags: new RegExp('')}).toArray((err, result) => {
             if (err) throw err
             let arry = []
             result.forEach(item => {
@@ -241,7 +305,7 @@ function searchTagsArticlesData(res) {
         const lastIndex = tagsCacheData.length - 1
         tagsArticlesCacheData = {}
         tagsCacheData.forEach((item, i) => {
-            dbo.collection('user').find({tags: item}).toArray((err, result) => {
+            dbo.collection('myBlog').find({tags: item}).toArray((err, result) => {
                 if (err) throw err
                 tagsArticlesCacheData[item] = result.length
                 if (res && i == lastIndex) {
@@ -261,9 +325,32 @@ function getAllArticlesNum() {
     MongoClient.connect(url, config, (err, db) => {
         if (err) throw err
         const dbo = db.db('blog')
-        dbo.collection('user').find().count((err, result) => {
+        dbo.collection('myBlog').find().count((err, result) => {
             totalCacheArticles = result
             db.close()
         })
     })
+}
+
+async function isVaildToken(dbo, token) {
+    let result
+    try {
+        result = jwt.verify(token, key)
+    } catch(e) {
+        console.log(e)
+        return false
+    }
+    
+    const {exp} = result
+    const current = Math.floor(Date.now() / 1000)
+    if (current > exp) {
+        return false
+    }
+
+    const res = await dbo.collection('user').find({token}).toArray()
+    if (res.length) {
+        return true
+    }
+    
+    return false
 }

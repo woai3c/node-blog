@@ -28,3 +28,7 @@ export function fetchTagsData() {
 export function fetchTagsArtilesData() {
     return axios.get('/fetchTagsArtilesData')
 }
+
+export function login(data) {
+    return axios.post('/login', data)
+}

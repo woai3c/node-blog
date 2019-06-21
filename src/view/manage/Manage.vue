@@ -162,7 +162,9 @@ export default {
                     this.$Message.success('删除成功')
                     this.initData()
                 } else {
-                    this.$Message.error(res.data.msg)
+                    this.$Message.error('删除失败，请重新登陆')
+                    localStorage.setItem('token', '')
+                    this.$router.push({name: 'login'})
                 }
             })
         },

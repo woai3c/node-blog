@@ -76,6 +76,8 @@ export default {
                     this.quit()
                 } else {
                     this.$Message.error(res.data.msg)
+                    localStorage.setItem('token', '')
+                    this.$router.push({name: 'login'})
                 }
             })
         },

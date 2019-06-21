@@ -5,7 +5,6 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        token: '',
         year: '年份',
         month: '月份',
         tag: '标签',
@@ -19,10 +18,6 @@ export default new Vuex.Store({
         totalArticles: 0,
     },
     mutations: {
-        setToken(state, token) {
-            state.token = token
-        },
-
         setArticlesData(state, data) {
             state.articlesData = data
         },

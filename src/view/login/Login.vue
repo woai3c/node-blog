@@ -3,7 +3,7 @@
         <div class="container">
             <p class="title">WELCOME</p>
             <div class="input-c">
-                <Input prefix="ios-contact" v-model="account" placeholder="用户名" clearable/>
+                <Input prefix="ios-contact" v-model="user" placeholder="用户名" clearable/>
             </div>
             <div class="input-c">
                 <Input type="password" v-model="pwd" prefix="md-lock" placeholder="密码" clearable/>
@@ -14,11 +14,13 @@
 </template>
 
 <script>
+import { login } from '../../api'
+
 export default {
     name: 'login',
     data() {
         return {
-            account: '',
+            user: '',
             pwd: '',
             isShowLoading: false,
             bg: {}
@@ -30,9 +32,22 @@ export default {
     methods: {
         submit() {
             this.isShowLoading = true
-            this.$store.commit('setToken', 'token')
-            this.$router.push('manage')
-        }
+            login({
+                user: this.user,
+                password: this.pwd,
+            })
+            .then(res => {
+                this.isShowLoading = false
+                res = res.data
+                if (res.code == 0) {
+                    localStorage.setItem('token', res.data)
+                    this.$router.push('manage')
+                    return
+                }
+
+                this.$Message.error(res.msg)
+            })
+        },
     }
 }
 </script>
@@ -90,10 +105,10 @@ export default {
 .login-vue .submit {
     width: 200px;
 }
-.login-vue .account {
+.login-vue .user {
     margin-top: 30px;
 }
-.login-vue .account span {
+.login-vue .user span {
     cursor: pointer;
 }
 .login-vue .ivu-icon {

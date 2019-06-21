@@ -40,6 +40,10 @@ export default {
         // 添加请求拦截器
         this.$axios.interceptors.request.use(config => {
             this.addLoading()
+            if (localStorage.getItem('token')) {
+                config.headers['Authorization'] = localStorage.getItem('token')
+            }
+            
             return config
         }, error => {
             this.isShowLoading = false

@@ -23,30 +23,34 @@ app.listen(port, hostname, () => {
     console.log(`正在监听${hostname}:${port}\n\n`)
 })
 
-app.use('/pushArticle', (req, res) => {
+app.post('/pushArticle', (req, res) => {
     handler.pushArticle(req, res)
 })
 
-app.use('/fetchAllArticles', (req, res) => {
+app.get('/fetchAllArticles', (req, res) => {
     handler.fetchAllArticles(req, res)
 })
 
-app.use('/deleteArticle', (req, res) => {
+app.post('/deleteArticle', (req, res) => {
     handler.deleteArticle(req, res)
 })
 
-app.use('/fetchArticleContent', (req, res) => {
+app.get('/fetchArticleContent', (req, res) => {
     handler.fetchArticleContent(req, res)
 })
 
-app.use('/fetchAppointArticles', (req, res) => {
+app.get('/fetchAppointArticles', (req, res) => {
     handler.fetchAppointArticles(req, res)
 })
 
-app.use('/fetchTagsData', (req, res) => {
+app.get('/fetchTagsData', (req, res) => {
     handler.fetchTagsData(req, res)
 })
 
-app.use('/fetchTagsArtilesData', (req, res) => {
+app.get('/fetchTagsArtilesData', (req, res) => {
     handler.fetchTagsArtilesData(req, res)
+})
+
+app.post('/login', (req, res) => {
+    handler.login(req, res)
 })
