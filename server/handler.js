@@ -1,4 +1,5 @@
 const { generateToken, isVaildToken } = require('./token')
+const { getClientIp } = require('./utils')
 const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID
 const url = 'mongodb://localhost:27017/'
@@ -62,7 +63,8 @@ module.exports = {
                     ...req.body,
                     date: date,
                     year: date.getFullYear(),
-                    month: date.getMonth() + 1
+                    month: date.getMonth() + 1,
+                    comments: [],
                 }
                 
                 dbo.collection('myBlogArticles').insertOne(articleData, err => {
@@ -112,7 +114,7 @@ module.exports = {
             })
         })
     },
-    
+
     fetchAppointArticles(req, res) {
         MongoClient.connect(url, config, (err, db) => {
             if (err) throw err
@@ -230,8 +232,7 @@ module.exports = {
         MongoClient.connect(url, config, (err, db) => {
             if (err) throw err
             const dbo = db.db('blog')
-            const {user, password} = req.body
-            console.log(user, password, 1)
+            const { user, password } = req.body
             dbo.collection('user').find({ user, password }).toArray((err, result) => {
                 if (err || !result.length) {
                     res.send({
@@ -264,7 +265,47 @@ module.exports = {
                 }
             })
         })
-    }
+    },
+
+    comment(req, res) {
+        MongoClient.connect(url, config, (err, db) => {
+            if (err) throw err
+            const dbo = db.db('blog')
+            const { comment, id } = req.body
+            const query = { _id: new ObjectID(id) }
+            const time = new Date()
+            const ip = getClientIp(req)
+            const updateContent = {
+                $addToSet: { 
+                    comments: {
+                        comment,
+                        time,
+                        user: ip
+                    }
+                }
+            }
+            
+            dbo.collection('myBlogArticles').updateOne(query, updateContent, err => {
+                if (err) {
+                    res.send({
+                        code: 1,
+                        msg: '评论失败'
+                    })
+                } else {
+                    res.send({
+                        code: 0,
+                        msg: '评论成功',
+                        data: {
+                            time,
+                            user: ip,
+                        }
+                    })
+                }
+
+                db.close()
+            })
+        })
+    },
 }
 
 function initData() {

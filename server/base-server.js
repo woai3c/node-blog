@@ -45,5 +45,9 @@ module.exports = {
         app.post('/login', (req, res) => {
             handler.login(req, res)
         })
+
+        app.post('/comment', (req, res) => {
+            handler.comment(req, res)
+        })
     }
 }

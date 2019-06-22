@@ -32,3 +32,7 @@ export function fetchTagsArtilesData() {
 export function login(data) {
     return axios.post('/login', data)
 }
+
+export function addComment(data) {
+    return axios.post('/comment', data)
+}

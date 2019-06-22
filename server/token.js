@@ -20,7 +20,7 @@ async function isVaildToken(dbo, token) {
         return false
     }
 
-    const {exp} = result
+    const { exp } = result
     const current = Math.floor(Date.now() / 1000)
     if (current > exp) {
         return false
@@ -30,7 +30,7 @@ async function isVaildToken(dbo, token) {
     if (res.length) {
         return true
     }
-    
+ 
     return false
 }
 
