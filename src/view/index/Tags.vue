@@ -49,7 +49,8 @@ export default {
             fetchAllArticles({
                 pageSize: this.pageSize,
                 pageIndex: this.pageIndex,
-            }).then(res => {
+            })
+            .then(res => {
                 res = res.data
                 if (res.code == 0) {
                     const data = res.data

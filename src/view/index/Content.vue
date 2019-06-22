@@ -20,6 +20,9 @@ import { timestampToDate } from '../../utils'
 
 export default {
     name: 'artileContent',
+    components: {
+        VueMarkdown
+    },
     data() {
         return {
             content: '',
@@ -27,9 +30,6 @@ export default {
             date: '',
             tags: ''
         }
-    },
-    components: {
-        VueMarkdown
     },
     created() {
         const data = this.$route.params.articleData

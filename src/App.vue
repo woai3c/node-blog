@@ -67,7 +67,7 @@ export default {
         $route(to, from) {
             const fname = from.name
             const tname = to.name
-            if (from.meta.isPublish || (fname != 'editor' && tname == 'manage')) {
+            if (from.meta.isPublish || (fname != 'editor' && fname != 'content' && tname == 'manage')) {
                 from.meta.isPublish = false
                 this.$store.commit('setPageIndex', 1)
                 fetchAppointArticles({
@@ -77,7 +77,8 @@ export default {
                     title: this.keyword,
                     pageSize: this.pageSize,
                     pageIndex: this.pageIndex,
-                }).then(res => {
+                })
+                .then(res => {
                     res = res.data
                     if (res.code == 0) {
                         const data = res.data
@@ -107,9 +108,8 @@ export default {
 
         isCloseLoading() {
             this.loadingCount--
-            if (this.loadingCount <= 0) {
+            if (this.loadingCount == 0) {
                 this.isShowLoading = false
-                this.loadingCount = 0
             }
         }
     }

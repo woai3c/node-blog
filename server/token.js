@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+// 密钥
 const key = 'secretKey'
 
 function generateToken(data) {
@@ -10,7 +11,30 @@ function generateToken(data) {
     return token
 }
 
+async function isVaildToken(dbo, token) {
+    let result
+    try {
+        result = jwt.verify(token, key)
+    } catch(e) {
+        console.log(e)
+        return false
+    }
+
+    const {exp} = result
+    const current = Math.floor(Date.now() / 1000)
+    if (current > exp) {
+        return false
+    }
+
+    const res = await dbo.collection('user').find({ token }).toArray()
+    if (res.length) {
+        return true
+    }
+    
+    return false
+}
+
 module.exports = {
-    key,
     generateToken,
+    isVaildToken
 }

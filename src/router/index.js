@@ -15,12 +15,11 @@ export default new Router({
         },
         {
             path: '/index',
-            name: 'index',
             component: () => import('../view/index/Index.vue'),
             children: [
                 {
                     path: '/',
-                    name: 'tags',
+                    name: 'index',
                     component: () => import('../view/index/Tags.vue')
                 },
                 {

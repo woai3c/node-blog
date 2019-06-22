@@ -4,8 +4,8 @@
   "description": " node搭建的个人博客网站",
   "main": "main.js",
   "scripts": {
-    "dev": "node server.js",
-    "build": "webpack --config build/webpack.pro.js --mode production"
+    "dev": "node ./server/dev-server.js",
+    "build": "webpack --config build/webpack.pro.js --mode production && node ./server/pro-server.js"
   },
   "repository": {
     "type": "git",

@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { fetchAllArticles, deleteArticle, fetchAppointArticles, fetchTagsData  } from '../../api'
+import { fetchAllArticles, deleteArticle, fetchAppointArticles, fetchTagsData } from '../../api'
 import { mapState } from 'vuex'
 import { timestampToDate } from '../../utils'
 

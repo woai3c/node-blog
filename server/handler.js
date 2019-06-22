@@ -1,9 +1,8 @@
-const { key, generateToken } = require('./token')
-const jwt = require('jsonwebtoken')
+const { generateToken, isVaildToken } = require('./token')
 const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID
 const url = 'mongodb://localhost:27017/'
-const config = {useNewUrlParser: true}
+const config = { useNewUrlParser: true }
 let tagsCacheData = []
 let tagsArticlesCacheData = {}
 let totalCacheArticles = 0
@@ -30,7 +29,7 @@ module.exports = {
             }
 
             if (req.body.id) {
-                const query = {_id: new ObjectID(req.body.id)}
+                const query = { _id: new ObjectID(req.body.id) }
                 const body = req.body
                 const updateContent = {
                     $set: { 
@@ -57,7 +56,6 @@ module.exports = {
 
                     db.close()
                 })
-
             } else {
                 const date = new Date()
                 const articleData = {
@@ -114,43 +112,7 @@ module.exports = {
             })
         })
     },
-
-    deleteArticle(req, res) {
-        MongoClient.connect(url, config, async (err, db) => {
-            if (err) throw err
-            const dbo = db.db('blog')
-            const token = req.get('Authorization')
-            const vaild = await isVaildToken(dbo, token)
-            if (!vaild) {
-                res.send({
-                    code: 1,
-                    msg: '无效的 token'
-                })
-
-                db.close()
-                return
-            }
-
-            dbo.collection('myBlogArticles').deleteOne({ _id: new ObjectID(req.body.id) }, err => {
-                if (err) {
-                    res.send({
-                        code: 1,
-                        msg: '删除失败'
-                    })
-                } else {
-                    updateTagsData()
-                    getAllArticlesNum()
-                    res.send({
-                        code: 0,
-                        msg: '删除成功'
-                    })
-                }
-                
-                db.close()
-            })
-        })
-    },
-
+    
     fetchAppointArticles(req, res) {
         MongoClient.connect(url, config, (err, db) => {
             if (err) throw err
@@ -187,6 +149,42 @@ module.exports = {
                     
                     db.close()
                 })
+            })
+        })
+    },
+
+    deleteArticle(req, res) {
+        MongoClient.connect(url, config, async (err, db) => {
+            if (err) throw err
+            const dbo = db.db('blog')
+            const token = req.get('Authorization')
+            const vaild = await isVaildToken(dbo, token)
+            if (!vaild) {
+                res.send({
+                    code: 1,
+                    msg: '无效的 token'
+                })
+
+                db.close()
+                return
+            }
+
+            dbo.collection('myBlogArticles').deleteOne({ _id: new ObjectID(req.body.id) }, err => {
+                if (err) {
+                    res.send({
+                        code: 1,
+                        msg: '删除失败'
+                    })
+                } else {
+                    updateTagsData()
+                    getAllArticlesNum()
+                    res.send({
+                        code: 0,
+                        msg: '删除成功'
+                    })
+                }
+                
+                db.close()
             })
         })
     },
@@ -234,7 +232,7 @@ module.exports = {
             const dbo = db.db('blog')
             const {user, password} = req.body
             console.log(user, password, 1)
-            dbo.collection('user').find({user, password}).toArray((err, result) => {
+            dbo.collection('user').find({ user, password }).toArray((err, result) => {
                 if (err || !result.length) {
                     res.send({
                         code: 1,
@@ -248,7 +246,7 @@ module.exports = {
                         }
                     }
 
-                    dbo.collection('user').updateOne({user, password}, updateContent, err => {
+                    dbo.collection('user').updateOne({ user, password }, updateContent, err => {
                         if (err) {
                             res.send({
                                 code: 1,
@@ -280,7 +278,7 @@ function updateTagsData(res) {
     MongoClient.connect(url, config, (err, db) => {
         if (err) throw err
         const dbo = db.db('blog')
-        dbo.collection('myBlogArticles').find({tags: new RegExp('')}).toArray((err, result) => {
+        dbo.collection('myBlogArticles').find({ tags: new RegExp('') }).toArray((err, result) => {
             if (err) throw err
             let arry = []
             result.forEach(item => {
@@ -308,7 +306,7 @@ function searchTagsArticlesData(res) {
         const lastIndex = tagsCacheData.length - 1
         tagsArticlesCacheData = {}
         tagsCacheData.forEach((item, i) => {
-            dbo.collection('myBlogArticles').find({tags: item}).toArray((err, result) => {
+            dbo.collection('myBlogArticles').find({ tags: item }).toArray((err, result) => {
                 if (err) throw err
                 tagsArticlesCacheData[item] = result.length
                 if (res && i == lastIndex) {
@@ -333,27 +331,4 @@ function getAllArticlesNum() {
             db.close()
         })
     })
-}
-
-async function isVaildToken(dbo, token) {
-    let result
-    try {
-        result = jwt.verify(token, key)
-    } catch(e) {
-        console.log(e)
-        return false
-    }
-
-    const {exp} = result
-    const current = Math.floor(Date.now() / 1000)
-    if (current > exp) {
-        return false
-    }
-
-    const res = await dbo.collection('user').find({token}).toArray()
-    if (res.length) {
-        return true
-    }
-    
-    return false
 }
