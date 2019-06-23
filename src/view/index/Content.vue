@@ -54,11 +54,17 @@ export default {
     },
     created() {
         this.articleData = this.$route.params.articleData
-        this.date = timestampToDate(this.articleData.date)
-        this.articleData.comments.forEach(item => {
-            item.time = timestampToDate(item.time)
-            item.user = formatIP(item.user)
-        })
+        if (this.articleData) {
+            this.date = timestampToDate(this.articleData.date)
+            this.articleData.comments.forEach(item => {
+                item.time = timestampToDate(item.time)
+                item.user = formatIP(item.user)
+            })
+        } else {
+            this.articleData = {
+                title: ''
+            }
+        }
     },
     methods: {
         back() {

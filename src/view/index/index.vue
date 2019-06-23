@@ -45,14 +45,13 @@
 </template>
 
 <script>
-import { fetchTagsArtilesData, fetchAppointArticles, fetchAllArticles, getVisits } from '../../api'
-import { timestampToDate, formatVisits } from '../../utils'
+import { fetchTagsArtilesData, fetchAppointArticles, fetchAllArticles } from '../../api'
+import { timestampToDate} from '../../utils'
 import { mapState } from 'vuex'
 
 export default {
     data() {
         return {
-            visits: '',
             sidebarData: []
         }
     },
@@ -60,6 +59,7 @@ export default {
         'articlesData',
         'pageSize',
         'pageIndex',
+        'visits'
     ]),
     created() {
         this.$store.commit('setPageIndex', 1)
@@ -72,13 +72,6 @@ export default {
                     tag: key,
                     nums: data[key]
                 }))
-            }
-        })
-
-        getVisits().then(res => {
-            res = res.data
-            if (res.code == 0) {
-                this.visits = formatVisits(res.data)
             }
         })
     },

@@ -16,8 +16,13 @@ export default new Vuex.Store({
         pageSize: 8,
         pageIndex: 1,
         totalArticles: 0,
+        visits: '',
     },
     mutations: {
+        setVisits(state, visits) {
+            state.visits = visits
+        },
+
         setArticlesData(state, data) {
             state.articlesData = data
         },

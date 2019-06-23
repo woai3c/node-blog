@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import { fetchAppointArticles, fetchTagsData  } from './api'
+import { fetchAppointArticles, fetchTagsData, getVisits } from './api'
 import { mapState } from 'vuex'
-import { timestampToDate } from './utils'
+import { timestampToDate, formatVisits } from './utils'
 
 export default {
     data() {
@@ -61,6 +61,14 @@ export default {
             this.loadingCount = 0
             this.$Message.error('网络异常，请稍后再试')
             return Promise.reject(error)
+        })
+
+        // 获取访问次数
+        getVisits().then(res => {
+            res = res.data
+            if (res.code == 0) {
+                this.$store.commit('setVisits', formatVisits(res.data))
+            }
         })
     },
     watch: {
