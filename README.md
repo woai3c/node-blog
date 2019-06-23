@@ -51,6 +51,8 @@
 * [mongodb 教程二](https://www.runoob.com/nodejs/nodejs-mongodb.html)
 
 在安装完 mongodb 后，打开 `mongod.exe` 和 `mongo.exe`，然后克隆项目
+
+**登陆入口在页面脚部的 Copyright ©2019 woai3c**
 ```
 git clone git@github.com:woai3c/node-blog.git
 ```
