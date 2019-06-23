@@ -35,9 +35,11 @@
 * mocha
 
 ## 使用
+需要先下载 mongodb，建议按照[windows 安装教程](https://www.runoob.com/mongodb/mongodb-window-install.html)一步步安装。
+
 * [mongodb 教程一](https://www.runoob.com/mongodb/mongodb-databases-documents-collections.html)
 * [mongodb 教程二](https://www.runoob.com/nodejs/nodejs-mongodb.html)
-需要先下载 mongodb，建议按照[windows 安装教程](https://www.runoob.com/mongodb/mongodb-window-install.html)一步步安装。
+
 在安装完 mongodb 后，打开 `mongod.exe` 和 `mongo.exe`，然后克隆项目
 ```
 git clone git@github.com:woai3c/node-blog.git
