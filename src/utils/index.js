@@ -1,4 +1,4 @@
-export function timestampToDate(timestamp) {
+function timestampToDate(timestamp = 0) {
     if (/\s/.test(timestamp)) {
         return timestamp
     }
@@ -7,19 +7,26 @@ export function timestampToDate(timestamp) {
     return date.toLocaleDateString().replace(/\//g, '-') + ' ' + date.toTimeString().split(' ')[0]
 }
 
-export function objToUrlParam(obj) {
+function objToUrlParam(obj = {}) {
     let param = ''
     for (let key in obj) {
         param += '&' + key + '=' + obj[key]
     }
     
-    return '?' + param.substr(1)
+    return param? '?' + param.substr(1) : ''
 }
 
-export function formatIP(ip) {
-    return ip.split('.').slice(0, 3).join('.') + '.*'
+function formatIP(ip = '') {
+    return ip? ip.split('.').slice(0, 3).join('.') + '.*' : ''
 }
 
-export function formatVisits(visits) {
-    return (visits + '').replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+function formatVisits(visits = 0) {
+    return visits? (visits + '').replace(/(\d)(?=(?:\d{3})+$)/g, '$1,') : 0
+}
+
+module.exports = {
+    timestampToDate,
+    objToUrlParam,
+    formatIP,
+    formatVisits,
 }

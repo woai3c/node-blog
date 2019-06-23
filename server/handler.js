@@ -68,7 +68,7 @@ module.exports = {
                     comments: [],
                 }
                 
-                dcollection.insertOne(articleData, err => {
+                collection.insertOne(articleData, err => {
                     if (err) {
                         res.send({
                             code: 1,
