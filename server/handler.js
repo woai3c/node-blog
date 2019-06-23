@@ -4,6 +4,7 @@ const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID
 const url = 'mongodb://localhost:27017/'
 const config = { useNewUrlParser: true }
+const articleCollection = 'myBlogArticles'
 let tagsCacheData = []
 let tagsArticlesCacheData = {}
 let totalCacheArticles = 0
@@ -19,7 +20,7 @@ module.exports = {
             const dbo = db.db('blog')
             const token = req.get('Authorization')
             const vaild = await isVaildToken(dbo, token)
-            const collection = dbo.collection('myBlogArticles')
+            const collection = dbo.collection(articleCollection)
             if (!vaild) {
                 res.send({
                     code: 1,
@@ -97,7 +98,7 @@ module.exports = {
             const query = req.query
             const size = ~~query.pageSize
             const index = ~~query.pageIndex
-            dbo.collection('myBlogArticles').find().skip(size * (index - 1)).limit(size).toArray((err, result) => {
+            dbo.collection(articleCollection).find().skip(size * (index - 1)).limit(size).toArray((err, result) => {
                 if (err) {
                     res.send({
                         code: 0,
@@ -125,7 +126,7 @@ module.exports = {
             const size = ~~query.pageSize
             const index = ~~query.pageIndex
             const queryObj = {}
-            const collection = dbo.collection('myBlogArticles')
+            const collection = dbo.collection(articleCollection)
             if (query.title) queryObj.title = new RegExp(query.title)
             if (query.year) queryObj.year = ~~query.year
             if (query.month) queryObj.month = ~~query.month
@@ -171,7 +172,7 @@ module.exports = {
                 return
             }
 
-            dbo.collection('myBlogArticles').deleteOne(query, err => {
+            dbo.collection(articleCollection).deleteOne(query, err => {
                 if (err) {
                     res.send({
                         code: 1,
@@ -286,7 +287,7 @@ module.exports = {
                 }
             }
             
-            dbo.collection('myBlogArticles').updateOne(query, updateContent, err => {
+            dbo.collection(articleCollection).updateOne(query, updateContent, err => {
                 if (err) {
                     res.send({
                         code: 1,
@@ -352,7 +353,7 @@ function updateTagsData(res) {
     MongoClient.connect(url, config, (err, db) => {
         if (err) throw err
         const dbo = db.db('blog')
-        dbo.collection('myBlogArticles').find({ tags: new RegExp('') }).toArray((err, result) => {
+        dbo.collection(articleCollection).find({ tags: new RegExp('') }).toArray((err, result) => {
             if (err) throw err
             let arry = []
             result.forEach(item => {
@@ -380,7 +381,7 @@ function searchTagsArticlesData(res) {
         const lastIndex = tagsCacheData.length - 1
         tagsArticlesCacheData = {}
         tagsCacheData.forEach((item, i) => {
-            dbo.collection('myBlogArticles').find({ tags: item }).toArray((err, result) => {
+            dbo.collection(articleCollection).find({ tags: item }).toArray((err, result) => {
                 if (err) throw err
                 tagsArticlesCacheData[item] = result.length
                 if (res && i == lastIndex) {
@@ -400,7 +401,7 @@ function getAllArticlesNum() {
     MongoClient.connect(url, config, (err, db) => {
         if (err) throw err
         const dbo = db.db('blog')
-        dbo.collection('myBlogArticles').find().count((err, result) => {
+        dbo.collection(articleCollection).find().count((err, result) => {
             totalCacheArticles = result
             db.close()
         })
