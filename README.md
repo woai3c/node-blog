@@ -1,4 +1,4 @@
-# 用 node 搭建自己的个人博客
+# 用 node 搭建的个人开源博客
 这个项目是为了学习 node 而建的，从前端到后端一手包办。相对来说，还是有一定难度的，适合有一定编程基础的人进阶学习。
 
 如果有问题，欢迎提 [issues](https://github.com/woai3c/node-blog/issues)
