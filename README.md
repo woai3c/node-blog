@@ -16,23 +16,23 @@
 
 ## 使用的库、框架
 ### 前端
-* vue
-* vue-router
-* vuex
-* vue-markdown
-* iview
-* axios
+* [vue](https://cn.vuejs.org/v2/guide/)
+* [vue-router](https://router.vuejs.org/zh/)
+* [vuex](https://vuex.vuejs.org/zh/)
+* [vue-markdown](https://github.com/miaolz123/vue-markdown)
+* [iview](https://www.iviewui.com/docs/guide/install)
+* [axios](https://www.kancloud.cn/yunye/axios/234845)
 
 ### 后端
-* node
-* express
-* jsonwebtoken
+* [node](https://nodejs.org/zh-cn/)
+* [express](https://expressjs.com/zh-cn/)
+* [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken#readme)
 
 ### 数据库
-* mongodb
+* [mongodb](https://www.runoob.com/mongodb/mongodb-databases-documents-collections.html)
 
 ### 测试
-* mocha
+* [mocha](https://mochajs.org/)
 
 ## 使用
 需要先下载 mongodb，建议按照[windows 安装教程](https://www.runoob.com/mongodb/mongodb-window-install.html)一步步安装。
@@ -48,11 +48,19 @@ git clone git@github.com:woai3c/node-blog.git
 ```
 npm i
 ```
-开发环境（前端代码热更新，修改完即可查看效果，后端代码修改完需求重启服务）
+开发环境（前端代码热更新，修改完即可查看效果，后端代码修改完需要重启服务）
 ```
 npm run dev
 ```
 生产环境 打包并开启服务（打包过程有点长，需求等待）
 ```
 npm run build
+```
+测试
+```
+npm run test
+```
+访问地址
+```
+http://localhost:8080/
 ```
