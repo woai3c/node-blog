@@ -20,6 +20,10 @@
 ### 后端
 * node
 * express
+* jsonwebtoken
 
 ### 数据库
 * mongodb
+
+### 测试
+* mocha
