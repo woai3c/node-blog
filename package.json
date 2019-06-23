@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/woai3c/node-blog#readme",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.19.0",
     "express": "^4.17.0",
     "iview": "^3.4.2",
     "jsonwebtoken": "^8.5.1",
