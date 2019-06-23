@@ -1,7 +1,7 @@
 # 用 node 搭建个人博客
 这个项目是为了学习 node 而建的，从前端到后端一手包办。相对来说，还是有一定难度的，适合有一定编程基础的人进阶学习。
 
-注意，本项目前后端的代码都是放在一起的，前端代码放在 `src` 目录，后端代码放在 `server` 目录。
+注意，本项目的前后端代码都是放在一起的，前端代码放在 `src` 目录，后端代码放在 `server` 目录。
 
 ## 相关文档
 * [多个请求下 loading 的展示与关闭](https://github.com/woai3c/Front-end-articles/blob/master/control%20loading.md)
