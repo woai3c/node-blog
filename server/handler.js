@@ -19,6 +19,7 @@ module.exports = {
             const dbo = db.db('blog')
             const token = req.get('Authorization')
             const vaild = await isVaildToken(dbo, token)
+            const collection = dbo.collection('myBlogArticles')
             if (!vaild) {
                 res.send({
                     code: 1,
@@ -40,7 +41,7 @@ module.exports = {
                     }
                 }
 
-                dbo.collection('myBlogArticles').updateOne(query, updateContent, err => {
+                collection.updateOne(query, updateContent, err => {
                     if (err) {
                         res.send({
                             code: 1,
@@ -67,7 +68,7 @@ module.exports = {
                     comments: [],
                 }
                 
-                dbo.collection('myBlogArticles').insertOne(articleData, err => {
+                dcollection.insertOne(articleData, err => {
                     if (err) {
                         res.send({
                             code: 1,
@@ -125,7 +126,6 @@ module.exports = {
             const index = ~~query.pageIndex
             const queryObj = {}
             const collection = dbo.collection('myBlogArticles')
-            let total = 0
             if (query.title) queryObj.title = new RegExp(query.title)
             if (query.year) queryObj.year = ~~query.year
             if (query.month) queryObj.month = ~~query.month
@@ -133,7 +133,6 @@ module.exports = {
 
             collection.find(queryObj).count((err, num) => {
                 if (err) throw err
-                total = num
                 collection.find(queryObj).skip(size * (index - 1)).limit(size).toArray((err, result) => {
                     if (err) {
                         res.send({
@@ -145,7 +144,7 @@ module.exports = {
                         res.send({
                             code: 0,
                             data: result,
-                            total: total,
+                            total: num,
                         })
                     }
                     
@@ -161,6 +160,7 @@ module.exports = {
             const dbo = db.db('blog')
             const token = req.get('Authorization')
             const vaild = await isVaildToken(dbo, token)
+            const query = { _id: new ObjectID(req.body.id) }
             if (!vaild) {
                 res.send({
                     code: 1,
@@ -171,7 +171,7 @@ module.exports = {
                 return
             }
 
-            dbo.collection('myBlogArticles').deleteOne({ _id: new ObjectID(req.body.id) }, err => {
+            dbo.collection('myBlogArticles').deleteOne(query, err => {
                 if (err) {
                     res.send({
                         code: 1,
@@ -233,8 +233,9 @@ module.exports = {
             if (err) throw err
             const dbo = db.db('blog')
             const { user, password } = req.body
-            dbo.collection('user').find({ user, password }).toArray((err, result) => {
-                if (err || !result.length) {
+            const collection = dbo.collection('user')
+            collection.findOne({ user, password }).then(result => {
+                if (!result) {
                     res.send({
                         code: 1,
                         msg: '没有查询到该用户'
@@ -247,7 +248,7 @@ module.exports = {
                         }
                     }
 
-                    dbo.collection('user').updateOne({ user, password }, updateContent, err => {
+                    collection.updateOne({ user, password }, updateContent, err => {
                         if (err) {
                             res.send({
                                 code: 1,
@@ -306,6 +307,38 @@ module.exports = {
             })
         })
     },
+
+    getVisits(req, res) {
+        MongoClient.connect(url, config, (err, db) => {
+            if (err) throw err
+            const dbo = db.db('blog')
+            const query = { user: 'admin' }
+            const collection = dbo.collection('user')
+            const updateContent = {
+                $inc: { 
+                    visits: 1
+                }
+            }
+            
+            collection.updateOne(query, updateContent, err => {
+                if (err) {
+                    res.send({
+                        code: 1,
+                        msg: '获取访问量失败'
+                    })
+                } else {
+                    collection.findOne(query).then(result => {
+                        res.send({
+                            code: 0,
+                            data: result.visits
+                        })
+
+                        db.close()
+                    })
+                }
+            })
+        })
+    }
 }
 
 function initData() {

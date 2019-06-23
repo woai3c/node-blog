@@ -49,5 +49,9 @@ module.exports = {
         app.post('/comment', (req, res) => {
             handler.comment(req, res)
         })
+
+        app.get('/getVisits', (req, res) => {
+            handler.getVisits(req, res)
+        })
     }
 }

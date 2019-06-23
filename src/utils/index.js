@@ -19,3 +19,7 @@ export function objToUrlParam(obj) {
 export function formatIP(ip) {
     return ip.split('.').slice(0, 3).join('.') + '.*'
 }
+
+export function formatVisits(visits) {
+    return (visits + '').replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+}

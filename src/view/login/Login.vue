@@ -29,7 +29,20 @@ export default {
         this.bg.backgroundImage = 'url(' + require('../../assets/bg.jpg') + ')'
     },
     methods: {
+        vaildInput() {
+            const re = /^\w+$/
+            if (!re.test(this.user) || !re.test(this.pwd)) {
+                this.$Message.error('请输入正确的用户名和密码')
+                return false
+            }
+            
+            return true
+        },
         submit() {
+            if (!this.vaildInput()) {
+                return
+            }
+
             this.isShowLoading = true
             login({
                 user: this.user,
