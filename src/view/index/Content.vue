@@ -82,20 +82,14 @@ export default {
                 id: this.articleData._id,
             })
             .then(res => {
-                res = res.data
-                if (res.code == 0) {
-                    const data = res.data
-                    this.$route.params.articleData.comments.push({
-                        user: formatIP(data.user),
-                        comment: this.comment,
-                        time: timestampToDate(data.time)
-                    })
+                const data = res.data
+                this.$route.params.articleData.comments.push({
+                    user: formatIP(data.user),
+                    comment: this.comment,
+                    time: timestampToDate(data.time)
+                })
 
-                    this.comment = ''
-                    return
-                }
-
-                this.$Message.error('评论失败，请稍候再试')
+                this.comment = ''
             })
         }
     }

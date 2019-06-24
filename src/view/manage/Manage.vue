@@ -97,23 +97,17 @@ export default {
                 pageSize: this.pageSize,
                 pageIndex: this.pageIndex,
             }).then(res => {
-                res = res.data
-                if (res.code == 0) {
-                    const data = res.data
-                    data.forEach(item => {
-                        item.date = timestampToDate(item.date)
-                    })
+                const data = res.data
+                data.forEach(item => {
+                    item.date = timestampToDate(item.date)
+                })
 
-                    this.$store.commit('setTotalArticles', res.total)
-                    this.$store.commit('setArticlesData', data)
-                }
+                this.$store.commit('setTotalArticles', res.total)
+                this.$store.commit('setArticlesData', data)
             })
 
             fetchTagsData().then(res => {
-                res = res.data
-                if (res.code == 0) {
-                    this.$store.commit('setTags', ['标签', ...res.data])
-                }
+                this.$store.commit('setTags', ['标签', ...res.data])
             })
         },
 
@@ -158,14 +152,12 @@ export default {
         del() {
             this.isShowModal = false
             deleteArticle({ id: this.articlesData[this.index]._id }).then(res => {
-                if (res.data.code == 0) {
-                    this.$Message.success('删除成功')
-                    this.initData()
-                } else {
-                    this.$Message.error('删除失败，请重新登陆')
-                    localStorage.setItem('token', '')
-                    this.$router.push({name: 'login'})
-                }
+                this.$Message.success('删除成功')
+                this.initData()
+            })
+            .catch(err => {
+                localStorage.setItem('token', '')
+                this.$router.push({name: 'login'})
             })
         },
 
@@ -179,16 +171,13 @@ export default {
                 pageIndex: this.pageIndex,
             })
             .then(res => {
-                res = res.data
-                if (res.code == 0) {
-                    const data = res.data
-                    data.forEach(item => {
-                        item.date = timestampToDate(item.date)
-                    })
+                const data = res.data
+                data.forEach(item => {
+                    item.date = timestampToDate(item.date)
+                })
 
-                    this.$store.commit('setArticlesData', data)
-                    this.$store.commit('setTotalArticles', res.total)
-                }
+                this.$store.commit('setArticlesData', data)
+                this.$store.commit('setTotalArticles', res.total)
             })
         }
     }

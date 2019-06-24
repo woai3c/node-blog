@@ -49,14 +49,8 @@ export default {
                 password: this.pwd,
             })
             .then(res => {
-                res = res.data
-                if (res.code == 0) {
-                    localStorage.setItem('token', res.data)
-                    this.$router.push('manage')
-                    return
-                }
-
-                this.$Message.error(res.msg)
+                localStorage.setItem('token', res.data)
+                this.$router.push('manage')
             })
         },
     }

@@ -26,7 +26,7 @@ module.exports = {
             if (!vaild) {
                 res.send({
                     code: 1,
-                    msg: '无效的 token'
+                    msg: 'token 失效，请重新登陆'
                 })
 
                 db.close()
@@ -168,7 +168,7 @@ module.exports = {
             if (!vaild) {
                 res.send({
                     code: 1,
-                    msg: '无效的 token'
+                    msg: 'token 失效，请重新登陆'
                 })
 
                 db.close()

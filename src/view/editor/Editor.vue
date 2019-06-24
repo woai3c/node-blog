@@ -26,7 +26,7 @@
 
 <script>
 import VueMarkdown from 'vue-markdown'
-import { pushArticle, fetchArticleContent } from '../../api'
+import { pushArticle } from '../../api'
 
 export default {
     name: 'editor',
@@ -70,15 +70,13 @@ export default {
 
             if (this.id) obj.id = this.id
             pushArticle(obj).then(res => {
-                if (res.data.code == 0) {
-                    this.$Message.success('发布成功')
-                    this.$route.meta.isPublish = true
-                    this.quit()
-                } else {
-                    this.$Message.error(res.data.msg)
-                    localStorage.setItem('token', '')
-                    this.$router.push({name: 'login'})
-                }
+                this.$Message.success('发布成功')
+                this.$route.meta.isPublish = true
+                this.quit()
+            })
+            .catch(err => {
+                localStorage.setItem('token', '')
+                this.$router.push({name: 'login'})
             })
         },
 

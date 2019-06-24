@@ -51,16 +51,13 @@ export default {
                 pageIndex: this.pageIndex,
             })
             .then(res => {
-                res = res.data
-                if (res.code == 0) {
-                    const data = res.data
-                    data.forEach(item => {
-                        item.date = timestampToDate(item.date)
-                    })
-                    
-                    this.$store.commit('setTotalArticles', res.total)
-                    this.$store.commit('setArticlesData', data)
-                }
+                const data = res.data
+                data.forEach(item => {
+                    item.date = timestampToDate(item.date)
+                })
+                
+                this.$store.commit('setTotalArticles', res.total)
+                this.$store.commit('setArticlesData', data)
             })
         }
     }

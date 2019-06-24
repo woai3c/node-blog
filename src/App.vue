@@ -55,7 +55,14 @@ export default {
         // 添加响应拦截器
         this.$axios.interceptors.response.use(response => {
             this.isCloseLoading()
-            return response
+            const res = response.data
+            if (res.code == 0) {
+                return res
+            }
+
+            console.log(res.msg)
+            this.$Message.error(res.msg)
+            return Promise.reject(new Error(res.msg || 'Error'))
         }, error => {
             this.isShowLoading = false
             this.loadingCount = 0
@@ -65,10 +72,7 @@ export default {
 
         // 获取访问次数
         fetchVisits().then(res => {
-            res = res.data
-            if (res.code == 0) {
-                this.$store.commit('setVisits', formatVisits(res.data))
-            }
+            this.$store.commit('setVisits', formatVisits(res.data))
         })
     },
     watch: {
@@ -87,23 +91,17 @@ export default {
                     pageIndex: this.pageIndex,
                 })
                 .then(res => {
-                    res = res.data
-                    if (res.code == 0) {
-                        const data = res.data
-                        data.forEach(item => {
-                            item.date = timestampToDate(item.date)
-                        })
+                    const data = res.data
+                    data.forEach(item => {
+                        item.date = timestampToDate(item.date)
+                    })
 
-                        this.$store.commit('setTotalArticles', res.total)
-                        this.$store.commit('setArticlesData', data)
-                    }
+                    this.$store.commit('setTotalArticles', res.total)
+                    this.$store.commit('setArticlesData', data)
                 })
 
                 fetchTagsData().then(res => {
-                    res = res.data
-                    if (res.code == 0) {
-                        this.$store.commit('setTags', ['标签', ...res.data])
-                    }
+                    this.$store.commit('setTags', ['标签', ...res.data])
                 })
             }
         }

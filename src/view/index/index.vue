@@ -64,15 +64,12 @@ export default {
     created() {
         this.$store.commit('setPageIndex', 1)
         fetchTagsArtilesData().then(res => {
-            res = res.data
-            if (res.code == 0) {
-                const data = res.data
-                const keys = Object.keys(data)
-                this.sidebarData = keys.map(key => ({
-                    tag: key,
-                    nums: data[key]
-                }))
-            }
+            const data = res.data
+            const keys = Object.keys(data)
+            this.sidebarData = keys.map(key => ({
+                tag: key,
+                nums: data[key]
+            }))
         })
     },
     methods: {
@@ -84,17 +81,14 @@ export default {
                     pageIndex: this.pageIndex,
                 })
                 .then(res => {
-                    res = res.data
-                    if (res.code == 0) {
-                        const data = res.data
-                        data.forEach(item => {
-                            item.date = timestampToDate(item.date)
-                        })
-                        
-                        this.$store.commit('setTotalArticles', res.total)
-                        this.$store.commit('setArticlesData', data)
-                        this.$router.push(name)
-                    }
+                    const data = res.data
+                    data.forEach(item => {
+                        item.date = timestampToDate(item.date)
+                    })
+                    
+                    this.$store.commit('setTotalArticles', res.total)
+                    this.$store.commit('setArticlesData', data)
+                    this.$router.push(name)
                 })
             } else {
                 this.$router.push(name)
@@ -110,17 +104,14 @@ export default {
                 pageIndex: this.pageIndex,
             })
             .then(res => {
-                res = res.data
-                if (res.code == 0) {
-                    const data = res.data
-                    data.forEach(item => {
-                        item.date = timestampToDate(item.date)
-                    })
+                const data = res.data
+                data.forEach(item => {
+                    item.date = timestampToDate(item.date)
+                })
 
-                    this.$store.commit('setTotalArticles', res.total)
-                    this.$store.commit('setArticlesData', data)
-                    this.$router.push('index')
-                }
+                this.$store.commit('setTotalArticles', res.total)
+                this.$store.commit('setArticlesData', data)
+                this.$router.push('index')
             })
         },
 
