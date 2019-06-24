@@ -50,8 +50,8 @@ module.exports = {
             handler.comment(req, res)
         })
 
-        app.get('/getVisits', (req, res) => {
-            handler.getVisits(req, res)
+        app.get('/fetchVisits', (req, res) => {
+            handler.fetchVisits(req, res)
         })
     }
 }

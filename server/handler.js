@@ -4,6 +4,7 @@ const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID
 const url = 'mongodb://localhost:27017/'
 const config = { useNewUrlParser: true }
+// 保存文章数据的集合/表
 const articleCollection = 'myBlogArticles'
 let tagsCacheData = []
 let tagsArticlesCacheData = {}
@@ -19,6 +20,7 @@ module.exports = {
             if (err) throw err
             const dbo = db.db('blog')
             const token = req.get('Authorization')
+            // 验证 token
             const vaild = await isVaildToken(dbo, token)
             const collection = dbo.collection(articleCollection)
             if (!vaild) {
@@ -160,6 +162,7 @@ module.exports = {
             if (err) throw err
             const dbo = db.db('blog')
             const token = req.get('Authorization')
+            // 验证 token
             const vaild = await isVaildToken(dbo, token)
             const query = { _id: new ObjectID(req.body.id) }
             if (!vaild) {
@@ -277,6 +280,7 @@ module.exports = {
             const query = { _id: new ObjectID(id) }
             const time = new Date()
             const ip = getClientIp(req)
+            // 更新评论
             const updateContent = {
                 $addToSet: { 
                     comments: {
@@ -309,12 +313,13 @@ module.exports = {
         })
     },
 
-    getVisits(req, res) {
+    fetchVisits(req, res) {
         MongoClient.connect(url, config, (err, db) => {
             if (err) throw err
             const dbo = db.db('blog')
             const query = { user: 'admin' }
             const collection = dbo.collection('user')
+            // visits 自增1
             const updateContent = {
                 $inc: { 
                     visits: 1
@@ -349,6 +354,7 @@ function initData() {
     getAllArticlesNum()
 }
 
+// 更新标签信息
 function updateTagsData(res) {
     MongoClient.connect(url, config, (err, db) => {
         if (err) throw err
@@ -374,6 +380,7 @@ function updateTagsData(res) {
     })
 }
 
+// 搜索文章标签数据
 function searchTagsArticlesData(res) {
     MongoClient.connect(url, config, (err, db) => {
         if (err) throw err
@@ -397,6 +404,7 @@ function searchTagsArticlesData(res) {
     })
 }
 
+// 获取文章总数
 function getAllArticlesNum() {
     MongoClient.connect(url, config, (err, db) => {
         if (err) throw err

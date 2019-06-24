@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { fetchAppointArticles, fetchTagsData, getVisits } from './api'
+import { fetchAppointArticles, fetchTagsData, fetchVisits } from './api'
 import { mapState } from 'vuex'
 import { timestampToDate, formatVisits } from './utils'
 
@@ -64,7 +64,7 @@ export default {
         })
 
         // 获取访问次数
-        getVisits().then(res => {
+        fetchVisits().then(res => {
             res = res.data
             if (res.code == 0) {
                 this.$store.commit('setVisits', formatVisits(res.data))

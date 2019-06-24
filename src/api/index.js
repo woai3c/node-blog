@@ -37,6 +37,6 @@ export function addComment(data) {
     return axios.post('/comment', data)
 }
 
-export function getVisits() {
-    return axios.get('/getVisits')
+export function fetchVisits() {
+    return axios.get('/fetchVisits')
 }
