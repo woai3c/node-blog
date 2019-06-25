@@ -62,15 +62,15 @@ git clone git@github.com:woai3c/node-blog.git
 
 打开 `mongod.exe`，再打开 `mongo.exe`，在 `mongo.exe` 打开的命令行进行如下操作：
 
-创建数据库
+**创建数据库**
 ```js
 use blog
 ```
-创建 user 集合，用来保存用户信息
+**创建 user 集合，用来保存用户信息**
 ```js
 db.createCollection('user')
 ```
-添加用户信息
+**添加用户信息**
 ```js
 db.user.insert({
     user: 'admin', // 用户名 随意填写
