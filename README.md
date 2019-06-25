@@ -45,17 +45,42 @@
 * [mocha](https://mochajs.org/)
 
 ## 使用
+**登陆入口在页面脚部的 Copyright ©2019 woai3c**
+
 需要先下载 mongodb，建议按照[windows 安装教程](https://www.runoob.com/mongodb/mongodb-window-install.html)一步步安装。
 
 * [mongodb 教程一](https://www.runoob.com/mongodb/mongodb-databases-documents-collections.html)
 * [mongodb 教程二](https://www.runoob.com/nodejs/nodejs-mongodb.html)
 
-在安装完 mongodb 后，打开 `mongod.exe` 和 `mongo.exe`，然后克隆项目
-
-**登陆入口在页面脚部的 Copyright ©2019 woai3c**
+在安装完 mongodb 后，克隆项目。
 ```
 git clone git@github.com:woai3c/node-blog.git
 ```
+在运行前还得进行一些准备工作：
+
+因为没有注册功能，所以在使用前需要先把用户信息添加到数据库。
+
+打开 `mongod.exe`，再打开 `mongo.exe`，在 `mongo.exe` 打开的命令行进行如下操作：
+
+创建数据库
+```js
+use blog
+```
+创建 user 集合，用来保存用户信息
+```js
+db.createCollection('user')
+```
+添加用户信息
+```js
+db.user.insert({
+    user: 'admin', // 用户名 随意填写
+    password: 'admin', // 密码 随意填写
+    visits: 0, // 博客访问次数 每次刷新网站 自增1
+    token: '', // 用户登录创建 token 后，保存在这
+})
+```
+接下来就可以开始运行项目了。
+
 **安装依赖**
 ```
 npm i
