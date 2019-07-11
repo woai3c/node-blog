@@ -1,8 +1,8 @@
 const handler = require('./handler')
 const express = require('express')
 const bodyParser = require('body-parser')
-const hostname = 'localhost'
-const port = 8080
+const hostname = '0.0.0.0'
+const port = 3000
 
 module.exports = {
     config(app) {

@@ -12,3 +12,7 @@ dist/
 *.ntvs*
 *.njsproj
 *.sln
+
+#nginx configure file * cert file
+default.conf
+*.pem

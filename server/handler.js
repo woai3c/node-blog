@@ -2,7 +2,7 @@ const { generateToken, isVaildToken } = require('./token')
 const { getClientIp } = require('./utils')
 const MongoClient = require('mongodb').MongoClient
 const ObjectID = require('mongodb').ObjectID
-const url = 'mongodb://localhost:27017/'
+const url = 'mongodb://mongo:27017/'
 const config = { useNewUrlParser: true }
 // 保存文章数据的集合/表
 const articleCollection = 'myBlogArticles'
@@ -37,7 +37,7 @@ module.exports = {
                 const query = { _id: new ObjectID(req.body.id) }
                 const body = req.body
                 const updateContent = {
-                    $set: { 
+                    $set: {
                         content: body.content,
                         title: body.title,
                         tags: body.tags
@@ -70,7 +70,7 @@ module.exports = {
                     month: date.getMonth() + 1,
                     comments: [],
                 }
-                
+
                 collection.insertOne(articleData, err => {
                     if (err) {
                         res.send({
@@ -113,7 +113,7 @@ module.exports = {
                         total: totalCacheArticles,
                     })
                 }
-                
+
                 db.close()
             })
         })
@@ -150,7 +150,7 @@ module.exports = {
                             total: num,
                         })
                     }
-                    
+
                     db.close()
                 })
             })
@@ -189,7 +189,7 @@ module.exports = {
                         msg: '删除成功'
                     })
                 }
-                
+
                 db.close()
             })
         })
@@ -202,7 +202,7 @@ module.exports = {
                 data: tagsCacheData
             })
 
-            return 
+            return
         }
 
         updateTagsData(res)
@@ -264,7 +264,7 @@ module.exports = {
                                 data: token
                             })
                         }
-    
+
                         db.close()
                     })
                 }
@@ -282,7 +282,7 @@ module.exports = {
             const ip = getClientIp(req)
             // 更新评论
             const updateContent = {
-                $addToSet: { 
+                $addToSet: {
                     comments: {
                         comment,
                         time,
@@ -290,7 +290,7 @@ module.exports = {
                     }
                 }
             }
-            
+
             dbo.collection(articleCollection).updateOne(query, updateContent, err => {
                 if (err) {
                     res.send({
@@ -321,11 +321,11 @@ module.exports = {
             const collection = dbo.collection('user')
             // visits 自增1
             const updateContent = {
-                $inc: { 
+                $inc: {
                     visits: 1
                 }
             }
-            
+
             collection.updateOne(query, updateContent, err => {
                 if (err) {
                     res.send({

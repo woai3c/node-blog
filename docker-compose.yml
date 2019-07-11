@@ -1,0 +1,53 @@
+version: '3.1'
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    networks:
+      - internal_network
+    environment:
+      - MONGODB_INITDB_DATABASE=blog
+    volumes:
+      - mongo-data:/data/db:rw
+  mongo-seed:
+    build:
+      context: ./mongo
+    networks:
+      - internal_network
+
+  web:
+    build: .
+    ports:
+      - 3000:3000/tcp
+    networks:
+      - internal_network
+      - external_network
+    depends_on:
+      - mongo
+    volumes:
+      - .:/usr/neo/sources
+
+  nginx:
+    build:
+      context: ./nginx
+    restart: always
+    ports:
+      - 80:80/tcp
+      - 443:443/tcp
+    depends_on:
+      - web
+    networks:
+      - internal_network
+      - external_network
+    volumes:
+      - ./nginx/crt:/etc/kaine/blog/crt
+      - ./nginx/html:/usr/share/nginx/html
+
+networks:
+  external_network:
+  internal_network:
+    internal: true
+
+volumes:
+  mongo-data:

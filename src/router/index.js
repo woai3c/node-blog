@@ -15,7 +15,7 @@ export default new Router({
         },
         {
             path: '/index',
-            component: () => import('../view/index/Index.vue'),
+            component: () => import('../view/index/index.vue'),
             children: [
                 {
                     path: '/',
