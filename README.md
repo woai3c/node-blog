@@ -56,7 +56,7 @@
 
 在安装完 mongodb 后，克隆项目。
 ```
-git clone git@github.com:woai3c/node-blog.git
+git clone https://github.com/woai3c/node-blog.git
 ```
 在运行前还得进行一些准备工作：
 
