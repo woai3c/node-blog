@@ -14,6 +14,7 @@
 * [用 node 搭建个人博客（三）：token](https://github.com/woai3c/node-blog/blob/master/doc/node-blog3.md)
 * [用 node 搭建个人博客（四）：评论功能](https://github.com/woai3c/node-blog/blob/master/doc/node-blog4.md)
 * [用 node 搭建个人博客（五）：数据库](https://github.com/woai3c/node-blog/blob/master/doc/node-blog5.md)
+* [阿里云服务器部署个人网站](https://github.com/woai3c/Front-end-articles/blob/master/ecs.md)
 
 ## 前端页面
 * 首页(index)
