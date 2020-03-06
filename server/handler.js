@@ -317,6 +317,7 @@ module.exports = {
         MongoClient.connect(url, config, (err, db) => {
             if (err) throw err
             const dbo = db.db('blog')
+            // 这里改成你自己的用户名 和登陆名一致
             const query = { user: 'admin' }
             const collection = dbo.collection('user')
             // visits 自增1
