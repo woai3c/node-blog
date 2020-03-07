@@ -30,7 +30,7 @@ export default {
     },
     methods: {
         vaildInput() {
-            const re = /^\w+$/
+            const re = /^[\w@%$#@\.]{10,20}$/
             if (!re.test(this.user) || !re.test(this.pwd)) {
                 this.$Message.error('请输入正确的用户名和密码')
                 return false
