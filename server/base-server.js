@@ -1,11 +1,13 @@
 const handler = require('./handler')
 const express = require('express')
 const bodyParser = require('body-parser')
+const compression = require('compression')
 const hostname = 'localhost'
 const port = 8080
 
 module.exports = {
     config(app) {
+        app.use(compression())
         app.use(bodyParser.urlencoded({ extended: false }))
         app.use(bodyParser.json())
         app.use(express.static('dist')) // 将dist设为根目录
