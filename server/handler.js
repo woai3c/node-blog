@@ -12,6 +12,19 @@ let tagsArticlesCacheData = {}
 let totalCacheArticles = 0
 // 标签数据是否改变
 let isTagsChange = true
+/**
+ * code
+ * 0 成功
+ * 1 查找失败
+ * 2 token 无效
+ * 3 更新失败
+ * 4 发布失败
+ * 5 删除失败
+ * 6 没有查询到用户
+ * 7 评论失败
+ * 8 登录失败
+ * * 获取访问量失败
+ */
 
 initData()
 
@@ -26,7 +39,7 @@ module.exports = {
             const collection = dbo.collection(articleCollection)
             if (!vaild) {
                 res.send({
-                    code: 1,
+                    code: 2,
                     msg: 'token 失效，请重新登陆'
                 })
 
@@ -48,7 +61,7 @@ module.exports = {
                 collection.updateOne(query, updateContent, err => {
                     if (err) {
                         res.send({
-                            code: 1,
+                            code: 3,
                             msg: '更新失败'
                         })
                     } else {
@@ -75,7 +88,7 @@ module.exports = {
                 collection.insertOne(articleData, err => {
                     if (err) {
                         res.send({
-                            code: 1,
+                            code: 4,
                             msg: '发布失败'
                         })
                     } else {
@@ -99,7 +112,6 @@ module.exports = {
             if (err) throw err
             const dbo = db.db(collectionName)
             dbo.collection(articleCollection).findOne({ _id: new ObjectID(req.query.id) }).then(result => {
-                console.log(result)
                 if (!result) {
                     res.send({
                         code: 1,
@@ -199,7 +211,7 @@ module.exports = {
             const query = { _id: new ObjectID(req.body.id) }
             if (!vaild) {
                 res.send({
-                    code: 1,
+                    code: 2,
                     msg: 'token 失效，请重新登陆'
                 })
 
@@ -210,7 +222,7 @@ module.exports = {
             dbo.collection(articleCollection).deleteOne(query, err => {
                 if (err) {
                     res.send({
-                        code: 1,
+                        code: 5,
                         msg: '删除失败'
                     })
                 } else {
@@ -273,7 +285,7 @@ module.exports = {
             collection.findOne({ user, password }).then(result => {
                 if (!result) {
                     res.send({
-                        code: 1,
+                        code: 6,
                         msg: '没有查询到该用户'
                     })
                 } else {
@@ -287,7 +299,7 @@ module.exports = {
                     collection.updateOne({ user, password }, updateContent, err => {
                         if (err) {
                             res.send({
-                                code: 1,
+                                code: 7,
                                 msg: '登陆失败，请重试'
                             })
                         } else {
@@ -326,7 +338,7 @@ module.exports = {
             dbo.collection(articleCollection).updateOne(query, updateContent, err => {
                 if (err) {
                     res.send({
-                        code: 1,
+                        code: 8,
                         msg: '评论失败'
                     })
                 } else {
@@ -362,7 +374,7 @@ module.exports = {
             collection.updateOne(query, updateContent, err => {
                 if (err) {
                     res.send({
-                        code: 1,
+                        code: 9,
                         msg: '获取访问量失败'
                     })
                 } else {
