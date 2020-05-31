@@ -1,9 +1,9 @@
 import Vue from 'vue'
-import App from './App'
-import store from './store'
-import router from './router'
+import App from '@/App'
+import store from '@/store'
+import router from '@/router'
 import axios from 'axios'
-import './permission'
+import '@/permission'
 import 'iview/dist/styles/iview.css'
 import { Button, Input, Tag, Modal, Page, Dropdown, DropdownMenu, DropdownItem, Spin, Message, Icon } from 'iview'
 Vue.component('Button', Button)

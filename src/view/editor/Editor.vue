@@ -26,7 +26,7 @@
 
 <script>
 import VueMarkdown from 'vue-markdown'
-import { pushArticle } from '../../api'
+import { pushArticle } from '@/api'
 
 export default {
     name: 'editor',

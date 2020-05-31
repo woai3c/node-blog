@@ -16,8 +16,8 @@
 <script>
 import VueMarkdown from 'vue-markdown'
 import { mapState } from 'vuex'
-import { fetchAllArticles } from '../../api'
-import { timestampToDate } from '../../utils'
+import { fetchAllArticles } from '@/api'
+import { timestampToDate } from '@/utils'
 
 export default {
     components: {

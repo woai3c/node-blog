@@ -38,10 +38,10 @@ module.exports = {
         ]
     },
     resolve: {
-        modules:['../components','node_modules'], 
         extensions: ['.js', '.json', '.vue', '.css'],
         alias: {
             'vue$': 'vue/dist/vue.esm.js',
+            '@': path.resolve(__dirname, '../src')
         }
     },
     plugins: [

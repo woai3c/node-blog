@@ -64,9 +64,9 @@
 </template>
 
 <script>
-import { fetchAllArticles, deleteArticle, fetchAppointArticles, fetchTagsData } from '../../api'
+import { fetchAllArticles, deleteArticle, fetchAppointArticles, fetchTagsData } from '@/api'
 import { mapState } from 'vuex'
-import { timestampToDate } from '../../utils'
+import { timestampToDate } from '@/utils'
 
 export default {
     name: 'manage',

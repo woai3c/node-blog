@@ -37,8 +37,8 @@
 <script>
 import VueMarkdown from 'vue-markdown'
 import { mapState } from 'vuex'
-import { timestampToDate, formatIP } from '../../utils'
-import { addComment } from '../../api'
+import { timestampToDate, formatIP } from '@/utils'
+import { addComment } from '@/api'
 
 export default {
     name: 'artileContent',

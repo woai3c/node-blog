@@ -45,8 +45,8 @@
 </template>
 
 <script>
-import { fetchTagsArtilesData, fetchAppointArticles, fetchAllArticles } from '../../api'
-import { timestampToDate} from '../../utils'
+import { fetchTagsArtilesData, fetchAppointArticles, fetchAllArticles } from '@/api'
+import { timestampToDate} from '@/utils'
 import { mapState } from 'vuex'
 
 export default {
