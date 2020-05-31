@@ -53,7 +53,12 @@ export default {
         }
     },
     created() {
-        this.getArticleDetail(this.$route.params.id)
+        const id = this.$route.params.id
+        if (id) {
+            this.getArticleDetail(this.$route.params.id)
+        } else {
+            this.$router.push({ path: '/' })
+        }
     },
     methods: {
         getArticleDetail(id) {
