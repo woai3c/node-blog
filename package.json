@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "dev": "node ./server/dev-server.js",
-    "build": "webpack --config build/webpack.pro.js --mode production && node ./server/pro-server.js",
+    "build": "webpack --config build/webpack.pro.js --mode production",
+    "server": "node ./server/pro-server.js",
     "test": "mocha ./test"
   },
   "repository": {
@@ -54,7 +55,7 @@
     "vue-loader": "^15.7.0",
     "vue-template-compiler": "^2.6.10",
     "webpack": "^4.32.2",
-    "webpack-cli": "^3.3.2",
+    "webpack-cli": "^3.3.11",
     "webpack-dev-middleware": "^3.7.0",
     "webpack-hot-middleware": "^2.25.0",
     "webpack-merge": "^4.2.1"
