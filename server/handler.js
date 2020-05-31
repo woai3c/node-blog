@@ -15,7 +15,7 @@ let isTagsChange = true
 initData()
 
 module.exports = {
-    pushArticle(req, res) {
+    addArticle(req, res) {
         MongoClient.connect(url, config, async (err, db) => {
             if (err) throw err
             const dbo = db.db('blog')
@@ -100,22 +100,27 @@ module.exports = {
             const query = req.query
             const size = ~~query.pageSize
             const index = ~~query.pageIndex
-            dbo.collection(articleCollection).find().skip(size * (index - 1)).limit(size).toArray((err, result) => {
-                if (err) {
-                    res.send({
-                        code: 0,
-                        msg: '查找失败'
-                    })
-                } else {
-                    res.send({
-                        code: 0,
-                        data: result,
-                        total: totalCacheArticles,
-                    })
-                }
-                
-                db.close()
-            })
+            dbo.collection(articleCollection)
+                .find()
+                .project({ content: 0, comments: 0 }) // 过滤字段
+                .skip(size * (index - 1))
+                .limit(size)
+                .toArray((err, result) => {
+                    if (err) {
+                        res.send({
+                            code: 0,
+                            msg: '查找失败'
+                        })
+                    } else {
+                        res.send({
+                            code: 0,
+                            data: result,
+                            total: totalCacheArticles,
+                        })
+                    }
+                    
+                    db.close()
+                })
         })
     },
 
@@ -134,25 +139,29 @@ module.exports = {
             if (query.month) queryObj.month = ~~query.month
             if (query.tags) queryObj.tags = query.tags
 
-            collection.find(queryObj).count((err, num) => {
+            collection.find(queryObj).project({ content: 0, comments: 0 }).count((err, num) => {
                 if (err) throw err
-                collection.find(queryObj).skip(size * (index - 1)).limit(size).toArray((err, result) => {
-                    if (err) {
-                        res.send({
-                            code: 0,
-                            msg: '查找失败',
-                            data: []
-                        })
-                    } else {
-                        res.send({
-                            code: 0,
-                            data: result,
-                            total: num,
-                        })
-                    }
-                    
-                    db.close()
-                })
+                collection.find(queryObj)
+                            .project({ content: 0, comments: 0 })
+                            .skip(size * (index - 1))
+                            .limit(size)
+                            .toArray((err, result) => {
+                                if (err) {
+                                    res.send({
+                                        code: 0,
+                                        msg: '查找失败',
+                                        data: []
+                                    })
+                                } else {
+                                    res.send({
+                                        code: 0,
+                                        data: result,
+                                        total: num,
+                                    })
+                                }
+                                
+                                db.close()
+                            })
             })
         })
     },

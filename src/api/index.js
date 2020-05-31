@@ -9,8 +9,8 @@ export function fetchArticleContent(id) {
     return axios.get(`/fetchArticleContent?id=${id}`)
 }
 
-export function pushArticle(obj) {
-    return axios.post('/pushArticle', obj)
+export function addArticle(obj) {
+    return axios.post('/addArticle', obj)
 }
 
 export function deleteArticle(obj) {

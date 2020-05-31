@@ -16,8 +16,8 @@ module.exports = {
         })
     },
     interface(app) {
-        app.post('/pushArticle', (req, res) => {
-            handler.pushArticle(req, res)
+        app.post('/addArticle', (req, res) => {
+            handler.addArticle(req, res)
         })
 
         app.get('/fetchAllArticles', (req, res) => {

@@ -3,9 +3,6 @@
         <ul @click="gotoContent">
             <li v-for="(item, index) in articlesData" :key="index" class="content-li">
                 <p class="p-title" :data-index="index">{{ item.title }}</p>
-                <div class="abstract">
-                    <VueMarkdown class="markdown" :source="item.content"/>
-                </div>
                 <p class="date">{{ item.date }}</p>
             </li>
         </ul>
@@ -14,15 +11,11 @@
 </template>
 
 <script>
-import VueMarkdown from 'vue-markdown'
 import { mapState } from 'vuex'
 import { fetchAllArticles } from '@/api'
 import { timestampToDate } from '@/utils'
 
 export default {
-    components: {
-        VueMarkdown
-    },
     computed: mapState([
         'articlesData',
         'pageSize',
@@ -70,22 +63,13 @@ export default {
     padding: 20px;
     border: 1px solid #dedede;
     margin-bottom: -1px;
+    display: flex;
+    justify-content: space-between;
 }
 .p-title {
-    font-size: 22px;
-    color: #333;
+    font-size: 18px;
+    color: #666;
     cursor: pointer;
-}
-.abstract {
-    font-size: 14px;
-    color: #333;
-    line-height: 2;
-    height: 82px;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    overflow: hidden;
-    margin-top: 10px;
 }
 .date {
     color: #bcbcbc;

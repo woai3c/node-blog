@@ -26,7 +26,7 @@
 
 <script>
 import VueMarkdown from 'vue-markdown'
-import { pushArticle } from '@/api'
+import { addArticle } from '@/api'
 
 export default {
     name: 'editor',
@@ -69,7 +69,7 @@ export default {
             }
 
             if (this.id) obj.id = this.id
-            pushArticle(obj).then(res => {
+            addArticle(obj).then(res => {
                 this.$Message.success('发布成功')
                 this.$route.meta.isPublish = true
                 this.quit()
