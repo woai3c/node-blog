@@ -38,7 +38,7 @@
 import VueMarkdown from 'vue-markdown'
 import { mapState } from 'vuex'
 import { timestampToDate, formatIP } from '@/utils'
-import { addComment } from '@/api'
+import { addComment, fetchArticleDetail } from '@/api'
 
 export default {
     name: 'artileContent',
@@ -53,20 +53,21 @@ export default {
         }
     },
     created() {
-        this.articleData = this.$route.params.articleData
-        if (this.articleData) {
-            this.date = timestampToDate(this.articleData.date)
-            this.articleData.comments.forEach(item => {
-                item.time = timestampToDate(item.time)
-                item.user = formatIP(item.user)
-            })
-        } else {
-            this.articleData = {
-                title: ''
-            }
-        }
+        this.getArticleDetail(this.$route.params.id)
     },
     methods: {
+        getArticleDetail(id) {
+            fetchArticleDetail(id).then(res => {
+                const data = res.data
+                this.articleData = data
+                this.date = timestampToDate(data.date)
+                data.comments.forEach(item => {
+                    item.time = timestampToDate(item.time)
+                    item.user = formatIP(item.user)
+                })
+            })
+        },
+
         back() {
             this.$router.back()
         },

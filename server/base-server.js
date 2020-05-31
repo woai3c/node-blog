@@ -20,16 +20,16 @@ module.exports = {
             handler.addArticle(req, res)
         })
 
+        app.get('/fetchArticleDetail', (req, res) => {
+            handler.fetchArticleDetail(req, res)
+        })
+
         app.get('/fetchAllArticles', (req, res) => {
             handler.fetchAllArticles(req, res)
         })
 
         app.post('/deleteArticle', (req, res) => {
             handler.deleteArticle(req, res)
-        })
-
-        app.get('/fetchArticleContent', (req, res) => {
-            handler.fetchArticleContent(req, res)
         })
 
         app.get('/fetchAppointArticles', (req, res) => {

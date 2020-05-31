@@ -6,6 +6,7 @@ const url = 'mongodb://localhost:27017/'
 const config = { useNewUrlParser: true }
 // 保存文章数据的集合/表
 const articleCollection = 'myBlogArticles'
+const collectionName = 'blog'
 let tagsCacheData = []
 let tagsArticlesCacheData = {}
 let totalCacheArticles = 0
@@ -18,7 +19,7 @@ module.exports = {
     addArticle(req, res) {
         MongoClient.connect(url, config, async (err, db) => {
             if (err) throw err
-            const dbo = db.db('blog')
+            const dbo = db.db(collectionName)
             const token = req.get('Authorization')
             // 验证 token
             const vaild = await isVaildToken(dbo, token)
@@ -93,10 +94,32 @@ module.exports = {
         })
     },
 
+    fetchArticleDetail(req, res) {
+        MongoClient.connect(url, config, (err, db) => {
+            if (err) throw err
+            const dbo = db.db(collectionName)
+            dbo.collection(articleCollection).findOne({ _id: new ObjectID(req.query.id) }).then(result => {
+                console.log(result)
+                if (!result) {
+                    res.send({
+                        code: 1,
+                        msg: '查找失败',
+                        data: []
+                    })
+                } else {
+                    res.send({
+                        code: 0,
+                        data: result,
+                    })
+                }
+            })
+        })
+    },
+
     fetchAllArticles(req, res) {
         MongoClient.connect(url, config, (err, db) => {
             if (err) throw err
-            const dbo = db.db('blog')
+            const dbo = db.db(collectionName)
             const query = req.query
             const size = ~~query.pageSize
             const index = ~~query.pageIndex
@@ -108,7 +131,7 @@ module.exports = {
                 .toArray((err, result) => {
                     if (err) {
                         res.send({
-                            code: 0,
+                            code: 1,
                             msg: '查找失败'
                         })
                     } else {
@@ -127,7 +150,7 @@ module.exports = {
     fetchAppointArticles(req, res) {
         MongoClient.connect(url, config, (err, db) => {
             if (err) throw err
-            const dbo = db.db('blog')
+            const dbo = db.db(collectionName)
             const query = req.query
             // ~~取整
             const size = ~~query.pageSize
@@ -148,7 +171,7 @@ module.exports = {
                             .toArray((err, result) => {
                                 if (err) {
                                     res.send({
-                                        code: 0,
+                                        code: 1,
                                         msg: '查找失败',
                                         data: []
                                     })
@@ -169,7 +192,7 @@ module.exports = {
     deleteArticle(req, res) {
         MongoClient.connect(url, config, async (err, db) => {
             if (err) throw err
-            const dbo = db.db('blog')
+            const dbo = db.db(collectionName)
             const token = req.get('Authorization')
             // 验证 token
             const vaild = await isVaildToken(dbo, token)
@@ -244,7 +267,7 @@ module.exports = {
     login(req, res) {
         MongoClient.connect(url, config, (err, db) => {
             if (err) throw err
-            const dbo = db.db('blog')
+            const dbo = db.db(collectionName)
             const { user, password } = req.body
             const collection = dbo.collection('user')
             collection.findOne({ user, password }).then(result => {
@@ -284,7 +307,7 @@ module.exports = {
     comment(req, res) {
         MongoClient.connect(url, config, (err, db) => {
             if (err) throw err
-            const dbo = db.db('blog')
+            const dbo = db.db(collectionName)
             const { comment, id } = req.body
             const query = { _id: new ObjectID(id) }
             const time = new Date()
@@ -325,7 +348,7 @@ module.exports = {
     fetchVisits(req, res) {
         MongoClient.connect(url, config, (err, db) => {
             if (err) throw err
-            const dbo = db.db('blog')
+            const dbo = db.db(collectionName)
             // 这里改成你自己的用户名 和登陆名一致
             const query = { user: 'admin' }
             const collection = dbo.collection('user')
@@ -368,7 +391,7 @@ function initData() {
 function updateTagsData(res) {
     MongoClient.connect(url, config, (err, db) => {
         if (err) throw err
-        const dbo = db.db('blog')
+        const dbo = db.db(collectionName)
         dbo.collection(articleCollection).find({ tags: new RegExp('') }).toArray((err, result) => {
             if (err) throw err
             let arry = []
@@ -394,7 +417,7 @@ function updateTagsData(res) {
 function searchTagsArticlesData(res) {
     MongoClient.connect(url, config, (err, db) => {
         if (err) throw err
-        const dbo = db.db('blog')
+        const dbo = db.db(collectionName)
         const lastIndex = tagsCacheData.length - 1
         tagsArticlesCacheData = {}
         tagsCacheData.forEach((item, i) => {
@@ -418,7 +441,7 @@ function searchTagsArticlesData(res) {
 function getAllArticlesNum() {
     MongoClient.connect(url, config, (err, db) => {
         if (err) throw err
-        const dbo = db.db('blog')
+        const dbo = db.db(collectionName)
         dbo.collection(articleCollection).find().count((err, result) => {
             totalCacheArticles = result
             db.close()

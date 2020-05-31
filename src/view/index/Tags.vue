@@ -29,7 +29,7 @@ export default {
         gotoContent(e) {
             const target = e.target
             if (target.className == 'p-title') {
-                this.$router.push({name: 'content', params: {articleData: this.articlesData[target.dataset.index]}})
+                this.$router.push({name: 'content', params: {id: this.articlesData[target.dataset.index]._id}})
             }
         },
 

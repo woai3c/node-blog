@@ -43,7 +43,7 @@ export default {
             if (localStorage.getItem('token')) {
                 config.headers['Authorization'] = localStorage.getItem('token')
             }
-            
+
             return config
         }, error => {
             this.isShowLoading = false
@@ -60,7 +60,6 @@ export default {
                 return res
             }
 
-            console.log(res.msg)
             this.$Message.error(res.msg)
             return Promise.reject(new Error(res.msg || 'Error'))
         }, error => {
