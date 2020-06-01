@@ -6,20 +6,19 @@ Vue.use(Router)
 export default new Router({
     routes: [
         {path: '*', redirect: '/index'},
-        {path: '/', redirect: '/index'},
+        {path: '/', redirect: '/index/tag'},
         {
             path: '/editor',
             name: 'editor',
             component: () => import('../view/editor/Editor.vue'),
-            meta: {isPublish: true}
         },
         {
             path: '/index',
             component: () => import('../view/index/Index.vue'),
             children: [
                 {
-                    path: '/',
-                    name: 'index',
+                    path: '',
+                    name: '',
                     component: () => import('../view/index/Tags.vue')
                 },
                 {

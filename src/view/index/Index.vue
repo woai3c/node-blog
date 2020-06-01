@@ -9,7 +9,13 @@
         <section class="main">
             <div class="content">
                 <keep-alive exclude="artileContent">
-                    <router-view></router-view>
+                    <router-view 
+                        :articlesData="articlesData"
+                        :pageIndex="pageIndex"
+                        :pageSize="pageSize"
+                        :totalArticles="totalArticles"
+                        @change="pageChange"
+                    ></router-view>
                 </keep-alive>
             </div>
             <div class="sidebar">
@@ -39,67 +45,67 @@
             </div>
         </section>
         <footer>
-            <p @click="gotoLogin">Copyright ©2019 woai3c</p>
+            <p @click="gotoLogin">Copyright ©2020 woai3c</p>
         </footer>
     </div>
 </template>
 
 <script>
-import { fetchTagsArtilesData, fetchAppointArticles, fetchAllArticles } from '@/api'
+import { fetchTagsArtilesData, fetchAppointArticles, fetchVisits } from '@/api'
 import { timestampToDate} from '@/utils'
 import { mapState } from 'vuex'
 
 export default {
     data() {
         return {
-            sidebarData: []
+            sidebarData: [],
+            visits: 0,
+            articlesData: [],
+            totalArticles: 0,
+            pageIndex: 1,
+            pageSize: 10,
+            tags: []
         }
     },
-    computed: mapState([
-        'articlesData',
-        'pageSize',
-        'pageIndex',
-        'visits'
-    ]),
     created() {
-        this.$store.commit('setPageIndex', 1)
-        fetchTagsArtilesData().then(res => {
-            const data = res.data
-            const keys = Object.keys(data)
-            this.sidebarData = keys.map(key => ({
-                tag: key,
-                nums: data[key]
-            }))
-        })
+        this.init()
     },
     methods: {
+        init() {
+            // 获取访问次数
+            fetchVisits().then(res => {
+                this.visits = res.data
+            })
+
+            fetchTagsArtilesData().then(res => {
+                const data = res.data
+                const keys = Object.keys(data)
+                this.sidebarData = keys.map(key => ({
+                    tag: key,
+                    nums: data[key]
+                }))
+            })
+
+            this.getAppointArticles()
+        },
+
         gotoPage(name) {
-            if (name == 'index') {
-                this.$store.commit('setPageIndex', 1)
-                fetchAllArticles({
-                    pageSize: this.pageSize,
-                    pageIndex: this.pageIndex,
-                })
-                .then(res => {
-                    const data = res.data
-                    data.forEach(item => {
-                        item.date = timestampToDate(item.date)
-                    })
-                    
-                    this.$store.commit('setTotalArticles', res.total)
-                    this.$store.commit('setArticlesData', data)
-                    this.$router.push(name)
-                })
-            } else {
-                this.$router.push(name)
-            }
+            this.$router.push(name)
         },
 
         toggleTag(e) {
-            this.$store.commit('setPageIndex', 1)
-            const tag = e.target.innerHTML.trim().split('（')[0]
+            this.tags = e.target.innerHTML.trim().split('（')[0]
+            this.getAppointArticles()
+        },
+        
+        pageChange(index) {
+            this.pageIndex = index
+            this.getAppointArticles()
+        },
+
+        getAppointArticles() {
             fetchAppointArticles({
-                tags: tag,
+                tags: this.tags,
                 pageSize: this.pageSize,
                 pageIndex: this.pageIndex,
             })
@@ -109,12 +115,11 @@ export default {
                     item.date = timestampToDate(item.date)
                 })
 
-                this.$store.commit('setTotalArticles', res.total)
-                this.$store.commit('setArticlesData', data)
-                this.$router.push('index')
+                this.articlesData = data
+                this.totalArticles = res.total
             })
         },
-
+        
         gotoLogin() {
             this.$router.push('manage')
         },

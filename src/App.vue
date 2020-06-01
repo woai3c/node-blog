@@ -1,7 +1,7 @@
 <template>
     <div class="app">
-        <keep-alive :include="keepAliveData">
-            <router-view/>
+        <keep-alive>
+            <router-view :key="$route.fullPath"/>
         </keep-alive>
         <div class="loading" v-show="isShowLoading">
             <Spin size="large"></Spin>
@@ -10,114 +10,21 @@
 </template>
 
 <script>
-import { fetchAppointArticles, fetchTagsData, fetchVisits } from './api'
+import { fetchAppointArticles, fetchTagsData } from './api'
 import { mapState } from 'vuex'
 import { timestampToDate, formatVisits } from './utils'
 
 export default {
     data() {
         return {
-            isShowLoading: false,
             keepAliveData: ['manage'],
-            loadingCount: 0,
         }
     },
     computed: {
         ...mapState([
-            'articlesNum',
-            'tags',
-            'articlesData',
-            'year',
-            'month',
-            'tag',
-            'keyword',
-            'pageSize',
-            'pageIndex',
-            'totalArticles',
+            'isShowLoading',
         ]),
     },
-    created() {
-        // 添加请求拦截器
-        this.$axios.interceptors.request.use(config => {
-            this.addLoading()
-            if (localStorage.getItem('token')) {
-                config.headers['Authorization'] = localStorage.getItem('token')
-            }
-
-            return config
-        }, error => {
-            this.isShowLoading = false
-            this.loadingCount = 0
-            this.$Message.error('网络异常，请稍后再试')
-            return Promise.reject(error)
-        })
-
-        // 添加响应拦截器
-        this.$axios.interceptors.response.use(response => {
-            this.isCloseLoading()
-            const res = response.data
-            if (res.code == 0) {
-                return res
-            }
-
-            this.$Message.error(res.msg)
-            return Promise.reject(new Error(res.msg || 'Error'))
-        }, error => {
-            this.isShowLoading = false
-            this.loadingCount = 0
-            this.$Message.error('网络异常，请稍后再试')
-            return Promise.reject(error)
-        })
-
-        // 获取访问次数
-        fetchVisits().then(res => {
-            this.$store.commit('setVisits', formatVisits(res.data))
-        })
-    },
-    watch: {
-        $route(to, from) {
-            const fname = from.name
-            const tname = to.name
-            if (from.meta.isPublish || (fname != 'editor' && fname != 'content' && tname == 'manage')) {
-                from.meta.isPublish = false
-                this.$store.commit('setPageIndex', 1)
-                fetchAppointArticles({
-                    tags: this.tag == '标签'? '' : this.tag,
-                    year: this.year == '年份'? '' : this.year,
-                    month: this.month == '月份'? '' : this.month,
-                    title: this.keyword,
-                    pageSize: this.pageSize,
-                    pageIndex: this.pageIndex,
-                })
-                .then(res => {
-                    const data = res.data
-                    data.forEach(item => {
-                        item.date = timestampToDate(item.date)
-                    })
-
-                    this.$store.commit('setTotalArticles', res.total)
-                    this.$store.commit('setArticlesData', data)
-                })
-
-                fetchTagsData().then(res => {
-                    this.$store.commit('setTags', ['标签', ...res.data])
-                })
-            }
-        }
-    },
-    methods: {
-        addLoading() {
-            this.isShowLoading = true
-            this.loadingCount++
-        },
-
-        isCloseLoading() {
-            this.loadingCount--
-            if (this.loadingCount == 0) {
-                this.isShowLoading = false
-            }
-        }
-    }
 }
 </script>
 

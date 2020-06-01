@@ -1,42 +1,42 @@
-import axios from 'axios'
-import { objToUrlParam } from '../utils'
+import request from '@/utils/request'
+import { objToUrlParam } from '@/utils'
 
 export function fetchAllArticles(obj) {
-    return axios.get('/fetchAllArticles' + objToUrlParam(obj))
+    return request.get('/fetchAllArticles' + objToUrlParam(obj))
 }
 
 export function fetchArticleDetail(id) {
-    return axios.get(`/fetchArticleDetail?id=${id}`)
+    return request.get(`/fetchArticleDetail?id=${id}`)
 }
 
 export function addArticle(obj) {
-    return axios.post('/addArticle', obj)
+    return request.post('/addArticle', obj)
 }
 
 export function deleteArticle(obj) {
-    return axios.post('/deleteArticle', obj)
+    return request.post('/deleteArticle', obj)
 }
 
 export function fetchAppointArticles(obj) {
-    return axios.get('/fetchAppointArticles' + objToUrlParam(obj))
+    return request.get('/fetchAppointArticles' + objToUrlParam(obj))
 }
 
 export function fetchTagsData() {
-    return axios.get('/fetchTagsData')
+    return request.get('/fetchTagsData')
 }
 
 export function fetchTagsArtilesData() {
-    return axios.get('/fetchTagsArtilesData')
+    return request.get('/fetchTagsArtilesData')
 }
 
 export function login(data) {
-    return axios.post('/login', data)
+    return request.post('/login', data)
 }
 
 export function addComment(data) {
-    return axios.post('/comment', data)
+    return request.post('/comment', data)
 }
 
 export function fetchVisits() {
-    return axios.get('/fetchVisits')
+    return request.get('/fetchVisits')
 }

@@ -47,7 +47,7 @@
                     </div>
                 </li>
             </ul>
-            <Page v-if="totalArticles" class="page" :page-size="pageSize" :total="totalArticles" @on-change="pageChange"/>
+            <Page v-if="totalArticles" show-total class="page" :page-size="pageSize" :total="totalArticles" @on-change="pageChange"/>
         </div>
         <Modal v-model="isShowModal" width="360" class="delete-modal">
             <p slot="header" style="color:#f60;text-align:center">
@@ -74,22 +74,21 @@ export default {
         return {
             isShowModal: false,
             index: 0,
+            year: '年份',
+            month: '月份',
+            tag: '标签',
+            keyword: '',
+            years: ['年份', 2019],
+            months: ['月份', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+            tags: [],
+            articlesData: [],
+            pageSize: 10,
+            pageIndex: 1,
+            totalArticles: 0,
         }
     },
-    computed: {
-        ...mapState([
-            'year',
-            'month',
-            'tag',
-            'keyword',
-            'years',
-            'months',
-            'tags',
-            'articlesData',
-            'pageSize',
-            'totalArticles',
-            'pageIndex'
-        ]),
+    created() {
+        this.initData()
     },
     methods: {
         initData() {
@@ -102,28 +101,28 @@ export default {
                     item.date = timestampToDate(item.date)
                 })
 
-                this.$store.commit('setTotalArticles', res.total)
-                this.$store.commit('setArticlesData', data)
+                this.articlesData = data
+                this.totalArticles = res.total
             })
 
             fetchTagsData().then(res => {
-                this.$store.commit('setTags', ['标签', ...res.data])
+                this.tags = ['标签', ...res.data]
             })
         },
 
         getYear(y) {
-            this.$store.commit('setPageIndex', 1)
-            this.$store.commit('setYear', y)
+            this.pageIndex = 1
+            this.year = y
         },
 
         getMonth(m) {
-            this.$store.commit('setPageIndex', 1)
-            this.$store.commit('setMonth', m)
+            this.pageIndex = 1
+            this.month = m
         },
 
         getTag(t) {
-            this.$store.commit('setPageIndex', 1)
-            this.$store.commit('setTag', t)
+            this.pageIndex = 1
+            this.tag = t
         },
 
         articleOP(e) {
@@ -134,19 +133,19 @@ export default {
             if (text == '删除') {
                 this.isShowModal = true
             } else if (text == '编辑') {
-                this.$router.push({name: 'editor', params: {articleData: this.articlesData[index]}})
+                this.$router.push({name: 'editor', query: {id: this.articlesData[index]._id}})
             } else if (target.className == 'p-title') {
-                this.$router.push({name: 'content', params: {articleData: this.articlesData[index]}})
+                this.$router.push({name: 'content', query: {id: this.articlesData[index]._id}})
             }
         },
 
-        pageChange(p) {
-            this.$store.commit('setPageIndex', p)
+        pageChange(index) {
+            this.pageIndex = index
             this.searchArticles()
         },
 
         gotoEditor() {
-            this.$router.push({name: 'editor'})
+            this.$router.push('editor?refresh=' + Math.random())
         },
 
         del() {
@@ -154,10 +153,6 @@ export default {
             deleteArticle({ id: this.articlesData[this.index]._id }).then(res => {
                 this.$Message.success('删除成功')
                 this.initData()
-            })
-            .catch(err => {
-                localStorage.setItem('token', '')
-                this.$router.push({name: 'login'})
             })
         },
 
@@ -176,8 +171,8 @@ export default {
                     item.date = timestampToDate(item.date)
                 })
 
-                this.$store.commit('setArticlesData', data)
-                this.$store.commit('setTotalArticles', res.total)
+                this.articlesData = data
+                this.totalArticles = res.total
             })
         }
     }

@@ -6,7 +6,7 @@
                 <p class="date">{{ item.date }}</p>
             </li>
         </ul>
-        <Page v-if="totalArticles" class="page" :page-size="pageSize" :total="totalArticles" @on-change="pageChange"/>
+        <Page v-if="totalArticles" show-total class="page" :page-size="pageSize" :total="totalArticles" @on-change="pageChange"/>
     </div>
 </template>
 
@@ -16,43 +16,35 @@ import { fetchAllArticles } from '@/api'
 import { timestampToDate } from '@/utils'
 
 export default {
-    computed: mapState([
-        'articlesData',
-        'pageSize',
-        'totalArticles',
-        'pageIndex',
-    ]),
-    created() {
-        this.initData()
+    props: {
+        articlesData: {
+            type: Array,
+            default: () => []
+        },
+        pageIndex: {
+            type: Number,
+            default: 1,
+        },
+        pageSize: {
+            type: Number,
+            default: 10,
+        },
+        totalArticles: {
+            type: Number,
+            default: 0,
+        },
     },
     methods: {
         gotoContent(e) {
             const target = e.target
             if (target.className == 'p-title') {
-                this.$router.push({name: 'content', params: {id: this.articlesData[target.dataset.index]._id}})
+                this.$router.push({name: 'content', query: {id: this.articlesData[target.dataset.index]._id}})
             }
         },
 
-        pageChange(p) {
-            this.$store.commit('setPageIndex', p)
-            this.initData()
+        pageChange(index) {
+            this.$emit('change', index)
         },
-
-        initData() {
-            fetchAllArticles({
-                pageSize: this.pageSize,
-                pageIndex: this.pageIndex,
-            })
-            .then(res => {
-                const data = res.data
-                data.forEach(item => {
-                    item.date = timestampToDate(item.date)
-                })
-                
-                this.$store.commit('setTotalArticles', res.total)
-                this.$store.commit('setArticlesData', data)
-            })
-        }
     }
 }
 </script>

@@ -26,7 +26,7 @@
 
 <script>
 import VueMarkdown from 'vue-markdown'
-import { addArticle } from '@/api'
+import { addArticle, fetchArticleDetail } from '@/api'
 
 export default {
     name: 'editor',
@@ -45,18 +45,24 @@ export default {
         }
     },
     created() {
-        const data = this.$route.params.articleData
-        if (data) {
-            this.content = data.content
-            this.title = data.title
-            this.tagsData = data.tags
-            this.id = data._id
+        this.id = this.$route.query.id
+        if (this.id) {
+            this.getArticleDetail()
         }
     },
     mounted() {
         this.rightEle = this.$('.right')
     },
     methods: {
+        getArticleDetail() {
+            fetchArticleDetail(this.id).then(res => {
+                const data = res.data
+                this.content = data.content
+                this.title = data.title
+                this.tagsData = data.tags
+            })
+        },
+
         syncScrollHeight(e) {
             this.rightEle.scrollTop = e.target.scrollTop
         },
@@ -71,12 +77,8 @@ export default {
             if (this.id) obj.id = this.id
             addArticle(obj).then(res => {
                 this.$Message.success('发布成功')
-                this.$route.meta.isPublish = true
-                this.quit()
-            })
-            .catch(err => {
-                localStorage.setItem('token', '')
-                this.$router.push({name: 'login'})
+                // 随机生成一个字符串，以便让 manage 页面刷新
+                this.$router.push('manage?refresh=' + Math.random())
             })
         },
 

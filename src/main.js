@@ -17,8 +17,6 @@ Vue.component('DropdownItem', DropdownItem)
 Vue.component('Spin', Spin)
 Vue.component('Icon', Icon)
 
-axios.defaults.timeout = 5000
-axios.defaults.baseURL = 'http://localhost:8080'
 Vue.prototype.$Message = Message
 Vue.prototype.$axios = axios
 Vue.prototype.$ = document.querySelector.bind(document)

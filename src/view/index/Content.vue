@@ -50,19 +50,20 @@ export default {
             date: '',
             comment: '',
             articleData: {},
+            id: '',
         }
     },
     created() {
-        const id = this.$route.params.id
-        if (id) {
-            this.getArticleDetail(this.$route.params.id)
+        this.id = this.$route.query.id
+        if (this.id) {
+            this.getArticleDetail()
         } else {
-            this.$router.push({ path: '/' })
+            this.$router.push('/')
         }
     },
     methods: {
-        getArticleDetail(id) {
-            fetchArticleDetail(id).then(res => {
+        getArticleDetail() {
+            fetchArticleDetail(this.id).then(res => {
                 const data = res.data
                 this.articleData = data
                 this.date = timestampToDate(data.date)
@@ -87,15 +88,9 @@ export default {
                 comment: this.comment,
                 id: this.articleData._id,
             })
-            .then(res => {
-                const data = res.data
-                this.$route.params.articleData.comments.push({
-                    user: formatIP(data.user),
-                    comment: this.comment,
-                    time: timestampToDate(data.time)
-                })
-
+            .then(() => {
                 this.comment = ''
+                this.getArticleDetail()
             })
         }
     }
