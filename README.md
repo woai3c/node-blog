@@ -48,6 +48,9 @@
 ### 测试
 * [mocha](https://mochajs.org/)
 
+### 其他
+* [lib-qqwry](https://github.com/cnwhy/lib-qqwry)——IP 地址转换为对应的城市名称
+
 ## 使用
 #### 注意
 1. **登陆入口在页面脚部的 Copyright ©2019 woai3c**
