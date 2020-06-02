@@ -41,7 +41,7 @@ async function isVaildToken(dbo, token) {
         return false
     }
 
-    const res = await dbo.collection('user').findOne({ token })
+    const res = await dbo.collection(userCollection).findOne({ token })
     if (res) {
         return true
     }

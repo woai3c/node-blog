@@ -77,7 +77,7 @@ use blog
 ```
 **创建 user 集合，用来保存用户信息**
 ```js
-db.createCollection('user')
+db.createCollection(userCollection)
 ```
 **添加用户信息**
 ```js

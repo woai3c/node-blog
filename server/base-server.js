@@ -1,4 +1,5 @@
-const handler = require('./handler')
+const articleInterface = require('./interface/article')
+const userInterface = require('./interface/user')
 const express = require('express')
 const bodyParser = require('body-parser')
 const compression = require('compression')
@@ -17,43 +18,42 @@ module.exports = {
     },
     interface(app) {
         app.post('/addArticle', (req, res) => {
-            handler.addArticle(req, res)
+            articleInterface.addArticle(req, res)
         })
-
+        
+        app.put('/updateArticle', (req, res) => {
+            articleInterface.updateArticle(req, res)
+        })
         app.get('/fetchArticleDetail', (req, res) => {
-            handler.fetchArticleDetail(req, res)
+            articleInterface.fetchArticleDetail(req, res)
         })
 
-        app.get('/fetchAllArticles', (req, res) => {
-            handler.fetchAllArticles(req, res)
+        app.get('/fetchArticles', (req, res) => {
+            articleInterface.fetchArticles(req, res)
         })
 
-        app.post('/deleteArticle', (req, res) => {
-            handler.deleteArticle(req, res)
-        })
-
-        app.get('/fetchAppointArticles', (req, res) => {
-            handler.fetchAppointArticles(req, res)
+        app.delete('/deleteArticle', (req, res) => {
+            articleInterface.deleteArticle(req, res)
         })
 
         app.get('/fetchTagsData', (req, res) => {
-            handler.fetchTagsData(req, res)
+            articleInterface.fetchTagsData(req, res)
         })
 
         app.get('/fetchTagsArtilesData', (req, res) => {
-            handler.fetchTagsArtilesData(req, res)
+            articleInterface.fetchTagsArtilesData(req, res)
+        })
+
+        app.post('/addComment', (req, res) => {
+            articleInterface.addComment(req, res)
         })
 
         app.post('/login', (req, res) => {
-            handler.login(req, res)
-        })
-
-        app.post('/comment', (req, res) => {
-            handler.comment(req, res)
+            userInterface.login(req, res)
         })
 
         app.get('/fetchVisits', (req, res) => {
-            handler.fetchVisits(req, res)
+            userInterface.fetchVisits(req, res)
         })
     }
 }

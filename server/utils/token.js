@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
-// 密钥
-const key = 'secretKey'
+const { userCollection } = require('./mongo')
+const key = 'secretKey' // 密钥
 
 function generateToken(data) {
     const token = jwt.sign({
@@ -26,7 +26,7 @@ async function isVaildToken(dbo, token) {
         return false
     }
 
-    const res = await dbo.collection('user').findOne({ token })
+    const res = await dbo.collection(userCollection).findOne({ token })
     if (res) {
         return true
     }
