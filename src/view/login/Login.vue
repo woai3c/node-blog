@@ -3,10 +3,10 @@
         <div class="container">
             <p class="title">WELCOME</p>
             <div class="input-c">
-                <Input prefix="ios-contact" v-model="user" placeholder="用户名" clearable/>
+                <Input prefix="ios-contact" v-model="user" placeholder="用户名" clearable />
             </div>
             <div class="input-c">
-                <Input type="password" v-model="pwd" prefix="md-lock" placeholder="密码" clearable/>
+                <Input type="password" v-model="pwd" prefix="md-lock" placeholder="密码" clearable @keyup.enter.native="submit" />
             </div>
             <Button class="submit" type="primary" @click="submit">登陆</Button>
         </div>

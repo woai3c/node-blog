@@ -12,7 +12,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { fetchAllArticles } from '@/api'
+import { fetchArticles } from '@/api'
 import { timestampToDate } from '@/utils'
 
 export default {

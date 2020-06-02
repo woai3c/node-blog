@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { fetchAllArticles, deleteArticle, fetchAppointArticles, fetchTagsData } from '@/api'
+import { fetchArticles, deleteArticle, fetchTagsData } from '@/api'
 import { mapState } from 'vuex'
 import { timestampToDate } from '@/utils'
 
@@ -92,19 +92,7 @@ export default {
     },
     methods: {
         initData() {
-            fetchAllArticles({
-                pageSize: this.pageSize,
-                pageIndex: this.pageIndex,
-            }).then(res => {
-                const data = res.data
-                data.forEach(item => {
-                    item.date = timestampToDate(item.date)
-                })
-
-                this.articlesData = data
-                this.totalArticles = res.total
-            })
-
+            this.searchArticles()
             fetchTagsData().then(res => {
                 this.tags = ['标签', ...res.data]
             })
@@ -157,7 +145,7 @@ export default {
         },
 
         searchArticles() {
-            fetchAppointArticles({
+            fetchArticles({
                 tags: this.tag == '标签'? '' : this.tag,
                 year: this.year == '年份'? '' : this.year,
                 month: this.month == '月份'? '' : this.month,

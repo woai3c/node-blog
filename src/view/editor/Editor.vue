@@ -26,7 +26,7 @@
 
 <script>
 import VueMarkdown from 'vue-markdown'
-import { addArticle, fetchArticleDetail } from '@/api'
+import { addArticle, updateArticle, fetchArticleDetail } from '@/api'
 
 export default {
     name: 'editor',
@@ -74,8 +74,12 @@ export default {
                 tags: this.tagsData,
             }
 
-            if (this.id) obj.id = this.id
-            addArticle(obj).then(res => {
+            let func = addArticle
+            if (this.id) {
+                obj.id = this.id
+                func = updateArticle
+            }
+            func(obj).then(res => {
                 this.$Message.success('发布成功')
                 // 随机生成一个字符串，以便让 manage 页面刷新
                 this.$router.push('manage?refresh=' + Math.random())

@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 import { objToUrlParam } from '@/utils'
 
-export function fetchAllArticles(obj) {
-    return request.get('/fetchAllArticles' + objToUrlParam(obj))
+export function fetchArticles(obj) {
+    return request.get('/fetchArticles' + objToUrlParam(obj))
 }
 
 export function fetchArticleDetail(id) {
@@ -13,12 +13,14 @@ export function addArticle(obj) {
     return request.post('/addArticle', obj)
 }
 
-export function deleteArticle(obj) {
-    return request.post('/deleteArticle', obj)
+export function updateArticle(obj) {
+    return request.put('/updateArticle', obj)
 }
 
-export function fetchAppointArticles(obj) {
-    return request.get('/fetchAppointArticles' + objToUrlParam(obj))
+// axios 的 delete 方法有坑，详情请看下面的链接
+// https://blog.csdn.net/qq383366204/article/details/80268007 
+export function deleteArticle(obj) {
+    return request.delete('/deleteArticle', { data: obj })
 }
 
 export function fetchTagsData() {
@@ -34,7 +36,7 @@ export function login(data) {
 }
 
 export function addComment(data) {
-    return request.post('/comment', data)
+    return request.post('/addComment', data)
 }
 
 export function fetchVisits() {

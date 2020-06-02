@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { fetchAppointArticles, fetchTagsData } from './api'
+import { fetchArticles, fetchTagsData } from './api'
 import { mapState } from 'vuex'
 import { timestampToDate, formatVisits } from './utils'
 

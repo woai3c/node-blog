@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { fetchTagsArtilesData, fetchAppointArticles, fetchVisits } from '@/api'
+import { fetchTagsArtilesData, fetchArticles, fetchVisits } from '@/api'
 import { timestampToDate} from '@/utils'
 import { mapState } from 'vuex'
 
@@ -63,7 +63,7 @@ export default {
             articlesData: [],
             totalArticles: 0,
             pageIndex: 1,
-            pageSize: 10,
+            pageSize: 20,
             tags: []
         }
     },
@@ -104,7 +104,7 @@ export default {
         },
 
         getAppointArticles() {
-            fetchAppointArticles({
+            fetchArticles({
                 tags: this.tags,
                 pageSize: this.pageSize,
                 pageIndex: this.pageIndex,
