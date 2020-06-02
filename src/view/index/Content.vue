@@ -16,7 +16,7 @@
             <p class="p-comment">评论</p>
             <div class="comment" v-for="(item, index) in articleData.comments" :key="index">
                 <p class="comment-title">
-                    用户：<span>{{ item.user }}</span>
+                    {{ item.location }} 用户（{{ item.user }}）
                     <span class="span-time">{{ item.time }}</span>
                 </p>
                 <div>
@@ -37,7 +37,7 @@
 <script>
 import VueMarkdown from 'vue-markdown'
 import { mapState } from 'vuex'
-import { timestampToDate, formatIP } from '@/utils'
+import { timestampToDate } from '@/utils'
 import { addComment, fetchArticleDetail } from '@/api'
 
 export default {
@@ -69,7 +69,6 @@ export default {
                 this.date = timestampToDate(data.date)
                 data.comments.forEach(item => {
                     item.time = timestampToDate(item.time)
-                    item.user = formatIP(item.user)
                 })
             })
         },

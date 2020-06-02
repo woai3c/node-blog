@@ -16,10 +16,6 @@ function objToUrlParam(obj = {}) {
     return param? '?' + param.substr(1) : ''
 }
 
-function formatIP(ip = '') {
-    return ip? ip.split('.').slice(0, 3).join('.') + '.*' : ''
-}
-
 function formatVisits(visits = 0) {
     return visits? (visits + '').replace(/(\d)(?=(?:\d{3})+$)/g, '$1,') : 0
 }
@@ -27,6 +23,5 @@ function formatVisits(visits = 0) {
 module.exports = {
     timestampToDate,
     objToUrlParam,
-    formatIP,
     formatVisits,
 }

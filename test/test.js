@@ -1,5 +1,5 @@
 const assert = require('assert')
-const { timestampToDate, objToUrlParam, formatIP, formatVisits } = require('../src/utils')
+const { timestampToDate, objToUrlParam, formatVisits } = require('../src/utils')
 
 describe('src/utils/index.js', () => {
     describe('timestampToDate()', () => {
@@ -30,18 +30,6 @@ describe('src/utils/index.js', () => {
 
         it('空对象返回空字符串', () => {
             assert.equal(objToUrlParam(), '')
-        })
-    })
-})
-
-describe('src/utils/index.js', () => {
-    describe('formatIP()', () => {
-        it('格式化IP地址', () => {
-            assert.equal(formatIP('192.168.0.255'), '192.168.0.*')
-        })
-
-        it('空返回空', () => {
-            assert.equal(formatIP(''), '')
         })
     })
 })

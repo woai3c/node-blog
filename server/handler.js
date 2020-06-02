@@ -1,17 +1,3 @@
-const { generateToken, isVaildToken } = require('./token')
-const { getClientIp } = require('./utils')
-const MongoClient = require('mongodb').MongoClient
-const ObjectID = require('mongodb').ObjectID
-const url = 'mongodb://localhost:27017/'
-const config = { useNewUrlParser: true }
-// 保存文章数据的集合/表
-const articleCollection = 'myBlogArticles'
-const collectionName = 'blog'
-let tagsCacheData = []
-let tagsArticlesCacheData = {}
-let totalCacheArticles = 0
-// 标签数据是否改变
-let isTagsChange = true
 /**
  * code
  * 0 成功
@@ -25,6 +11,21 @@ let isTagsChange = true
  * 8 登录失败
  * * 获取访问量失败
  */
+
+const { generateToken, isVaildToken } = require('./token')
+const { getClientIp, ipToCity, formatIP } = require('./utils')
+const MongoClient = require('mongodb').MongoClient
+const ObjectID = require('mongodb').ObjectID
+const url = 'mongodb://localhost:27017/'
+const config = { useNewUrlParser: true }
+// 保存文章数据的集合/表
+const articleCollection = 'myBlogArticles'
+const collectionName = 'blog'
+let tagsCacheData = []
+let tagsArticlesCacheData = {}
+let totalCacheArticles = 0
+// 标签数据是否改变
+let isTagsChange = true
 
 initData()
 
@@ -119,6 +120,10 @@ module.exports = {
                         data: []
                     })
                 } else {
+                    result.comments.forEach(comment => {
+                        comment.user = formatIP(comment.user)
+                    })
+ 
                     res.send({
                         code: 0,
                         data: result,
@@ -330,7 +335,8 @@ module.exports = {
                     comments: {
                         comment,
                         time,
-                        user: ip
+                        user: ip,
+                        location: ipToCity(ip),
                     }
                 }
             }
