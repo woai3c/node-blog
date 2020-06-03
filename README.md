@@ -54,7 +54,7 @@
 
 ## 使用
 #### 注意
-1. **登陆入口在页面脚部的 Copyright ©2019 woai3c**
+1. **登陆入口在页面脚部的 Copyright ©2020 woai3c**
 2. **博客内容、评论使用的都是 `markdown` 语法**
 
 需要先下载 mongodb，建议按照[windows 安装教程](https://www.runoob.com/mongodb/mongodb-window-install.html)一步步安装。
