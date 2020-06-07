@@ -4,7 +4,7 @@ import router from '@/router'
 import { showLoading, closeLoading } from '@/utils/loading'
 
 const service = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: location.origin,
     timeout: 60000,
 })
 
