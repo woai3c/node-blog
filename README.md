@@ -17,6 +17,7 @@
 * [用 node 搭建个人博客（三）：token](https://github.com/woai3c/node-blog/blob/master/doc/node-blog3.md)
 * [用 node 搭建个人博客（四）：评论功能](https://github.com/woai3c/node-blog/blob/master/doc/node-blog4.md)
 * [用 node 搭建个人博客（五）：数据库](https://github.com/woai3c/node-blog/blob/master/doc/node-blog5.md)
+* [用 node 搭建个人博客（六）：路由模式 history](https://github.com/woai3c/node-blog/blob/master/doc/node-blog6.md)
 * [阿里云服务器部署个人网站](https://github.com/woai3c/Front-end-articles/blob/master/ecs.md)
 * [性能优化--开启 gzip 压缩](https://github.com/woai3c/node-blog/blob/master/doc/optimize.md)
 
