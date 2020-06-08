@@ -4,7 +4,7 @@ qqwry.speed() //启用急速模式
 
 function ipToCity(ip) {
     const result = qqwry.searchIP(ip)
-    return result.Area + ' ' + result.Country
+    return result.Country + ' ' + result.Area
 }
 
 //获取客户端ip地址
