@@ -55,5 +55,10 @@ module.exports = {
         app.get('/fetchVisits', (req, res) => {
             userInterface.fetchVisits(req, res)
         })
+        
+        // 默认返回 index.html
+        app.get('*', (req, res) => {
+            userInterface.getIndexHTML(req, res)
+        })
     }
 }

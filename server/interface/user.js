@@ -12,6 +12,8 @@
  * * 获取访问量失败
  */
 
+const path = require('path')
+const fs = require('fs')
 const { generateToken } = require('../utils/token')
 const { connect, database, userCollection } = require('../utils/mongo')
 
@@ -89,7 +91,20 @@ function login(req, res) {
     })
 }
 
+function getIndexHTML(req, res) {
+    fs.readFile(path.join(__dirname, '../../dist', 'index.html'), { encoding: 'utf-8' }, (err, data) => {
+        if (err) throw err
+        
+        res.writeHead(200, {
+            'Content-Type': 'text/html; charset=utf-8',
+        })
+
+        res.end(data)
+    })
+}
+
 module.exports = {
     fetchVisits,
     login,
+    getIndexHTML,
 }

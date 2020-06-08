@@ -11,7 +11,8 @@ app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
     stats: {
         colors: true
-    }
+    },
+    writeToDisk: true // 开发环境下也要将文件写到 dist 目录下，否则读取不了默认的 index.html
 }))
 
 initArticleConfig() // 初始化数据库相关配置

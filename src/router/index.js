@@ -4,9 +4,8 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export default new Router({
+    mode: 'history',
     routes: [
-        {path: '*', redirect: '/index'},
-        {path: '/', redirect: '/index/tag'},
         {
             path: '/editor',
             name: 'editor',
@@ -43,5 +42,6 @@ export default new Router({
             name: 'manage',
             component: () => import('../view/manage/Manage.vue'),
         },
+        { path: '*', redirect: '/index' },
     ]
 })
