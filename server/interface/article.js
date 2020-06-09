@@ -302,7 +302,6 @@ module.exports = {
     updateArticle,
     fetchArticleDetail,
     fetchArticles,
-    fetchArticles,
     deleteArticle,
     fetchTagsData,
     fetchTagsArtilesData,
