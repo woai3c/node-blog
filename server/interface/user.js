@@ -15,15 +15,13 @@
 const path = require('path')
 const fs = require('fs')
 const { generateToken } = require('../utils/token')
-const { connect, database, userCollection } = require('../utils/mongo')
+const { userCollection, createDB } = require('../utils/mongo')
 
 function fetchVisits(req, res) {
-    connect((err, db) => {
-        if (err) throw err
-        const dbo = db.db(database)
+    createDB().then(db => {
         // 这里改成你自己的用户名 和登陆名一致
         const query = { user: 'admin' }
-        const collection = dbo.collection(userCollection)
+        const collection = db.collection(userCollection)
         // visits 自增1
         const updateContent = {
             $inc: { 
@@ -43,20 +41,17 @@ function fetchVisits(req, res) {
                         code: 0,
                         data: result.visits
                     })
-
-                    db.close()
                 })
             }
         })
     })
+    .catch(err => { throw err })
 }
 
 function login(req, res) {
-    connect((err, db) => {
-        if (err) throw err
-        const dbo = db.db(database)
+    createDB().then(db => {
         const { user, password } = req.body
-        const collection = dbo.collection(userCollection)
+        const collection = db.collection(userCollection)
         collection.findOne({ user, password }).then(result => {
             if (!result) {
                 res.send({
@@ -83,18 +78,16 @@ function login(req, res) {
                             data: token
                         })
                     }
-
-                    db.close()
                 })
             }
         })
     })
+    .catch(err => { throw err })
 }
 
 function getIndexHTML(req, res) {
     fs.readFile(path.join(__dirname, '../../dist', 'index.html'), { encoding: 'utf-8' }, (err, data) => {
         if (err) throw err
-        
         res.writeHead(200, {
             'Content-Type': 'text/html; charset=utf-8',
         })

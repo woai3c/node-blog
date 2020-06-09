@@ -14,18 +14,17 @@
 
 const { isVaildToken } = require('../utils/token')
 const { getClientIp, ipToCity, formatIP } = require('../utils/ip')
-const { connect, articleCollection, database } = require('../utils/mongo')
+const { articleCollection, createDB } = require('../utils/mongo')
 const { updateTagsData, searchTagsArticlesData } = require('../utils/article')
 const ObjectID = require('mongodb').ObjectID
 const { cache } = require('../utils/cache')
 
 function addArticle(req, res) {
-    connect(async (err, db) => {
-        if (err) throw err
-        const dbo = db.db(database)
-        const collection = dbo.collection(articleCollection)
+    createDB()
+    .then(async (db) => {
+        const collection = db.collection(articleCollection)
         const token = req.get('Authorization')
-        const vaild = await isVaildToken(dbo, token) // 验证 token
+        const vaild = await isVaildToken(db, token) // 验证 token
         
         if (!vaild) {
             res.send({
@@ -33,7 +32,6 @@ function addArticle(req, res) {
                 msg: 'token 失效，请重新登陆'
             })
 
-            db.close()
             return
         }
 
@@ -60,19 +58,17 @@ function addArticle(req, res) {
                     data: '发布成功'
                 })
             }
-
-            db.close()
         })
     })
+    .catch(err => { throw err })
 }
 
 function updateArticle(req, res) {
-    connect(async (err, db) => {
-        if (err) throw err
-        const dbo = db.db(database)
-        const collection = dbo.collection(articleCollection)
+    createDB()
+    .then(async (db) => {
+        const collection = db.collection(articleCollection)
         const token = req.get('Authorization')
-        const vaild = await isVaildToken(dbo, token) // 验证 token
+        const vaild = await isVaildToken(db, token) // 验证 token
 
         if (!vaild) {
             res.send({
@@ -80,7 +76,6 @@ function updateArticle(req, res) {
                 msg: 'token 失效，请重新登陆'
             })
 
-            db.close()
             return
         }
 
@@ -108,17 +103,14 @@ function updateArticle(req, res) {
                     data: '更新成功'
                 })
             }
-
-            db.close()
         })
     })
+    .catch(err => { throw err })
 }
 
 function fetchArticleDetail(req, res) {
-    connect((err, db) => {
-        if (err) throw err
-        const dbo = db.db(database)
-        dbo.collection(articleCollection).findOne({ _id: new ObjectID(req.query.id) }).then(result => {
+    createDB().then(db => {
+        db.collection(articleCollection).findOne({ _id: new ObjectID(req.query.id) }).then(result => {
             if (!result) {
                 res.send({
                     code: 1,
@@ -137,17 +129,16 @@ function fetchArticleDetail(req, res) {
             }
         })
     })
+    .catch(err => { throw err })
 }
 
 function fetchArticles(req, res) {
-    connect((err, db) => {
-        if (err) throw err
-        const dbo = db.db(database)
+    createDB().then(db => {
         const query = req.query
         const size = ~~query.pageSize // ~~取整
         const index = ~~query.pageIndex
         const queryObj = {}
-        const collection = dbo.collection(articleCollection)
+        const collection = db.collection(articleCollection)
         if (query.title) queryObj.title = new RegExp(query.title)
         if (query.year) queryObj.year = ~~query.year
         if (query.month) queryObj.month = ~~query.month
@@ -173,32 +164,28 @@ function fetchArticles(req, res) {
                                     total: num,
                                 })
                             }
-                            
-                            db.close()
                         })
         })
     })
+    .catch(err => { throw err })
 }
 
 function deleteArticle(req, res) {
-    connect(async (err, db) => {
-        if (err) throw err
-        const dbo = db.db(database)
+    createDB()
+    .then(async (db) => {
         const token = req.get('Authorization')
         // 验证 token
-        const vaild = await isVaildToken(dbo, token)
+        const vaild = await isVaildToken(db, token)
         const query = { _id: new ObjectID(req.body.id) }
         if (!vaild) {
             res.send({
                 code: 2,
                 msg: 'token 失效，请重新登陆'
             })
-
-            db.close()
             return
         }
 
-        dbo.collection(articleCollection).deleteOne(query, err => {
+        db.collection(articleCollection).deleteOne(query, err => {
             if (err) {
                 res.send({
                     code: 5,
@@ -211,10 +198,9 @@ function deleteArticle(req, res) {
                     msg: '删除成功'
                 })
             }
-            
-            db.close()
         })
     })
+    .catch(err => { throw err })
 }
 
 function fetchTagsData(req, res) {
@@ -256,9 +242,7 @@ function fetchTagsArtilesData(req, res) {
 }
 
 function addComment(req, res) {
-    connect((err, db) => {
-        if (err) throw err
-        const dbo = db.db(database)
+    createDB().then(db => {
         const { comment, id } = req.body
         const query = { _id: new ObjectID(id) }
         const time = new Date()
@@ -275,7 +259,7 @@ function addComment(req, res) {
             }
         }
         
-        dbo.collection(articleCollection).updateOne(query, updateContent, err => {
+        db.collection(articleCollection).updateOne(query, updateContent, err => {
             if (err) {
                 res.send({
                     code: 8,
@@ -291,10 +275,9 @@ function addComment(req, res) {
                     }
                 })
             }
-
-            db.close()
         })
     })
+    .catch(err => { throw err })
 }
 
 module.exports = {

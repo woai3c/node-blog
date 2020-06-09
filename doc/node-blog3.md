@@ -26,7 +26,7 @@ function generateToken(data) {
 * 是否和数据库中保存的 token 一致
 
 ```js
-async function isVaildToken(dbo, token) {
+async function isVaildToken(db, token) {
     let result
     try {
         result = jwt.verify(token, key)
@@ -41,7 +41,7 @@ async function isVaildToken(dbo, token) {
         return false
     }
 
-    const res = await dbo.collection(userCollection).findOne({ token })
+    const res = await db.collection(userCollection).findOne({ token })
     if (res) {
         return true
     }

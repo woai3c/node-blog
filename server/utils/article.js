@@ -1,5 +1,5 @@
 const { cache } = require('../utils/cache')
-const { connect, articleCollection, database} = require('../utils/mongo')
+const { connect, articleCollection, createDB } = require('../utils/mongo')
 
 function initArticleConfig() {
     // 更新并缓存标签数据
@@ -8,10 +8,8 @@ function initArticleConfig() {
 
 // 更新标签信息
 function updateTagsData(res) {
-    connect((err, db) => {
-        if (err) throw err
-        const dbo = db.db(database)
-        dbo.collection(articleCollection).find({ tags: new RegExp('') }).toArray((err, result) => {
+    createDB().then(db => {
+        db.collection(articleCollection).find({ tags: new RegExp('') }).toArray((err, result) => {
             if (err) throw err
             let arry = []
             result.forEach(item => {
@@ -26,21 +24,18 @@ function updateTagsData(res) {
                     data: arry
                 })
             }
-
-            db.close()
         })
     })
+    .catch(err => { throw err })
 }
 
 // 搜索文章标签数据
 function searchTagsArticlesData(res) {
-    connect((err, db) => {
-        if (err) throw err
-        const dbo = db.db(database)
+    createDB().then(db => {
         const tagsData = cache.getTagsData()
         const lastIndex = tagsData.length - 1
         tagsData.forEach((item, i) => {
-            dbo.collection(articleCollection).find({ tags: item }).toArray((err, result) => {
+            db.collection(articleCollection).find({ tags: item }).toArray((err, result) => {
                 if (err) throw err
                 cache.setTagsArticlesData(item, result.length)
                 if (res && i == lastIndex) {
@@ -49,11 +44,10 @@ function searchTagsArticlesData(res) {
                         data: cache.getTagsArticlesData()
                     })
                 }
-
-                db.close()
             })
         })
     })
+    .catch(err => { throw err })
 }
 
 module.exports = {
