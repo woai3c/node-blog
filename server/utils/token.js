@@ -27,7 +27,6 @@ function isVaildToken(db, token) {
         }
 
         db.collection(userCollection).findOne({ token }).then(res => {
-            console.log(res)
             if (res) {
                 resolve(true)
             } else {

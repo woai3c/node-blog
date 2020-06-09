@@ -26,27 +26,30 @@ function generateToken(data) {
 * 是否和数据库中保存的 token 一致
 
 ```js
-async function isVaildToken(db, token) {
-    let result
-    try {
-        result = jwt.verify(token, key)
-    } catch(e) {
-        console.log(e)
-        return false
-    }
+function isVaildToken(db, token) {
+    return new Promise(resolve => {
+        let result
+        try {
+            result = jwt.verify(token, key)
+        } catch(e) {
+            resolve(false)
+        }
 
-    const { exp } = result
-    const current = Math.floor(Date.now() / 1000)
-    if (current > exp) {
-        return false
-    }
+        const { exp } = result
+        const current = Math.floor(Date.now() / 1000)
+        if (current > exp) {
+            resolve(false)
+        }
 
-    const res = await db.collection(userCollection).findOne({ token })
-    if (res) {
-        return true
-    }
- 
-    return false
+        db.collection(userCollection).findOne({ token }).then(res => {
+            console.log(res)
+            if (res) {
+                resolve(true)
+            } else {
+                resolve(false)
+            }
+        })
+    })
 }
 ```
 如果验证正确，则继续进行下一步的操作，如果验证错误，则清除客户端保存的 token，并跳转到登陆页。

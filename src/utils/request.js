@@ -20,16 +20,15 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(response => {
     closeLoading()
     const res = response.data
-    if (res.code == 2) {
-        localStorage.setItem('token', '')
-        router.push('login')
-        return Promise.reject()
-    } if (res.code != 0 && res.msg) {
-        Message({
-            message: res.msg,
-            type: 'error',
-            duration: 5000,
+    if (res.code != 0 && res.msg) {
+        Message.error({
+            content: res.msg,
         })
+
+        if (res.code == 2) {
+            localStorage.setItem('token', '')
+            router.push('login')
+        }
 
         return Promise.reject()
     }
@@ -38,16 +37,12 @@ service.interceptors.response.use(response => {
 }, (error) => {
     closeLoading()
     if (error.name == 'Error') {
-        Message({
-            message: error.message,
-            type: 'error',
-            duration: 5000,
+        Message.error({
+            content: res.msg,
         })
     } else {
-        Message({
-            message: error.response.data.data || error.message,
-            type: 'error',
-            duration: 5000,
+        Message.error({
+            content: error.response.data.data || error.message,
         })
     }
 
