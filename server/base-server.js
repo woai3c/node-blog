@@ -1,3 +1,5 @@
+const path = require('path')
+const fs = require('fs')
 const articleInterface = require('./interface/article')
 const userInterface = require('./interface/user')
 const express = require('express')
@@ -11,9 +13,17 @@ module.exports = {
         app.use(compression())
         app.use(bodyParser.urlencoded({ extended: false }))
         app.use(bodyParser.json())
+        app.use((req, res, next) => { // 将 index.html 设为 no-cache
+            if(req.url == '/') {
+                res.setHeader('Cache-control', 'no-cache')
+            }
+
+            next()
+        })
+
         app.use(express.static('dist', {
             etag: false,
-            maxAge: 60 * 60 * 24 * 365
+            maxAge: 1000 * 60 * 60 * 24 * 365, // 缓存一年
         })) // 将dist设为根目录
 
         app.listen(port, hostname, () => {
