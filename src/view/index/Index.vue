@@ -91,6 +91,11 @@ export default {
 
         gotoPage(name) {
             this.$router.push(name)
+            if (name == 'index') {
+                this.pageIndex = 1
+                this.tags = []
+                this.getAppointArticles()
+            }
         },
 
         toggleTag(e) {
