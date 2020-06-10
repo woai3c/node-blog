@@ -41,14 +41,14 @@ module.exports = {
         extensions: ['.js', '.json', '.vue', '.css'],
         alias: {
             'vue$': 'vue/dist/vue.esm.js',
-            '@': path.resolve(__dirname, '../src')
+            '@': path.resolve(__dirname, '../client')
         }
     },
     plugins: [
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: 'index.html',
-            favicon: './src/assets/favicon.ico',
+            favicon: './client/assets/favicon.ico',
             inject: true
         }),
         new webpack.NamedModulesPlugin(),

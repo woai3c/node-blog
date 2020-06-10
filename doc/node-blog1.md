@@ -1,7 +1,7 @@
 # 用 node 搭建个人博客（一）：代码热更新
 一般来说，web 项目都是分为前端和后端代码，放在不同的项目。
 
-本项目为了开发方便，前后端代码都是放在同一项目，`src` 目录为前端代码，`server` 目录为后端代码。
+本项目为了开发方便，前后端代码都是放在同一项目，`client` 目录为前端代码，`server` 目录为后端代码。
 
 这篇文章的目的是为了讲解怎么用 node 配合 webpack 让前端代码热更新。
 ## 依赖
@@ -40,7 +40,7 @@ const webpackBaseConfig = require('./webpack.base.js')
 module.exports = merge(webpackBaseConfig, {
     mode: 'development',
     entry: {
-        app: ['webpack-hot-middleware/client?reload=true' , './src/main.js'] // 开启热模块更新
+        app: ['webpack-hot-middleware/client?reload=true' , './client/main.js'] // 开启热模块更新
     },
 })
 ```

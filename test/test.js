@@ -1,7 +1,7 @@
 const assert = require('assert')
-const { timestampToDate, objToUrlParam, formatVisits } = require('../src/utils')
+const { timestampToDate, objToUrlParam, formatVisits } = require('../client/utils')
 
-describe('src/utils/index.js', () => {
+describe('client/utils/index.js', () => {
     describe('timestampToDate()', () => {
         it('如果是时间戳，转化成日期+时间的格式', () => {
             assert.equal(timestampToDate(1561271877014), '2019-6-23 14:37:57')
@@ -17,7 +17,7 @@ describe('src/utils/index.js', () => {
     })
 })
 
-describe('src/utils/index.js', () => {
+describe('client/utils/index.js', () => {
     describe('objToUrlParam()', () => {
         it('将对象转化成URL参数', () => {
             const obj = {
@@ -34,7 +34,7 @@ describe('src/utils/index.js', () => {
     })
 })
 
-describe('src/utils/index.js', () => {
+describe('client/utils/index.js', () => {
     describe('formatVisits()', () => {
         it('每隔三位加逗号', () => {
             assert.equal(formatVisits(19216855), '19,216,855')

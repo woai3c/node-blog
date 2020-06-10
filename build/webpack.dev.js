@@ -4,6 +4,6 @@ const webpackBaseConfig = require('./webpack.base.js')
 module.exports = merge(webpackBaseConfig, {
     mode: 'development',
     entry: {
-        app: ['webpack-hot-middleware/client?reload=true' , './src/main.js'] // 开启热模块更新
+        app: ['webpack-hot-middleware/client?reload=true' , './client/main.js'] // 开启热模块更新
     },
 })

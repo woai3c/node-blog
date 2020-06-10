@@ -4,7 +4,7 @@ const webpackBaseConfig = require('./webpack.base.js')
 const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = merge(webpackBaseConfig, {
-    entry: './src/main.js',
+    entry: './client/main.js',
     devtool: 'source-map',
     plugins: [
         new CompressionPlugin(),
