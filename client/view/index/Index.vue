@@ -68,7 +68,7 @@ export default {
         }
     },
     created() {
-        this.init()
+        if (this.$route.path == '/index') this.init()
     },
     methods: {
         init() {
