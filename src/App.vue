@@ -71,6 +71,10 @@ table {
     line-height: 1.5;
     word-wrap: break-word;
 }
+.markdown img {
+    max-width: 100%;
+    margin: 10px 0;
+}
 .markdown>:first-child {
     margin-top: 0!important;
 }
