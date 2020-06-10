@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "dev": "node ./server/dev-server.js",
-    "build": "webpack --config build/webpack.pro.js --mode production",
+    "build": "webpack --config build/webpack.pro.js",
     "server": "node ./server/pro-server.js",
     "test": "mocha ./test"
   },
@@ -59,6 +59,7 @@
     "webpack-cli": "^3.3.11",
     "webpack-dev-middleware": "^3.7.0",
     "webpack-hot-middleware": "^2.25.0",
-    "webpack-merge": "^4.2.1"
+    "webpack-merge": "^4.2.1",
+    "webpackbar": "^4.0.0"
   }
 }
