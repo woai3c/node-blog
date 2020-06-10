@@ -11,7 +11,11 @@ module.exports = {
         app.use(compression())
         app.use(bodyParser.urlencoded({ extended: false }))
         app.use(bodyParser.json())
-        app.use(express.static('dist')) // 将dist设为根目录
+        app.use(express.static('dist', {
+            etag: false,
+            maxAge: 60 * 60 * 24 * 365
+        })) // 将dist设为根目录
+
         app.listen(port, hostname, () => {
             console.log(`正在监听${hostname}:${port}\n\n`)
         })

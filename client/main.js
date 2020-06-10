@@ -18,7 +18,6 @@ Vue.component('Spin', Spin)
 Vue.component('Icon', Icon)
 
 Vue.prototype.$Message = Message
-Vue.prototype.$axios = axios
 Vue.prototype.$ = document.querySelector.bind(document)
 
 new Vue({

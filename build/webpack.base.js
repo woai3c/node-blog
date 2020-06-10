@@ -1,5 +1,4 @@
 const path = require('path')
-const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
@@ -51,13 +50,29 @@ module.exports = {
             favicon: './client/assets/favicon.ico',
             inject: true
         }),
-        new webpack.NamedModulesPlugin(),
-        new webpack.HotModuleReplacementPlugin(),
         new VueLoaderPlugin(),
         new CleanWebpackPlugin()
     ],
-    output: {
-        filename: 'app.js',
-        path: path.resolve(__dirname, '../dist'),
-    }
+    optimization: {
+        runtimeChunk: {
+            name: 'manifest'
+        },
+        splitChunks: {
+            cacheGroups: {
+                vendor: {
+                    name: 'chunk-vendors',
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10,
+                    chunks: 'initial'
+                },
+                common: {
+                    name: 'chunk-common',
+                    minChunks: 2,
+                    priority: -20,
+                    chunks: 'initial',
+                    reuseExistingChunk: true
+                }
+            },
+        }
+    },
 }
