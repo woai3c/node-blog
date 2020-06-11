@@ -3,16 +3,17 @@ function formatDate(time) {
     return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.toTimeString().split(' ')[0]
 }
 
-function serialize(req) {
+function formatLog(data, date, duration) {
     return {
-        hostname: req.hostname,
-        method: req.method,
-        url: req.url,
-        headers: req.headers,
-        time: formatDate(new Date())
+        duration,
+        time: formatDate(date),
+        hostname: data.hostname,
+        method: data.method,
+        url: data.url,
+        headers: data.headers
     }
 }
 
 module.exports = {
-    serialize
+    formatLog
 }

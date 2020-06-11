@@ -16,6 +16,7 @@ const path = require('path')
 const fs = require('fs')
 const { generateToken } = require('../utils/token')
 const { userCollection, createDB } = require('../utils/mongo')
+const { handleError } = require('../utils/log')
 
 function fetchVisits(req, res) {
     createDB().then(db => {
@@ -31,6 +32,7 @@ function fetchVisits(req, res) {
         
         collection.updateOne(query, updateContent, err => {
             if (err) {
+                handleError(err)
                 res.send({
                     code: 9,
                     msg: '获取访问量失败'
@@ -45,7 +47,7 @@ function fetchVisits(req, res) {
             }
         })
     })
-    .catch(err => { throw err })
+    .catch(err => { handleError(err) })
 }
 
 function login(req, res) {
@@ -68,6 +70,7 @@ function login(req, res) {
 
                 collection.updateOne({ user, password }, updateContent, err => {
                     if (err) {
+                        handleError(err)
                         res.send({
                             code: 7,
                             msg: '登陆失败，请重试'
@@ -82,12 +85,12 @@ function login(req, res) {
             }
         })
     })
-    .catch(err => { throw err })
+    .catch(err => { handleError(err) })
 }
 
 function getIndexHTML(req, res) {
     fs.readFile(path.join(__dirname, '../../dist', 'index.html'), { encoding: 'utf-8' }, (err, data) => {
-        if (err) throw err
+        if (err) handleError(err)
         res.writeHead(200, {
             'Content-Type': 'text/html; charset=utf-8',
         })

@@ -18,8 +18,7 @@ const { articleCollection, createDB } = require('../utils/mongo')
 const { updateTagsData, searchTagsArticlesData } = require('../utils/article')
 const ObjectID = require('mongodb').ObjectID
 const { cache } = require('../utils/cache')
-const log = require('../utils/log')
-const { serialize } = require('../utils/format')
+const { handleError } = require('../utils/log')
 
 function addArticle(req, res) {
     createDB()
@@ -48,6 +47,7 @@ function addArticle(req, res) {
         
         collection.insertOne(articleData, err => {
             if (err) {
+                handleError(err)
                 res.send({
                     code: 4,
                     msg: '发布失败'
@@ -62,7 +62,7 @@ function addArticle(req, res) {
             }
         })
     })
-    .catch(err => { throw err })
+    .catch(err => { handleError(err) })
 }
 
 function updateArticle(req, res) {
@@ -93,6 +93,7 @@ function updateArticle(req, res) {
 
         collection.updateOne(query, updateContent, err => {
             if (err) {
+                handleError(err)
                 res.send({
                     code: 3,
                     msg: '更新失败'
@@ -107,7 +108,7 @@ function updateArticle(req, res) {
             }
         })
     })
-    .catch(err => { throw err })
+    .catch(err => { handleError(err) })
 }
 
 function fetchArticleDetail(req, res) {
@@ -131,7 +132,7 @@ function fetchArticleDetail(req, res) {
             }
         })
     })
-    .catch(err => { throw err })
+    .catch(err => { handleError(err) })
 }
 
 function fetchArticles(req, res) {
@@ -147,13 +148,14 @@ function fetchArticles(req, res) {
         if (query.tags) queryObj.tags = query.tags
 
         collection.find(queryObj).count((err, num) => {
-            if (err) throw err
+            if (err) handleError(err)
             collection.find(queryObj)
                         .project({ content: 0, comments: 0 })
                         .skip(size * (index - 1))
                         .limit(size)
                         .toArray((err, result) => {
                             if (err) {
+                                handleError(err)
                                 res.send({
                                     code: 1,
                                     msg: '查找失败',
@@ -169,7 +171,7 @@ function fetchArticles(req, res) {
                         })
         })
     })
-    .catch(err => { throw err })
+    .catch(err => { handleError(err) })
 }
 
 function deleteArticle(req, res) {
@@ -189,6 +191,7 @@ function deleteArticle(req, res) {
 
         db.collection(articleCollection).deleteOne(query, err => {
             if (err) {
+                handleError(err)
                 res.send({
                     code: 5,
                     msg: '删除失败'
@@ -202,7 +205,7 @@ function deleteArticle(req, res) {
             }
         })
     })
-    .catch(err => { throw err })
+    .catch(err => { handleError(err) })
 }
 
 function fetchTagsData(req, res) {
@@ -263,6 +266,7 @@ function addComment(req, res) {
         
         db.collection(articleCollection).updateOne(query, updateContent, err => {
             if (err) {
+                handleError(err)
                 res.send({
                     code: 8,
                     msg: '评论失败'
@@ -279,7 +283,7 @@ function addComment(req, res) {
             }
         })
     })
-    .catch(err => { throw err })
+    .catch(err => { handleError(err) })
 }
 
 module.exports = {

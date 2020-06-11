@@ -17,4 +17,12 @@ const log = bunyan.createLogger({
     ]
 })
 
-module.exports = log
+function handleError(err) {
+    log.error(err)
+    throw err
+}
+
+module.exports = {
+    log,
+    handleError
+}
