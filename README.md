@@ -21,6 +21,7 @@
 * [webpack + express 实现文件精确缓存](https://github.com/woai3c/node-blog/blob/master/doc/node-blog7.md)
 * [阿里云服务器部署个人网站](https://github.com/woai3c/Front-end-articles/blob/master/ecs.md)
 * [性能优化--开启 gzip 压缩](https://github.com/woai3c/node-blog/blob/master/doc/optimize.md)
+* [日志功能](https://github.com/woai3c/node-blog/blob/master/doc/log.md)
 
 ## 前端页面
 * 首页(index)
