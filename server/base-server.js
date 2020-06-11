@@ -1,5 +1,4 @@
-const path = require('path')
-const fs = require('fs')
+const { createDB } = require('./utils/mongo')
 const articleInterface = require('./interface/article')
 const userInterface = require('./interface/user')
 const express = require('express')

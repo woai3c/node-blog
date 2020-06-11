@@ -1,5 +1,5 @@
 const { cache } = require('../utils/cache')
-const { connect, articleCollection, createDB } = require('../utils/mongo')
+const { articleCollection, createDB } = require('../utils/mongo')
 
 function initArticleConfig() {
     // 更新并缓存标签数据

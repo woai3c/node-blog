@@ -7,10 +7,6 @@ const userCollection = 'user' // 保存用户信息的集合/表
 let mongodbClient
 let db
 
-function connect(callback) {
-    MongoClient.connect(url, config, callback)
-}
-
 function createDB() {
     return new Promise((resolve, reject) => {
         if (db) {
@@ -40,7 +36,6 @@ function dbClose() {
 
 module.exports = {
     createDB,
-    connect,
     articleCollection,
     database,
     userCollection,
