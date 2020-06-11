@@ -3,6 +3,8 @@ const userInterface = require('./interface/user')
 const express = require('express')
 const bodyParser = require('body-parser')
 const compression = require('compression')
+const log = require('./utils/log')
+const { serialize } = require('./utils/format')
 const hostname = 'localhost'
 const port = 8888
 
@@ -12,6 +14,8 @@ module.exports = {
         app.use(bodyParser.urlencoded({ extended: false }))
         app.use(bodyParser.json())
         app.use((req, res, next) => { // 将 index.html 设为 no-cache
+            log.info(serialize(req))
+            
             if(req.url == '/') {
                 res.setHeader('Cache-control', 'no-cache')
             }
