@@ -1,11 +1,10 @@
-const { createDB } = require('./utils/mongo')
 const articleInterface = require('./interface/article')
 const userInterface = require('./interface/user')
 const express = require('express')
 const bodyParser = require('body-parser')
 const compression = require('compression')
 const hostname = 'localhost'
-const port = 8080
+const port = 8888
 
 module.exports = {
     config(app) {
