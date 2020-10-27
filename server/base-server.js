@@ -1,19 +1,16 @@
 const articleInterface = require('./interface/article')
 const userInterface = require('./interface/user')
-const express = require('express')
 const bodyParser = require('body-parser')
 const compression = require('compression')
 const { log } = require('./utils/log')
 const { formatLog } = require('./utils/format')
-const hostname = 'localhost'
-const port = 8888
 
 module.exports = {
     config(app) {
         app.use(compression())
         app.use(bodyParser.urlencoded({ extended: false }))
         app.use(bodyParser.json())
-        app.use((req, res, next) => { 
+        app.use((req, res, next) => {
             const startTime = new Date()
 
             res.once('close', () => { // 监听请求结束事件
@@ -21,27 +18,18 @@ module.exports = {
                 log.info(formatLog(req, startTime, endTime - startTime))
             })
 
-            if(req.url == '/') { // 将 index.html 设为 no-cache
+            if (req.url == '/') { // 将 index.html 设为 no-cache
                 res.setHeader('Cache-control', 'no-cache')
             }
 
             next()
-        })
-
-        app.use(express.static('dist', {
-            etag: false,
-            maxAge: 1000 * 60 * 60 * 24 * 365, // 缓存一年
-        })) // 将dist设为根目录
-
-        app.listen(port, hostname, () => {
-            console.log(`正在监听${hostname}:${port}\n\n`)
         })
     },
     interface(app) {
         app.post('/addArticle', (req, res) => {
             articleInterface.addArticle(req, res)
         })
-        
+
         app.put('/updateArticle', (req, res) => {
             articleInterface.updateArticle(req, res)
         })
@@ -75,11 +63,6 @@ module.exports = {
 
         app.get('/fetchVisits', (req, res) => {
             userInterface.fetchVisits(req, res)
-        })
-        
-        // 默认返回 index.html
-        app.get('*', (req, res) => {
-            userInterface.getIndexHTML(req, res)
         })
     }
 }

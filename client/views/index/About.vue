@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    created() {
+    mounted() {
         console.log(1)
     }
 }

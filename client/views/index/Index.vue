@@ -67,7 +67,7 @@ export default {
             tags: []
         }
     },
-    created() {
+    mounted() {
         if (this.$route.path == '/index') this.init()
     },
     methods: {

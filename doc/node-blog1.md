@@ -35,7 +35,7 @@ app.use(require('webpack-dev-middleware')(compiler, {
 `webpack.dev.js`
 ```js
 const merge = require('webpack-merge')
-const webpackBaseConfig = require('./webpack.base.js')
+const webpackBaseConfig = require('./webpack.base.config.js')
 
 module.exports = merge(webpackBaseConfig, {
     mode: 'development',

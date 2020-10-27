@@ -87,7 +87,7 @@ export default {
             totalArticles: 0,
         }
     },
-    created() {
+    mounted() {
         this.initData()
     },
     methods: {

@@ -25,7 +25,7 @@ export default {
             bg: {}
         }
     },
-    created() {
+    mounted() {
         this.bg.backgroundImage = 'url(' + require('../../assets/bg.jpg') + ')'
     },
     methods: {

@@ -1,11 +1,11 @@
 import axios from 'axios'
-import { Message } from 'iview'
-import router from '@/router'
+import { Message } from 'view-design'
+import { router } from '@/entry-client'
 import { showLoading, closeLoading } from '@/utils/loading'
 
 const service = axios.create({
-    baseURL: location.origin,
-    timeout: 60000,
+    baseURL: 'http://localhost:8888',
+    timeout: 30000,
 })
 
 service.interceptors.request.use(config => {

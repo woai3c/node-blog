@@ -44,7 +44,7 @@ export default {
             tagVal: '',
         }
     },
-    created() {
+    mounted() {
         this.id = this.$route.query.id
         if (this.id) {
             this.getArticleDetail()

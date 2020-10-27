@@ -53,7 +53,7 @@ export default {
             id: '',
         }
     },
-    created() {
+    mounted() {
         this.id = this.$route.query.id
         if (this.id) {
             this.getArticleDetail()

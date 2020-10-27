@@ -1,4 +1,5 @@
-import store from '@/store'
+import { store } from '@/entry-client'
+
 let loadingCounter = 0
 
 export function showLoading() {

@@ -2,6 +2,8 @@ import Vue from 'vue'
 import { createApp } from './app'
 const { app, router, store } = createApp()
 
+export { router, store }
+
 Vue.mixin({
     beforeMount() {
         const { asyncData } = this.$options
@@ -14,10 +16,8 @@ Vue.mixin({
                 route: this.$route
             })
         }
-    }
-})
+    },
 
-Vue.mixin({
     beforeRouteUpdate(to, from, next) {
         const { asyncData } = this.$options
         if (asyncData) {
@@ -30,11 +30,28 @@ Vue.mixin({
         }
     }
 })
-console.log(window.__INITIAL_STATE__)
+
 if (window.__INITIAL_STATE__) {
     store.replaceState(window.__INITIAL_STATE__)
 }
 
 router.onReady(() => {
     app.$mount('#app')
+    // router.beforeEach((to, from, next) => {
+    //     const name = to.name
+    //     if (localStorage.getItem('token')) {
+    //         if (name == 'login') {
+    //             next('index')
+    //         } else {
+    //             next()
+    //         }
+    //     } else {
+    //         if (name == 'editor' || name == 'manage') {
+    //             next('login')
+    //         } else {
+    //             next()
+    //         }
+    //     }
+    // })
+    // Vue.prototype.$ = document.querySelector.bind(document)
 })
