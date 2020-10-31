@@ -37,7 +37,7 @@ export default {
         gotoContent(e) {
             const target = e.target
             if (target.className == 'p-title') {
-                this.$router.push({name: 'content', query: {id: this.articlesData[target.dataset.index]._id}})
+                this.$router.push('content?id=' + this.articlesData[target.dataset.index]._id)
             }
         },
 

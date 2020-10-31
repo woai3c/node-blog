@@ -1,5 +1,6 @@
 class Cache {
     constructor() {
+        this.years = []
         this.tagsData = []
         this.tagsArticlesData = {}
         this.isTagsChange = true // 标签数据是否改变
@@ -19,6 +20,14 @@ class Cache {
 
     setTagsArticlesData(tag, len) {
         this.tagsArticlesData[tag] = len
+    }
+
+    getYears() {
+        return this.years
+    }
+
+    setYears(data) {
+        this.years = data
     }
 
     getTagsData() {

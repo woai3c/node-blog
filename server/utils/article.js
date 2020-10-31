@@ -5,6 +5,7 @@ const { handleError } = require('../utils/log')
 function initArticleConfig() {
     // 更新并缓存标签数据
     updateTagsData()
+    updateYears()
 }
 
 // 更新标签信息
@@ -51,8 +52,33 @@ function searchTagsArticlesData(res) {
     .catch(err => { handleError(err) })
 }
 
+// 更新年份信息
+function updateYears(res) {
+    createDB()
+    .then(db => {
+        db.collection(articleCollection).find().toArray((err, result) => {
+            if (err) handleError(err)
+            const s = new Set()
+            result.forEach(item => {
+                s.add(item.year)
+            })
+
+            const arry = [...s]
+            cache.setYears(arry)
+            if (res) {
+                res.send({
+                    code: 0,
+                    data: arry
+                })
+            }
+        })
+    })
+    .catch(err => { handleError(err) })
+}
+
 module.exports = {
     initArticleConfig,
     updateTagsData,
     searchTagsArticlesData,
+    updateYears,
 }

@@ -20,7 +20,7 @@ const serve = (path) => {
     })
 }
 
-app.use('/dist', serve('../dist', true))
+app.use('/dist', serve('../dist'))
 
 function createRenderer(bundle, options) {
     return createBundleRenderer(

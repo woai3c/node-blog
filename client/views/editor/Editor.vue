@@ -26,8 +26,8 @@
 
 <script>
 import VueMarkdown from 'vue-markdown'
-import { addArticle, updateArticle, fetchArticleDetail } from '@/api'
 
+let addArticle, updateArticle, fetchArticleDetail
 export default {
     name: 'editor',
     components: {
@@ -45,13 +45,17 @@ export default {
         }
     },
     mounted() {
+        const api = require('@/api/client')
+        addArticle = api.addArticle
+        updateArticle = api.updateArticle
+        fetchArticleDetail = api.fetchArticleDetail
+
+        this.rightEle = this.$('.right')
+
         this.id = this.$route.query.id
         if (this.id) {
             this.getArticleDetail()
         }
-    },
-    mounted() {
-        this.rightEle = this.$('.right')
     },
     methods: {
         getArticleDetail() {

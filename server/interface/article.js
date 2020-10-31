@@ -15,7 +15,7 @@
 const { isVaildToken } = require('../utils/token')
 const { getClientIp, ipToCity, formatIP } = require('../utils/ip')
 const { articleCollection, createDB } = require('../utils/mongo')
-const { updateTagsData, searchTagsArticlesData } = require('../utils/article')
+const { updateTagsData, searchTagsArticlesData, updateYears } = require('../utils/article')
 const ObjectID = require('mongodb').ObjectID
 const { cache } = require('../utils/cache')
 const { handleError } = require('../utils/log')
@@ -54,6 +54,7 @@ function addArticle(req, res) {
                 })
             } else {
                 updateTagsData()
+                updateYears()
                 cache.setTagsStatus(true)
                 res.send({
                     code: 0,
@@ -133,6 +134,13 @@ function fetchArticleDetail(req, res) {
         })
     })
     .catch(err => { handleError(err) })
+}
+
+function fetchYears(req, res) {
+    res.send({
+        code: 0,
+        data: cache.getYears()
+    })
 }
 
 function fetchArticles(req, res) {
@@ -295,4 +303,5 @@ module.exports = {
     fetchTagsData,
     fetchTagsArtilesData,
     addComment,
+    fetchYears,
 }

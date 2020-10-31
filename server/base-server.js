@@ -64,5 +64,9 @@ module.exports = {
         app.get('/fetchVisits', (req, res) => {
             userInterface.fetchVisits(req, res)
         })
+
+        app.get('/fetchYears', (req, res) => {
+            articleInterface.fetchYears(req, res)
+        })
     }
 }

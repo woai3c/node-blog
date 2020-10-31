@@ -4,6 +4,7 @@
             <div class="article-header">
                 <p>全部文章（{{ totalArticles }}）</p>
                 <Button class="btn-publish" type="primary" @click="gotoEditor">发布文章</Button>
+                <Button to="/index" style="margin-left: 20px">返回首页</Button>
             </div>
             <div class="div-search">
                 <p>筛选：</p>
@@ -64,10 +65,9 @@
 </template>
 
 <script>
-import { fetchArticles, deleteArticle, fetchTagsData } from '@/api'
 import { mapState } from 'vuex'
-import { timestampToDate } from '@/utils'
 
+let fetchArticles, deleteArticle
 export default {
     name: 'manage',
     data() {
@@ -78,24 +78,39 @@ export default {
             month: '月份',
             tag: '标签',
             keyword: '',
-            years: ['年份', 2019],
             months: ['月份', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-            tags: [],
-            articlesData: [],
             pageSize: 10,
             pageIndex: 1,
-            totalArticles: 0,
         }
     },
+    computed: {
+        ...mapState([
+            'years',
+            'tags',
+            'articlesData',
+            'totalArticles',
+        ]),
+    },
+    asyncData({ store, route }) {
+        return Promise.all([
+            store.dispatch('getYears'),
+            store.dispatch('getTagsData'),
+            store.dispatch('getArticles', {
+                pageSize: 10,
+                pageIndex: 1,
+            })
+        ])
+    },
     mounted() {
-        this.initData()
+        const api = require('@/api/client')
+        fetchArticles = api.fetchArticles
+        deleteArticle = api.deleteArticle
     },
     methods: {
         initData() {
             this.searchArticles()
-            fetchTagsData().then(res => {
-                this.tags = ['标签', ...res.data]
-            })
+            this.$store.dispatch('getTagsData')
+            this.$store.dispatch('getYears')
         },
 
         getYear(y) {
@@ -121,9 +136,9 @@ export default {
             if (text == '删除') {
                 this.isShowModal = true
             } else if (text == '编辑') {
-                this.$router.push({name: 'editor', query: {id: this.articlesData[index]._id}})
+                this.$router.push('editor?id=' + this.articlesData[index]._id)
             } else if (target.className == 'p-title') {
-                this.$router.push({name: 'content', query: {id: this.articlesData[index]._id}})
+                this.$router.push('content?id=' + this.articlesData[index]._id)
             }
         },
 
@@ -154,13 +169,7 @@ export default {
                 pageIndex: this.pageIndex,
             })
             .then(res => {
-                const data = res.data
-                data.forEach(item => {
-                    item.date = timestampToDate(item.date)
-                })
-
-                this.articlesData = data
-                this.totalArticles = res.total
+                this.$store.commit('setArticles', res)
             })
         }
     }
@@ -205,6 +214,9 @@ button {
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
+}
+.ivu-btn-error {
+    margin-right: 10px;
 }
 .keyword {
     width: 200px;

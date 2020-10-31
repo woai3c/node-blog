@@ -9,12 +9,10 @@ const { initArticleConfig } = require('./utils/article')
 const app = express()
 
 const serve = (path) => {
-    return express.static(resolve(path), {
-        maxAge: 0
-    })
+    return express.static(resolve(path))
 }
 
-app.use('/dist', serve('../dist', true))
+app.use('/dist', serve('../dist'))
 
 function createRenderer(bundle, options) {
     return createBundleRenderer(
@@ -41,7 +39,6 @@ function render(req, res) {
     }
 
     const context = {
-        title: 'SSR 测试', // default title
         url: req.url
     }
 

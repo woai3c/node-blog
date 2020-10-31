@@ -13,10 +13,8 @@
 import { mapState } from 'vuex'
 
 export default {
-    data() {
-        return {
-            keepAliveData: ['manage'],
-        }
+    asyncData({ store, route }) {
+        store.dispatch('getVisits')
     },
     computed: {
         ...mapState([

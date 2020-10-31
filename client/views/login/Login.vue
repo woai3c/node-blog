@@ -14,19 +14,21 @@
 </template>
 
 <script>
-import { login } from '@/api'
-
+let login
 export default {
     name: 'login',
     data() {
         return {
             user: '',
             pwd: '',
-            bg: {}
+            bg: {
+                backgroundImage: ''
+            }
         }
     },
     mounted() {
-        this.bg.backgroundImage = 'url(' + require('../../assets/bg.jpg') + ')'
+        login = require('@/api/client').login
+        this.bg.backgroundImage = 'url(' + require('@/assets/bg.jpg') + ')'
     },
     methods: {
         vaildInput() {

@@ -6,7 +6,7 @@
             </div>
             <p class="title">{{ articleData.title }}</p>
             <div class="info">
-                时间：{{ date }}
+                时间：{{ articleData.date }}
                 <span style="margin-left: 30px;">标签：</span>
                 <Tag v-for="(item, index) in articleData.tags" :key="index">{{ item }}</Tag>
             </div>
@@ -37,23 +37,30 @@
 <script>
 import VueMarkdown from 'vue-markdown'
 import { mapState } from 'vuex'
-import { timestampToDate } from '@/utils'
-import { addComment, fetchArticleDetail } from '@/api'
 
+let addComment, fetchArticleDetail
 export default {
-    name: 'artileContent',
     components: {
         VueMarkdown
     },
     data() {
         return {
-            date: '',
             comment: '',
-            articleData: {},
             id: '',
         }
     },
+    computed: {
+        ...mapState([
+            'articleData',
+        ]),
+    },
+    asyncData({ store, route }) {
+        return store.dispatch('getArticleDetail', route.query.id)
+    },
     mounted() {
+        const api = require('@/api/client')
+        addComment = api.addComment
+        fetchArticleDetail = api.fetchArticleDetail
         this.id = this.$route.query.id
         if (this.id) {
             this.getArticleDetail()
@@ -64,12 +71,7 @@ export default {
     methods: {
         getArticleDetail() {
             fetchArticleDetail(this.id).then(res => {
-                const data = res.data
-                this.articleData = data
-                this.date = timestampToDate(data.date)
-                data.comments.forEach(item => {
-                    item.time = timestampToDate(item.time)
-                })
+                this.$store.commit('setArticleDetail', res.data)
             })
         },
 

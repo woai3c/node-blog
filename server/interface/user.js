@@ -9,11 +9,9 @@
  * 6 没有查询到用户
  * 7 评论失败
  * 8 登录失败
- * * 获取访问量失败
+ * 9 获取访问量失败
  */
 
-const path = require('path')
-const fs = require('fs')
 const { generateToken } = require('../utils/token')
 const { userCollection, createDB } = require('../utils/mongo')
 const { handleError } = require('../utils/log')
