@@ -191,6 +191,9 @@ textarea {
 .ivu-input-wrapper  {
     width: 70%;
 }
+.ivu-btn-error {
+    margin-right: 10px;
+}
 </style>
 
 
