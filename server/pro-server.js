@@ -6,8 +6,11 @@ const { createBundleRenderer } = require('vue-server-renderer')
 const resolve = file => path.resolve(__dirname, file)
 const { interface, config } = require('./base-server')
 const { initArticleConfig } = require('./utils/article')
-
+const compression = require('compression')
 const app = express()
+
+// 开启 gzip 压缩
+app.use(compression())
 
 const microCache = LRU({
     max: 100,
@@ -75,13 +78,12 @@ const renderer = createRenderer(bundle, {
     clientManifest
 })
 
-initArticleConfig() // 初始化数据库相关配置
-
 app.use(express.static('dist', {
     etag: false,
     maxAge: 1000 * 60 * 60 * 24 * 365, // 缓存一年
 })) // 将dist设为根目录
 
+initArticleConfig() // 初始化数据库相关配置
 config(app) // 基本配置
 interface(app) // 处理接口
 

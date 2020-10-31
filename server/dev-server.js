@@ -5,7 +5,6 @@ const { createBundleRenderer } = require('vue-server-renderer')
 const devServer = require('../build/setup-dev-server')
 const resolve = (file) => path.resolve(__dirname, file)
 const { initArticleConfig } = require('./utils/article')
-
 const app = express()
 
 const serve = (path) => {

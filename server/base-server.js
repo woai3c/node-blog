@@ -1,13 +1,11 @@
 const articleInterface = require('./interface/article')
 const userInterface = require('./interface/user')
 const bodyParser = require('body-parser')
-const compression = require('compression')
 const { log } = require('./utils/log')
 const { formatLog } = require('./utils/format')
 
 module.exports = {
     config(app) {
-        app.use(compression())
         app.use(bodyParser.urlencoded({ extended: false }))
         app.use(bodyParser.json())
         app.use((req, res, next) => {
