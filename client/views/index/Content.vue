@@ -55,21 +55,25 @@ export default {
         ]),
     },
     asyncData({ store, route }) {
-        return store.dispatch('getArticleDetail', route.query.id)
+        if (route.path == '/content' && route.query.id) {
+            return store.dispatch('getArticleDetail', route.query.id)
+        }
+
+        return Promise.resolve()
     },
     mounted() {
-        const api = require('@/api/client')
-        addComment = api.addComment
-        fetchArticleDetail = api.fetchArticleDetail
         this.id = this.$route.query.id
-        if (this.id) {
-            this.getArticleDetail()
-        } else {
+        if (!this.id) {
             this.$router.push('/')
         }
     },
     methods: {
         getArticleDetail() {
+            if (!fetchArticleDetail) {
+                const api = require('@/api/client')
+                fetchArticleDetail = api.fetchArticleDetail
+            }
+            
             fetchArticleDetail(this.id).then(res => {
                 this.$store.commit('setArticleDetail', res.data)
             })
@@ -80,6 +84,11 @@ export default {
         },
 
         reply() {
+            if (!addComment) {
+                const api = require('@/api/client')
+                addComment = api.addComment
+            }
+            
             if (this.comment.length > 200 || this.comment.length == 0) {
                 this.$Message.error('评论长度为1-200个字符')
                 return

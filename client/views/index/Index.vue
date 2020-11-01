@@ -10,7 +10,6 @@
             <div class="content">
                 <keep-alive>
                     <router-view
-                        :key="$route.fullPath"
                         :articlesData="articlesData"
                         :pageIndex="pageIndex"
                         :pageSize="pageSize"
