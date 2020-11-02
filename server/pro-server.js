@@ -1,7 +1,6 @@
 const fs = require('fs')
 const path = require('path')
 const express = require('express')
-const LRU = require('lru-cache')
 const { createBundleRenderer } = require('vue-server-renderer')
 const resolve = file => path.resolve(__dirname, file)
 const { interface, config } = require('./base-server')
@@ -13,11 +12,6 @@ const app = express()
 // 开启 gzip 压缩
 app.use(compression())
 app.use(favicon(resolve('../public/favicon.ico')))
-
-const microCache = LRU({
-    max: 100,
-    maxAge: 60 * 60 * 24 * 1000 // 重要提示：条目在 1 天后过期。
-})
 
 const serve = (path) => {
     return express.static(resolve(path), {
@@ -38,12 +32,6 @@ function createRenderer(bundle, options) {
 }
 
 function render(req, res) {
-    const hit = microCache.get(req.url)
-    if (hit) {
-        console.log('Response from cache')
-        return res.end(hit)
-    }
-
     res.setHeader('Content-Type', 'text/html')
 
     const handleError = err => {
@@ -57,7 +45,6 @@ function render(req, res) {
     }
 
     const context = {
-        title: 'SSR 测试', // default title
         url: req.url
     }
 
@@ -66,7 +53,6 @@ function render(req, res) {
             return handleError(err)
         }
 
-        microCache.set(req.url, html)
         res.send(html)
     })
 }
