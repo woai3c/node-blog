@@ -6,11 +6,13 @@ const { createBundleRenderer } = require('vue-server-renderer')
 const resolve = file => path.resolve(__dirname, file)
 const { interface, config } = require('./base-server')
 const { initArticleConfig } = require('./utils/article')
+const favicon = require('serve-favicon')
 const compression = require('compression')
 const app = express()
 
 // 开启 gzip 压缩
 app.use(compression())
+app.use(favicon(resolve('../public/favicon.ico')))
 
 const microCache = LRU({
     max: 100,
@@ -69,7 +71,7 @@ function render(req, res) {
     })
 }
 
-const templatePath = resolve('../client/index.template.html')
+const templatePath = resolve('../public/index.template.html')
 const template = fs.readFileSync(templatePath, 'utf-8')
 const bundle = require('../dist/vue-ssr-server-bundle.json')
 const clientManifest = require('../dist/vue-ssr-client-manifest.json') // 将js文件注入到页面中

@@ -35,6 +35,7 @@
     "jsonwebtoken": "^8.5.1",
     "lib-qqwry": "^1.3.2",
     "mongodb": "^3.2.6",
+    "serve-favicon": "^2.5.0",
     "view-design": "^4.4.0",
     "vue": "^2.6.12",
     "vue-markdown": "^2.2.4",

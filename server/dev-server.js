@@ -5,12 +5,13 @@ const { createBundleRenderer } = require('vue-server-renderer')
 const devServer = require('../build/setup-dev-server')
 const resolve = (file) => path.resolve(__dirname, file)
 const { initArticleConfig } = require('./utils/article')
+const favicon = require('serve-favicon')
 const app = express()
-
 const serve = (path) => {
     return express.static(resolve(path))
 }
 
+app.use(favicon(resolve('../public/favicon.ico')))
 app.use('/dist', serve('../dist'))
 
 function createRenderer(bundle, options) {
@@ -24,7 +25,6 @@ function createRenderer(bundle, options) {
 }
 
 function render(req, res) {
-    const startTime = Date.now()
     res.setHeader('Content-Type', 'text/html')
 
     const handleError = err => {
@@ -44,13 +44,12 @@ function render(req, res) {
     renderer.renderToString(context, (err, html) => {
         if (err) return handleError(err)
         res.send(html)
-        console.log(`whole request: ${ Date.now() - startTime }ms`)
     })
 }
 
 let renderer
 let readyPromise
-const templatePath = resolve('../client/index.template.html')
+const templatePath = resolve('../public/index.template.html')
 
 readyPromise = devServer(
     app,
