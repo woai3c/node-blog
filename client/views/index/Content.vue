@@ -39,6 +39,7 @@ import VueMarkdown from 'vue-markdown'
 import { mapState } from 'vuex'
 
 let addComment, fetchArticleDetail
+let isFirst = true
 export default {
     components: {
         VueMarkdown
@@ -55,7 +56,10 @@ export default {
         ]),
     },
     asyncData({ store, route }) {
-        if (route.path == '/content' && route.query.id) {
+        // 只有第一次进入页面才调用 asyncData
+        // 由于组件使用 keep-alive 缓存
+        // 当进入页面会触发 activated() 钩子，所以再次进入页面在 activated() 钩子获取数据
+        if (isFirst && route.query.id) {
             return store.dispatch('getArticleDetail', route.query.id)
         }
 
@@ -66,6 +70,14 @@ export default {
         if (!this.id) {
             this.$router.push('/')
         }
+    },
+    activated() {
+        if (isFirst) {
+            isFirst = false
+            return
+        }
+        
+        this.$store.dispatch('getArticleDetail', this.$route.query.id)
     },
     methods: {
         getArticleDetail() {
