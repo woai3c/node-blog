@@ -6,7 +6,7 @@
 注意，本项目的前后端代码都是放在一起的，前端代码放在 `client` 目录，后端代码放在 `server` 目录。
 
 ## [在线预览](http://118.190.217.8:3389/)
-由于服务器网带宽过小（阿里云 1M），首次加载时间较久，请耐心等待。
+由于服务器网络带宽过小（阿里云 1M），所以首次加载时间较久，请耐心等待。
 
 ## 相关文档
 * [多个请求下 loading 的展示与关闭](https://github.com/woai3c/Front-end-articles/blob/master/control%20loading.md)
