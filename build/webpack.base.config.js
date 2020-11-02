@@ -22,10 +22,11 @@ module.exports = {
     },
     module: {
         // https://juejin.im/post/6844903689103081485
-        // 在服务端渲染打包的配置中使用了 mini-css-extract-plugin 是的 server bundle 中会使用到document
-        // node 环境中不存在 window 对象 所以报错。
-        // 解决方案：将样式相关的 loader 不要放在 webpack.base.config.js 文件
-        // 分拆到 client 和 server 文件。其中 mini-css-extract-plugin 要放在 client 配置。
+        // 使用 `mini-css-extract-plugin` 插件打包的的 `server bundle` 会使用到 document。
+        // 由于 node 环境中不存在 document 对象，所以报错。
+        // 解决方案：样式相关的 loader 不要放在 `webpack.base.config.js` 文件
+        // 将其分拆到 `webpack.client.config.js` 和 `webpack.client.server.js` 文件
+        // 其中 `mini-css-extract-plugin` 插件要放在 `webpack.client.config.js` 文件配置。
         rules: [
             {
                 test: /\.vue$/,
