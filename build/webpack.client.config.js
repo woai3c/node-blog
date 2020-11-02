@@ -5,6 +5,7 @@ const CompressionPlugin = require('compression-webpack-plugin')
 const WebpackBar = require('webpackbar')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const path = require('path')
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -31,7 +32,7 @@ if (isProd) {
     )
 }
 
-module.exports = merge(base, {
+const config = {
     entry: path.join(__dirname, '../client/entry-client.js'),
     plugins,
     optimization: {
@@ -40,14 +41,6 @@ module.exports = merge(base, {
         },
         splitChunks: {
             cacheGroups: {
-                // 分割 css 文件
-                styles: {
-                    name: 'styles',
-                    test: /\.css$/,
-                    chunks: 'all',
-                    enforce: true,
-                    priority: 20, 
-                },
                 vendor: {
                     name: 'chunk-vendors',
                     test: /[\\/]node_modules[\\/]/,
@@ -73,6 +66,7 @@ module.exports = merge(base, {
                         loader: MiniCssExtractPlugin.loader,
                         options: {
                             // 解决 export 'default' (imported as 'mod') was not found
+                            // 启用 CommonJS 语法
                             esModule: false,
                         },
                     },
@@ -81,4 +75,13 @@ module.exports = merge(base, {
             }
         ]
     },
-})
+}
+
+if (isProd) {
+    // 压缩 css
+    config.optimization.minimizer = [
+        new CssMinimizerPlugin(),
+    ]
+}
+
+module.exports = merge(base, config)
