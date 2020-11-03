@@ -22,6 +22,7 @@
 * [阿里云服务器部署个人网站](https://github.com/woai3c/Front-end-articles/blob/master/ecs.md)
 * [性能优化--开启 gzip 压缩](https://github.com/woai3c/node-blog/blob/master/doc/optimize.md)
 * [日志功能](https://github.com/woai3c/node-blog/blob/master/doc/log.md)
+* [手把手教你搭建 Vue 服务端渲染项目](https://github.com/woai3c/Front-end-articles/issues/13)
 
 ## 前端页面
 * 首页(index)
