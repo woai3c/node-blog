@@ -63,9 +63,10 @@ initArticleConfig() // 初始化数据库相关配置
 config(app) // 基本配置
 interface(app) // 处理接口
 
-const port = 8888
+const { host, port } = require('../net') 
+
 app.listen(port, () => {
-    console.log(`server started at localhost:${ port }`)
+    console.log(`server started at ${host}:${ port }`)
 })
 
 app.get('*', (req, res) => {

@@ -2,9 +2,10 @@ import axios from 'axios'
 import { Message } from 'view-design'
 import { router } from '@/entry-client'
 import { showLoading, closeLoading } from '@/utils/loading'
+import { host, port } from '../../net'
 
 const service = axios.create({
-    baseURL: 'http://localhost:8888',
+    baseURL: `http://${host}:${port}`,
     timeout: 30000,
 })
 

@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { host, port } from '../../net'
 
 const service = axios.create({
-    baseURL: 'http://localhost:8888',
+    baseURL: `http://${host}:${port}`,
     timeout: 30000,
 })
 
