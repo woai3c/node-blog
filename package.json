@@ -58,6 +58,8 @@
     "css-loader": "^2.1.1",
     "css-minimizer-webpack-plugin": "^1.1.5",
     "file-loader": "^3.0.1",
+    "less": "^3.12.2",
+    "less-loader": "^7.0.2",
     "memory-fs": "^0.5.0",
     "mini-css-extract-plugin": "^1.2.1",
     "mocha": "^6.1.4",

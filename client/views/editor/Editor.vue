@@ -13,26 +13,27 @@
                 <VueMarkdown class="markdown" :source="content"/>
             </div>
         </section>
-        <Modal v-model="isShowModal" @on-ok="publish">
-            <p class="modal-p">请添加标签</p>
-            <div class="div-input">
-                <Input v-model="tagVal"/>
-                <Button type="primary" @click="addTag">添加标签</Button>
+        <div v-show="isShowModal" class="modal-bg">
+            <div class="modal">
+                <p class="modal-p">请添加标签</p>
+                <div class="div-input">
+                    <input class="ivu-input" style="margin-right: 10px; font-size: 14px;" v-model="tagVal"/>
+                    <Button type="primary" @click="addTag">添加标签</Button>
+                </div>
+                <Tag @on-close="closeTag(index)" closable v-for="(item, index) in tagsData" :key="index">{{ item }}</Tag>
+                <div class="btn-container">
+                    <Button style="margin-right: 20px; border: 1px solid #ddd" @click="isShowModal = false">取消</Button>
+                    <Button type="primary" @click="publish">发布</Button>
+                </div>
             </div>
-            <Tag @on-close="closeTag(index)" closable v-for="(item, index) in tagsData" :key="index">{{ item }}</Tag>
-        </Modal>
+        </div>
     </div>
 </template>
 
 <script>
-import VueMarkdown from 'vue-markdown'
-
 let addArticle, updateArticle, fetchArticleDetail
 export default {
     name: 'editor',
-    components: {
-        VueMarkdown
-    },
     data() {
         return {
             tagsData: [],
@@ -193,6 +194,11 @@ textarea {
 }
 .ivu-btn-error {
     margin-right: 10px;
+}
+.btn-container {
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    margin-top: 20px;
 }
 </style>
 

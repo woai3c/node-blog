@@ -35,7 +35,7 @@
                         <DropdownItem v-for="(item, index) in tags" :name="item" :key="index">{{ item }}</DropdownItem>
                     </DropdownMenu>
                 </Dropdown>
-                <Input class="keyword" placeholder="请输入标题关键词" v-model="keyword"/>
+                <input class="keyword ivu-input" placeholder="请输入标题关键词" v-model="keyword"/>
                 <Button class="btn-search" type="primary" @click="searchArticles">搜索</Button>
             </div>
             <ul class="div-list">
@@ -50,17 +50,20 @@
             </ul>
             <Page v-if="totalArticles" show-total class="page" :page-size="pageSize" :total="totalArticles" @on-change="pageChange"/>
         </div>
-        <Modal v-model="isShowModal" width="360" class="delete-modal">
-            <p slot="header" style="color:#f60;text-align:center">
-                <span class="delete-title">删除确认</span>
-            </p>
-            <div>
-                <p class="delete-p">是否要删除该文章？</p>
+        <div v-show="isShowModal" class="modal-bg">
+            <div class="modal">
+                <div class="header">
+                    <span class="delete-title">删除确认</span>
+                </div>
+                <div>
+                    <p class="delete-p">是否要删除该文章？</p>
+                </div>
+                <div>
+                    <Button size="large" style="margin-right: 20px;" @click="isShowModal = false">取消</Button>
+                    <Button type="error" size="large" @click="del">确认</Button>
+                </div>
             </div>
-            <div slot="footer">
-                <Button type="error" size="large" @click="del">删除</Button>
-            </div>
-        </Modal>
+        </div>
     </div>
 </template>
 
@@ -204,16 +207,10 @@ button {
     align-items: center;
 }
 .btn {
-    text-align: left;
+    text-align: right;
 }
 .btn-tag {
     width: 200px;
-}
-.ivu-icon {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
 }
 .ivu-btn-error {
     margin-right: 10px;

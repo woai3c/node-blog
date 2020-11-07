@@ -2,7 +2,7 @@
     <div class="view-content">
         <div class="content">
             <div class="back" @click="back">
-                <img src="../../assets/back.png">返回
+                <Icon type="ios-arrow-back" style="font-size: 30px" />返回
             </div>
             <p class="title">{{ articleData.title }}</p>
             <div class="info">
@@ -25,7 +25,7 @@
             </div>
             <div class="div-reply">
                 <p class="p-reply">请友善评论</p>
-                <Input type="textarea" :rows="6" v-model="comment"/>
+                <textarea class="ivu-input" v-model="comment" style="resize: none; height: 140px" />
                 <div class="div-btn">
                     <Button @click="reply">回复</Button>
                 </div>
@@ -35,15 +35,11 @@
 </template>
 
 <script>
-import VueMarkdown from 'vue-markdown'
 import { mapState } from 'vuex'
 
 let addComment, fetchArticleDetail
 let isFirst = true
 export default {
-    components: {
-        VueMarkdown
-    },
     data() {
         return {
             comment: '',

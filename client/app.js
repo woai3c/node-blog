@@ -1,15 +1,16 @@
 import Vue from 'vue'
 import App from '@/App.vue'
-import 'view-design/dist/styles/iview.css'
-import { Button, Input, Tag, Modal, Page, Dropdown, DropdownMenu, DropdownItem, Spin, Message, Icon } from 'view-design'
+import '@/assets/iconfont/ionicons.less'
+import '@/styles/public.css'
+import { Button, Tag, Page, Dropdown, DropdownMenu, DropdownItem, Spin, Message, Icon } from 'view-design'
+import VueMarkdown from 'vue-markdown'
 import { createRouter } from '@/router'
 import { createStore } from '@/store'
 import { sync } from 'vuex-router-sync'
 
+Vue.component('VueMarkdown', VueMarkdown)
 Vue.component('Button', Button)
-Vue.component('Input', Input)
 Vue.component('Tag', Tag)
-Vue.component('Modal', Modal)
 Vue.component('Page', Page)
 Vue.component('Dropdown', Dropdown)
 Vue.component('DropdownMenu', DropdownMenu)
