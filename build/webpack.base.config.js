@@ -50,6 +50,17 @@ module.exports = {
                 test: /\.(woff|eot|ttf)\??.*$/,
                 loader: 'url-loader?name=fonts/[name].[md5:hash:hex:7].[ext]'
             },
+            {
+                test: /\.css$/,
+                use: [
+                    'vue-style-loader',
+                    'css-loader'
+                ]
+            },
+            {
+                test: /\.less$/,
+                use: ['vue-style-loader', 'css-loader', 'less-loader']
+            },
         ]
     },
     plugins: [new VueLoaderPlugin()],
