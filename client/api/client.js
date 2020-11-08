@@ -35,9 +35,9 @@ export function login(data) {
     return request.post('/login', data)
 }
 
-export function addComment(data) {
-    return request.post('/addComment', data)
-}
+// export function addComment(data) {
+//     return request.post('/addComment', data)
+// }
 
 export function fetchVisits() {
     return request.get('/fetchVisits')

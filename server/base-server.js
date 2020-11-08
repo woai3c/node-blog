@@ -51,9 +51,9 @@ module.exports = {
             articleInterface.fetchTagsArtilesData(req, res)
         })
 
-        app.post('/addComment', (req, res) => {
-            articleInterface.addComment(req, res)
-        })
+        // app.post('/addComment', (req, res) => {
+        //     articleInterface.addComment(req, res)
+        // })
 
         app.post('/login', (req, res) => {
             userInterface.login(req, res)

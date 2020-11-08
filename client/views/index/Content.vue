@@ -12,7 +12,7 @@
             </div>
             <VueMarkdown class="markdown" :source="articleData.content"/>
         </div>
-        <div class="div-comment">
+        <!-- <div class="div-comment">
             <p class="p-comment">评论</p>
             <div class="comment" v-for="(item, index) in articleData.comments" :key="index">
                 <p class="comment-title">
@@ -30,7 +30,7 @@
                     <Button @click="reply">回复</Button>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -91,26 +91,26 @@ export default {
             this.$router.back()
         },
 
-        reply() {
-            if (!addComment) {
-                const api = require('@/api/client')
-                addComment = api.addComment
-            }
+        // reply() {
+        //     if (!addComment) {
+        //         const api = require('@/api/client')
+        //         addComment = api.addComment
+        //     }
             
-            if (this.comment.length > 200 || this.comment.length == 0) {
-                this.$Message.error('评论长度为1-200个字符')
-                return
-            }
+        //     if (this.comment.length > 200 || this.comment.length == 0) {
+        //         this.$Message.error('评论长度为1-200个字符')
+        //         return
+        //     }
 
-            addComment({
-                comment: this.comment,
-                id: this.articleData._id,
-            })
-            .then(() => {
-                this.comment = ''
-                this.getArticleDetail()
-            })
-        }
+        //     addComment({
+        //         comment: this.comment,
+        //         id: this.articleData._id,
+        //     })
+        //     .then(() => {
+        //         this.comment = ''
+        //         this.getArticleDetail()
+        //     })
+        // }
     }
 }
 </script>

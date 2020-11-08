@@ -254,45 +254,45 @@ function fetchTagsArtilesData(req, res) {
     searchTagsArticlesData(res)
 }
 
-function addComment(req, res) {
-    createDB().then(db => {
-        const { comment, id } = req.body
-        const query = { _id: new ObjectID(id) }
-        const time = new Date()
-        const ip = getClientIp(req)
-        // 更新评论
-        const updateContent = {
-            $addToSet: { 
-                comments: {
-                    comment,
-                    time,
-                    user: ip,
-                    location: ipToCity(ip),
-                }
-            }
-        }
+// function addComment(req, res) {
+//     createDB().then(db => {
+//         const { comment, id } = req.body
+//         const query = { _id: new ObjectID(id) }
+//         const time = new Date()
+//         const ip = getClientIp(req)
+//         // 更新评论
+//         const updateContent = {
+//             $addToSet: { 
+//                 comments: {
+//                     comment,
+//                     time,
+//                     user: ip,
+//                     location: ipToCity(ip),
+//                 }
+//             }
+//         }
         
-        db.collection(articleCollection).updateOne(query, updateContent, err => {
-            if (err) {
-                handleError(err)
-                res.send({
-                    code: 8,
-                    msg: '评论失败'
-                })
-            } else {
-                res.send({
-                    code: 0,
-                    msg: '评论成功',
-                    data: {
-                        time,
-                        user: ip,
-                    }
-                })
-            }
-        })
-    })
-    .catch(err => { handleError(err) })
-}
+//         db.collection(articleCollection).updateOne(query, updateContent, err => {
+//             if (err) {
+//                 handleError(err)
+//                 res.send({
+//                     code: 8,
+//                     msg: '评论失败'
+//                 })
+//             } else {
+//                 res.send({
+//                     code: 0,
+//                     msg: '评论成功',
+//                     data: {
+//                         time,
+//                         user: ip,
+//                     }
+//                 })
+//             }
+//         })
+//     })
+//     .catch(err => { handleError(err) })
+// }
 
 module.exports = {
     addArticle,
@@ -302,6 +302,6 @@ module.exports = {
     deleteArticle,
     fetchTagsData,
     fetchTagsArtilesData,
-    addComment,
+    // addComment,
     fetchYears,
 }
