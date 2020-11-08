@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Message } from 'view-design'
 import { router } from '@/entry-client'
 import { showLoading, closeLoading } from '@/utils/loading'
-import { host, port } from '../../net'
+import { host, port } from '../../env'
 
 const service = axios.create({
     baseURL: `http://${host}:${port}`,

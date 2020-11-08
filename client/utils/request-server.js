@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { host, port } from '../../net'
+import { host, port } from '../../env'
 
 const service = axios.create({
     baseURL: `http://${host}:${port}`,

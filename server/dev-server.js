@@ -63,7 +63,7 @@ initArticleConfig() // 初始化数据库相关配置
 config(app) // 基本配置
 interface(app) // 处理接口
 
-const { host, port } = require('../net') 
+const { host, port } = require('../env') 
 
 app.listen(port, () => {
     console.log(`server started at ${host}:${ port }`)
