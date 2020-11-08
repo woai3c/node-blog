@@ -8,6 +8,10 @@
 ## [在线预览](http://118.190.217.8:3389/)
 由于服务器网络带宽过小（阿里云 1M），所以首次加载时间较久，请耐心等待。
 
+个人博客 Chrome Lighthouse 评分
+
+![](https://github.com/woai3c/node-blog/blob/master/doc/performance.png)
+
 ## 相关文档
 * [多个请求下 loading 的展示与关闭](https://github.com/woai3c/Front-end-articles/blob/master/control%20loading.md)
 * [Vue 页面权限控制和登陆验证](https://github.com/woai3c/Front-end-articles/blob/master/authentication.md)
