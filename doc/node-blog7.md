@@ -16,7 +16,7 @@
 通过配置 output 的 filename 属性可以实现这个需求。filename 属性的值选项中有一个 [contenthash]，它将根据文件内容创建出唯一 hash。当文件内容发生变化时，[contenthash] 也会发生变化。
 ```js
 output: {
-	filename: '[name].[contenthash].js',
+    filename: '[name].[contenthash].js',
     chunkFilename: '[name].[contenthash].js',
     path: path.resolve(__dirname, '../dist'),
 },
